@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Тренер</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{
+  --bg:var(--tg-theme-bg-color,#111214);
+  --card:var(--tg-theme-secondary-bg-color,#1c1d21);
+  --text:var(--tg-theme-text-color,#f2f2f2);
+  --hint:var(--tg-theme-hint-color,#8b8e96);
+  --accent:var(--tg-theme-button-color,#3d8bfd);
+  --accent-text:var(--tg-theme-button-text-color,#ffffff);
+  --line:rgba(127,127,127,.18);
+  --soft:rgba(127,127,127,.12);
+  --ok:#2fb36b; --warn:#e3a92b; --bad:#e05252;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);
+  font:15px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif}
+body{padding:14px 14px 120px}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.top{display:flex;align-items:baseline;justify-content:space-between;margin:2px 2px 12px}
+.eyebrow{font-size:12px;color:var(--hint);letter-spacing:.06em;text-transform:uppercase}
+h1{font-size:24px;line-height:1.15;margin:2px 0 0;font-weight:700}
+.tabs{display:flex;background:var(--card);border-radius:12px;padding:3px;margin-bottom:12px}
+.tabs button{flex:1;padding:8px 0;border-radius:10px;font-size:14px;font-weight:600;color:var(--hint)}
+.tabs button.on{background:var(--bg);color:var(--text)}
+.days{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.day{background:var(--card);border-radius:12px;padding:8px 4px;text-align:center;position:relative}
+.day b{display:block;font-size:17px}
+.day span{font-size:11px;color:var(--hint);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day.on{background:var(--accent);color:var(--accent-text)}
+.day.on span{color:var(--accent-text);opacity:.85}
+.day i{position:absolute;top:6px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--ok)}
+.card{background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;transition:opacity .2s}
+.card.done{opacity:.55}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.name{font-weight:650;font-size:16px}
+.meta{font-size:13px;color:var(--hint);margin-top:2px}
+.num{width:26px;height:26px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
+.tipbtn{width:28px;height:28px;border-radius:50%;background:var(--soft);font-weight:700;color:var(--hint);flex:none}
+.tip{font-size:13px;color:var(--hint);background:var(--soft);border-radius:10px;padding:8px 10px;margin-top:10px;display:none}
+.tip.open{display:block}
+.stepper{display:flex;align-items:center;background:var(--bg);border-radius:12px;margin-top:12px}
+.stepper button{width:52px;height:46px;font-size:24px;font-weight:500;color:var(--accent)}
+.stepper input{flex:1;min-width:0;text-align:center;background:none;border:0;color:var(--text);
+  font:700 22px/1 inherit;outline:none;-moz-appearance:textfield}
+.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none}
+.stepper small{color:var(--hint);font-size:13px;margin-left:-8px;margin-right:8px}
+.sets{display:flex;gap:8px;margin-top:12px;align-items:center}
+.sets .lbl{font-size:12px;color:var(--hint);margin-right:2px}
+.set{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);font-size:13px;font-weight:700;color:var(--hint)}
+.set.on{background:var(--accent);border-color:var(--accent);color:var(--accent-text)}
+.rate{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.rate button{background:var(--bg);border-radius:10px;padding:8px 2px;font-size:12px;font-weight:600;line-height:1.2}
+.rate button em{display:block;font-style:normal;font-size:18px;margin-bottom:2px}
+.rate button.on[data-r=easy]{background:var(--ok);color:#fff}
+.rate button.on[data-r=ok]{background:var(--accent);color:var(--accent-text)}
+.rate button.on[data-r=hard]{background:var(--warn);color:#1a1a1a}
+.rate button.on[data-r=fail]{background:var(--bad);color:#fff}
+.err{color:var(--bad);font-size:12px;margin-top:6px;display:none}
+.err.show{display:block}
+.timer{position:fixed;left:14px;right:14px;bottom:14px;background:var(--text);color:var(--bg);border-radius:16px;
+  padding:12px 14px;display:none;align-items:center;gap:12px;z-index:5}
+.timer.show{display:flex}
+.timer .t{font:700 24px/1 ui-monospace,SFMono-Regular,Menlo,monospace;min-width:70px}
+.timer .bar{flex:1;height:6px;border-radius:3px;background:rgba(127,127,127,.35);overflow:hidden}
+.timer .bar div{height:100%;background:var(--accent);width:100%}
+.timer button{font-size:13px;font-weight:700;color:var(--bg);opacity:.75;padding:4px}
+.pday{margin-bottom:14px}
+.pday h3{font-size:13px;color:var(--hint);text-transform:uppercase;letter-spacing:.05em;margin:0 2px 6px}
+.prow{display:flex;justify-content:space-between;padding:11px 14px;border-bottom:.5px solid var(--line)}
+.prow:last-child{border:0}
+.prow b{font-variant-numeric:tabular-nums}
+.plist{background:var(--card);border-radius:14px;overflow:hidden}
+.stat{background:var(--card);border-radius:16px;padding:14px;margin-bottom:14px;display:flex;gap:14px;align-items:center}
+.stat b{font-size:30px}
+.fallback{display:none;width:100%;margin-top:6px;background:var(--accent);color:var(--accent-text);
+  border-radius:14px;padding:15px;font-weight:700;font-size:16px}
+</style>
+</head>
+<body>
+<div class="top">
+  <div><div class="eyebrow" id="eyebrow">Тренировка</div><h1 id="title">—</h1></div>
+</div>
+<div class="tabs"><button class="on" data-tab="w">Тренировка</button><button data-tab="p">Прогресс</button></div>
+
+<section id="tab-w">
+  <div class="days" id="days"></div>
+  <div id="list"></div>
+  <button class="fallback" id="finishFallback">Завершить тренировку</button>
+</section>
+<section id="tab-p" hidden></section>
+
+<div class="timer" id="timer">
+  <div class="t" id="tval">1:30</div>
+  <div class="bar"><div id="tbar"></div></div>
+  <button id="tplus">+30с</button><button id="tstop">✕</button>
+</div>
+
+<script>
+const PROGRAM = {"A": {"title": "Спина и бицепс", "exercises": [{"id": "lat_pulldown", "name": "Тяга верхнего блока", "sets": 3, "reps": [8, 12], "step": 5, "tip": "Тяни локтями вниз к рёбрам, грудь вперёд, не раскачивайся корпусом."}, {"id": "bb_row", "name": "Тяга штанги в наклоне", "sets": 3, "reps": [6, 10], "step": 2.5, "tip": "Спина прямая, наклон ~45°, тяни штангу к низу живота."}, {"id": "db_row", "name": "Тяга гантели одной рукой", "sets": 3, "reps": [8, 12], "step": 2, "tip": "Веди локоть назад вдоль корпуса, в верхней точке задержка на секунду."}, {"id": "bb_curl", "name": "Подъём штанги на бицепс", "sets": 3, "reps": [8, 12], "step": 2.5, "tip": "Локти прижаты к корпусу, опускай медленно, без рывков спиной."}, {"id": "hammer", "name": "Молотки с гантелями", "sets": 3, "reps": [10, 12], "step": 1, "tip": "Ладони смотрят друг на друга, плечо не двигается."}]}, "B": {"title": "Грудь, плечи, трицепс", "exercises": [{"id": "bench", "name": "Жим штанги лёжа", "sets": 4, "reps": [6, 10], "step": 2.5, "tip": "Лопатки сведены, ноги упираются в пол, штанга опускается к низу груди."}, {"id": "incline_db", "name": "Жим гантелей на наклонной", "sets": 3, "reps": [8, 12], "step": 2, "tip": "Скамья 30°, локти под ~45° к корпусу, в нижней точке растяжение груди."}, {"id": "db_press", "name": "Жим гантелей сидя", "sets": 3, "reps": [8, 12], "step": 2, "tip": "Не прогибайся в пояснице, выжимай вверх, не до полного удара гантелей."}, {"id": "lat_raise", "name": "Махи гантелями в стороны", "sets": 3, "reps": [12, 15], "step": 1, "tip": "Локоть чуть согнут, поднимай до уровня плеч, без раскачки."}, {"id": "pushdown", "name": "Разгибания на блоке (трицепс)", "sets": 3, "reps": [10, 12], "step": 2.5, "tip": "Локти зафиксированы у корпуса, внизу полностью разгибай руки."}]}, "C": {"title": "Ноги", "exercises": [{"id": "squat", "name": "Присед со штангой", "sets": 4, "reps": [6, 10], "step": 2.5, "tip": "Колени идут по линии носков, спина нейтральная, садись минимум до параллели."}, {"id": "rdl", "name": "Румынская тяга", "sets": 3, "reps": [8, 10], "step": 2.5, "tip": "Таз уводи назад, гриф скользит по ногам, спина прямая, колени чуть согнуты."}, {"id": "leg_press", "name": "Жим ногами", "sets": 3, "reps": [10, 12], "step": 10, "tip": "Поясница прижата к спинке, колени не выпрямляй до щелчка."}, {"id": "leg_curl", "name": "Сгибания ног в тренажёре", "sets": 3, "reps": [10, 12], "step": 2.5, "tip": "Подъём быстро, опускание медленно на 2–3 счёта."}, {"id": "calf", "name": "Подъёмы на носки", "sets": 3, "reps": [12, 15], "step": 5, "tip": "Полная амплитуда: растяжение внизу, пауза наверху."}]}, "D": {"title": "Всё тело", "exercises": [{"id": "ohp", "name": "Жим штанги стоя", "sets": 3, "reps": [6, 10], "step": 2.5, "tip": "Пресс и ягодицы напряжены, не отклоняйся назад."}, {"id": "lunges", "name": "Выпады с гантелями", "sets": 3, "reps": [8, 10], "step": 2, "tip": "Шаг широкий, колено задней ноги почти касается пола, корпус ровно."}, {"id": "cable_row", "name": "Тяга горизонтального блока", "sets": 3, "reps": [10, 12], "step": 5, "tip": "Своди лопатки в конце движения, корпус не заваливай назад."}, {"id": "chest_machine", "name": "Жим в тренажёре на грудь", "sets": 3, "reps": [10, 12], "step": 5, "tip": "Лопатки прижаты к спинке, в верхней точке не выпрямляй локти до упора."}, {"id": "cable_crunch", "name": "Скручивания на блоке", "sets": 3, "reps": [12, 15], "step": 5, "tip": "Скручивайся за счёт пресса, а не тяни руками."}]}};
+const DAY_ORDER = ["A", "B", "C", "D"];
+const REST_SEC = 90;
+const RATES = [["easy","😎","Легко"],["ok","👌","Норм"],["hard","😮‍💨","Тяжело"],["fail","❌","Не добил"]];
+
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); }
+const haptic = (t) => { try { tg.HapticFeedback.impactOccurred(t || "light"); } catch (e) {} };
+
+function readState() {
+  try {
+    const d = new URLSearchParams(location.search).get("d");
+    if (!d) return { n: "A", c: 0, w: {} };
+    let b = d.replace(/-/g, "+").replace(/_/g, "/");
+    while (b.length % 4) b += "=";
+    return JSON.parse(atob(b));
+  } catch (e) { return { n: "A", c: 0, w: {} }; }
+}
+const S = readState();
+const fmt = (x) => x == null ? "—" : String(Math.round(x * 100) / 100);
+
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+
+let day = DAY_ORDER.includes(S.n) ? S.n : DAY_ORDER[0];
+let draft = {};
+
+function draftKey() { return "draft_" + day + "_" + S.c; }
+function loadDraft() {
+  draft = store.get(draftKey()) || {};
+  for (const ex of PROGRAM[day].exercises) {
+    if (!draft[ex.id]) {
+      const w = S.w[ex.id];
+      draft[ex.id] = { w: w ? w[0] : null, reps: w ? w[1] : ex.reps[0], sets: [], r: null };
+    }
+  }
+}
+function saveDraft() { store.set(draftKey(), draft); }
+
+function renderDays() {
+  const el = document.getElementById("days");
+  el.innerHTML = DAY_ORDER.map(d => `
+    <button class="day ${d === day ? "on" : ""}" data-day="${d}">
+      ${d === S.n ? "<i></i>" : ""}<b>${d}</b><span>${PROGRAM[d].title}</span>
+    </button>`).join("");
+  el.querySelectorAll(".day").forEach(b => b.onclick = () => {
+    if (b.dataset.day === day) return;
+    haptic(); day = b.dataset.day; loadDraft(); render();
+  });
+}
+
+function renderList() {
+  const list = document.getElementById("list");
+  list.innerHTML = PROGRAM[day].exercises.map((ex, i) => {
+    const d = draft[ex.id];
+    const sets = Array.from({ length: ex.sets }, (_, k) =>
+      `<button class="set ${d.sets.includes(k) ? "on" : ""}" data-k="${k}">${k + 1}</button>`).join("");
+    const rates = RATES.map(([k, e, t]) =>
+      `<button data-r="${k}" class="${d.r === k ? "on" : ""}"><em>${e}</em>${t}</button>`).join("");
+    return `
+    <div class="card ${d.r ? "done" : ""}" data-id="${ex.id}">
+      <div class="row">
+        <div class="num">${i + 1}</div>
+        <div style="flex:1;min-width:0">
+          <div class="name">${ex.name}</div>
+          <div class="meta">${ex.sets} × ${d.reps} повт. · шаг ${fmt(ex.step)} кг</div>
+        </div>
+        <button class="tipbtn" aria-label="Техника">?</button>
+      </div>
+      <div class="tip">${ex.tip}</div>
+      <div class="stepper">
+        <button data-step="-1" aria-label="Меньше">−</button>
+        <input type="number" inputmode="decimal" step="any" placeholder="вес" value="${d.w ?? ""}">
+        <small>кг</small>
+        <button data-step="1" aria-label="Больше">+</button>
+      </div>
+      <div class="sets"><span class="lbl">Подходы</span>${sets}</div>
+      <div class="rate">${rates}</div>
+      <div class="err">Сначала укажи вес</div>
+    </div>`;
+  }).join("");
+
+  list.querySelectorAll(".card").forEach(card => {
+    const id = card.dataset.id;
+    const ex = PROGRAM[day].exercises.find(e => e.id === id);
+    const d = draft[id];
+    const input = card.querySelector("input");
+    const err = card.querySelector(".err");
+
+    card.querySelector(".tipbtn").onclick = () => card.querySelector(".tip").classList.toggle("open");
+    card.querySelectorAll("[data-step]").forEach(b => b.onclick = () => {
+      haptic();
+      const cur = parseFloat(input.value) || 0;
+      const next = Math.max(0, Math.round((cur + ex.step * Number(b.dataset.step)) * 100) / 100);
+      input.value = next || ""; d.w = next || null; err.classList.remove("show"); saveDraft();
+    });
+    input.oninput = () => {
+      const v = parseFloat(String(input.value).replace(",", "."));
+      d.w = v > 0 ? v : null; err.classList.remove("show"); saveDraft();
+    };
+    card.querySelectorAll(".set").forEach(b => b.onclick = () => {
+      const k = Number(b.dataset.k);
+      if (d.sets.includes(k)) { d.sets = d.sets.filter(x => x !== k); b.classList.remove("on"); }
+      else { d.sets.push(k); b.classList.add("on"); haptic("medium"); if (d.sets.length < ex.sets) startTimer(); }
+      saveDraft();
+    });
+    card.querySelectorAll(".rate button").forEach(b => b.onclick = () => {
+      if (!(d.w > 0)) { err.classList.add("show"); haptic("heavy"); input.focus(); return; }
+      d.r = d.r === b.dataset.r ? null : b.dataset.r;
+      haptic("medium"); saveDraft(); renderList(); updateMain();
+    });
+  });
+}
+
+function render() {
+  document.getElementById("eyebrow").textContent = "День " + day + (day === S.n ? " · по плану" : "");
+  document.getElementById("title").textContent = PROGRAM[day].title;
+  renderDays(); renderList(); updateMain();
+}
+
+function rated() { return PROGRAM[day].exercises.filter(ex => draft[ex.id].r); }
+
+function updateMain() {
+  const n = rated().length, total = PROGRAM[day].exercises.length;
+  const text = n ? `Завершить · ${n}/${total}` : "Отметь упражнения";
+  if (tg && tg.MainButton && tg.initData) {
+    tg.MainButton.setText(text);
+    n ? tg.MainButton.show() : tg.MainButton.hide();
+  } else {
+    const f = document.getElementById("finishFallback");
+    f.style.display = "block"; f.textContent = text;
+  }
+}
+
+function finish() {
+  const items = rated().map(ex => ({ id: ex.id, w: draft[ex.id].w, r: draft[ex.id].r }));
+  if (!items.length) return;
+  const send = () => {
+    const payload = JSON.stringify({ day, items });
+    store.del(draftKey());
+    if (tg && tg.initData) tg.sendData(payload);
+    else alert("Откройте приложение из Telegram.\n\n" + payload);
+  };
+  const left = PROGRAM[day].exercises.length - items.length;
+  if (left && tg && tg.showConfirm) {
+    tg.showConfirm(`Не отмечено упражнений: ${left}. Завершить без них?`, ok => ok && send());
+  } else send();
+}
+if (tg && tg.MainButton) tg.MainButton.onClick(finish);
+document.getElementById("finishFallback").onclick = finish;
+
+let timerId = null, tEnd = 0, tTotal = REST_SEC;
+function startTimer(sec) {
+  tTotal = sec || REST_SEC; tEnd = Date.now() + tTotal * 1000;
+  document.getElementById("timer").classList.add("show");
+  clearInterval(timerId); tick(); timerId = setInterval(tick, 250);
+}
+function tick() {
+  const left = Math.max(0, Math.ceil((tEnd - Date.now()) / 1000));
+  document.getElementById("tval").textContent = Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0");
+  document.getElementById("tbar").style.width = Math.min(100, (left / tTotal) * 100) + "%";
+  if (left <= 0) {
+    clearInterval(timerId);
+    try { tg.HapticFeedback.notificationOccurred("success"); } catch (e) {}
+    setTimeout(() => document.getElementById("timer").classList.remove("show"), 1500);
+  }
+}
+document.getElementById("tplus").onclick = () => { tEnd += 30000; tTotal += 30; tick(); };
+document.getElementById("tstop").onclick = () => { clearInterval(timerId); document.getElementById("timer").classList.remove("show"); };
+
+function renderProgress() {
+  const el = document.getElementById("tab-p");
+  el.innerHTML = `<div class="stat"><b>${S.c}</b><div>тренировок<br><span style="color:var(--hint);font-size:13px">закрыто с ботом</span></div></div>` +
+    DAY_ORDER.map(d => `<div class="pday"><h3>День ${d} · ${PROGRAM[d].title}</h3><div class="plist">` +
+      PROGRAM[d].exercises.map(ex => {
+        const w = S.w[ex.id];
+        return `<div class="prow"><span>${ex.name}</span><b>${w && w[0] != null ? fmt(w[0]) + " кг × " + w[1] : "—"}</b></div>`;
+      }).join("") + `</div></div>`).join("");
+}
+
+document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x === b));
+  const p = b.dataset.tab === "p";
+  document.getElementById("tab-w").hidden = p;
+  document.getElementById("tab-p").hidden = !p;
+  if (tg && tg.MainButton) p ? tg.MainButton.hide() : updateMain();
+  if (p) renderProgress();
+});
+
+loadDraft(); render();
+</script>
+</body>
+</html>
