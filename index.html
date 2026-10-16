@@ -10,11 +10,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --lime:#94E51B; --green:#A6FF00; --olive:#669C18;
-  --bg:#000000; --graphite:#30363D; --dark:#383838; --mid:#666666;
-  --inactive:#A8ABB1; --text:#FFFFFF; --outline:#85858D;
-  --card:#121314; --card2:#1B1D20;
-  --easy:#94E51B; --norm:#FF9F1C; --hard:#FF4D4D; --warm:#85858D;
+  --lime:#D97845; --green:#E69A70; --olive:#A85A32; --on:#151719;
+  --bg:#151719; --graphite:#393D41; --dark:#393D41; --mid:#6B7178;
+  --inactive:#9AA0A6; --text:#F2F0EC; --outline:#40464B;
+  --card:#232629; --card2:#2B2F33;
+  --easy:#7FB77E; --norm:#E2B04A; --hard:#E5534B; --warm:#6B7178;
   --top:calc(var(--tg-safe-area-inset-top,0px) + var(--tg-content-safe-area-inset-top,0px));
   --bot:calc(var(--tg-safe-area-inset-bottom,0px) + var(--tg-content-safe-area-inset-bottom,0px));
   --ease:cubic-bezier(.2,.8,.2,1);
@@ -61,14 +61,14 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .wd.done .n{background:var(--dark)}
 .wd.done .n::after{content:"";position:absolute;bottom:6px;width:5px;height:5px;border-radius:50%;background:var(--lime)}
 .wd.future .n{color:var(--mid)}
-.wd.sel .n{background:var(--lime);color:#000;border-color:var(--lime)}
-.wd.sel .n::after{background:#000}
+.wd.sel .n{background:var(--lime);color:var(--on);border-color:var(--lime)}
+.wd.sel .n::after{background:var(--on)}
 .calnote{font-size:13px;color:var(--inactive);text-align:center;margin-top:10px;min-height:18px}
 .calnote b{color:var(--text);font-weight:600}
 
 /* ---------- карточка «сегодня» ---------- */
 .hero{background:var(--card);border-radius:26px;padding:18px;margin-top:14px;position:relative;overflow:hidden}
-.hero .tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#000;background:var(--lime);
+.hero .tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--on);background:var(--lime);
   padding:5px 10px;border-radius:99px;letter-spacing:.02em}
 .hero h2{font-size:24px;margin:12px 0 4px}
 .hero .meta{color:var(--inactive);font-size:14px}
@@ -85,9 +85,9 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .chip i svg{width:11px;height:11px}
 .chip.sec2{border-color:var(--olive)}
 .chip.sec2 i{background:var(--olive)}
-.cta{width:100%;height:56px;border-radius:18px;background:var(--lime);color:#000;font-weight:800;font-size:17px;
+.cta{width:100%;height:56px;border-radius:18px;background:var(--lime);color:var(--on);font-weight:800;font-size:17px;
   margin-top:18px;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform .15s}
-.cta:active{transform:scale(.98)}
+.cta:active{transform:scale(.98);background:var(--green)}
 .cta.ghost{background:transparent;color:var(--lime);border:1.5px solid var(--lime)}
 
 /* ---------- список дней ---------- */
@@ -95,7 +95,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .dayrow{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:18px;padding:14px;text-align:left;width:100%}
 .dayrow:active{background:var(--card2)}
 .dayrow .L{width:44px;height:44px;border-radius:14px;background:var(--dark);display:grid;place-items:center;font-weight:800;font-size:18px;flex:none}
-.dayrow.next .L{background:var(--lime);color:#000}
+.dayrow.next .L{background:var(--lime);color:var(--on)}
 .dayrow .t{flex:1;min-width:0}
 .dayrow .t b{display:block;font-weight:600}
 .dayrow .t span{font-size:13px;color:var(--inactive);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -109,7 +109,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .empty-hero p{color:var(--inactive);font-size:14px;margin:8px auto 0;max-width:290px}
 .plan-link{margin-top:14px;color:var(--inactive);font-size:14px;font-weight:500;padding:8px}
 .plan-link b{color:var(--lime);font-weight:600}
-.resume{display:flex;align-items:center;gap:14px;background:var(--card);border:1.5px solid rgba(148,229,27,.35);border-radius:20px;padding:14px;margin-top:14px;width:100%;text-align:left}
+.resume{display:flex;align-items:center;gap:14px;background:var(--card);border:1.5px solid rgba(217,120,69,.35);border-radius:20px;padding:14px;margin-top:14px;width:100%;text-align:left}
 .resume .dot{width:44px;height:44px;border-radius:14px;background:var(--lime);display:grid;place-items:center;flex:none}
 .resume .t{flex:1;min-width:0}
 .resume .t small{display:block;font-size:12px;color:var(--lime);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
@@ -117,13 +117,13 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .resume .t span{font-size:13px;color:var(--inactive)}
 
 /* ---------- выбор действия ---------- */
-.opt{display:flex;align-items:center;gap:16px;width:100%;padding:18px 4px;border-bottom:1px solid #1b1c1f;text-align:left}
+.opt{display:flex;align-items:center;gap:16px;width:100%;padding:18px 4px;border-bottom:1px solid #2B2F33;text-align:left}
 .opt:last-child{border:0}
 .opt .ic{width:48px;height:48px;border-radius:16px;background:var(--card2);display:grid;place-items:center;flex:none;color:var(--lime)}
 .opt .ic svg{width:24px;height:24px}
 .opt b{display:block;font-size:17px;font-weight:600}
 .opt span{font-size:13px;color:var(--inactive)}
-.dayrow .t .badge,.badge{display:inline-block;width:auto;font-size:11px;font-weight:700;color:#000;background:var(--lime);padding:2px 8px;border-radius:99px;margin-left:6px;vertical-align:2px}
+.dayrow .t .badge,.badge{display:inline-block;width:auto;font-size:11px;font-weight:700;color:var(--on);background:var(--lime);padding:2px 8px;border-radius:99px;margin-left:6px;vertical-align:2px}
 
 /* ---------- выбор мышц ---------- */
 .side{display:inline-flex;background:var(--card);border-radius:14px;padding:4px;margin:14px 0 4px}
@@ -135,11 +135,12 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
   color:var(--inactive);font-weight:600;font-size:15px;transition:all .25s var(--ease)}
 .gbtn i{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--outline);display:grid;place-items:center;flex:none;transition:all .25s}
 .gbtn i svg{width:13px;height:13px;opacity:0;transition:opacity .2s}
-.gbtn.on{border-color:var(--lime);color:var(--text);box-shadow:0 0 0 1px rgba(148,229,27,.15),0 0 18px rgba(148,229,27,.12)}
+.gbtn.on{border-color:var(--lime);color:var(--text);background:var(--card);box-shadow:0 0 0 1px rgba(217,120,69,.15),0 0 18px rgba(217,120,69,.12)}
 .gbtn.on i{background:var(--lime);border-color:var(--lime)}
 .gbtn.on i svg{opacity:1}
 .gbtn:active{transform:scale(.96)}
 .pfig{display:flex;justify-content:center}
+.fig svg,.pfig svg,.crow .mini svg{mix-blend-mode:lighten}
 .pfig svg{height:440px;width:auto;max-width:100%;animation:fade .3s var(--ease)}
 .pksum{text-align:center;color:var(--inactive);font-size:14px;margin-top:10px;min-height:20px}
 .pksum b{color:var(--text);font-weight:600}
@@ -154,10 +155,10 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .progress div{height:100%;background:var(--lime);border-radius:2px;transition:width .4s var(--ease)}
 
 .ex{background:var(--card);border-radius:24px;padding:16px;margin-top:12px;transition:background .3s}
-.ex.done{background:#0d1406}
+.ex.done{background:#2A2420}
 .exhead{display:flex;gap:12px;align-items:flex-start}
 .exnum{width:30px;height:30px;border-radius:10px;background:var(--dark);display:grid;place-items:center;font-weight:700;font-size:14px;flex:none;transition:all .25s}
-.ex.done .exnum{background:var(--lime);color:#000}
+.ex.done .exnum{background:var(--lime);color:var(--on)}
 .exname{flex:1;min-width:0}
 .exname b{display:block;font-size:17px;font-weight:700;line-height:1.25}
 .exname span{font-size:13px;color:var(--inactive)}
@@ -166,11 +167,11 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .exbtns button:active{color:var(--lime)}
 .exbtns svg{width:17px;height:17px}
 .target{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
-.target span{font-size:12px;font-weight:600;color:var(--lime);background:rgba(148,229,27,.08);border:1px solid rgba(148,229,27,.22);padding:4px 10px;border-radius:99px}
+.target span{font-size:12px;font-weight:600;color:var(--lime);background:rgba(217,120,69,.08);border:1px solid rgba(217,120,69,.22);padding:4px 10px;border-radius:99px}
 .tip{display:none;font-size:13px;color:var(--inactive);background:var(--card2);border-radius:14px;padding:10px 12px;margin-top:10px;line-height:1.45}
 .tip.open{display:block;animation:fade .25s var(--ease)}
 
-.set{border-top:1px solid #1f2124;padding:12px 0 2px;margin-top:10px}
+.set{border-top:1px solid #2B2F33;padding:12px 0 2px;margin-top:10px}
 .set:first-of-type{border-top:0}
 .setline{display:flex;align-items:center;gap:10px}
 .setno{width:22px;font-weight:700;color:var(--mid);font-size:15px}
@@ -187,20 +188,20 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .rates button{height:36px;border-radius:99px;border:1.5px solid var(--outline);color:var(--inactive);font-size:12px;font-weight:700;letter-spacing:.04em;
   transition:transform .15s,background .2s,color .2s,border-color .2s}
 .rates button:active{transform:scale(.94)}
-.rates [data-r=w].on{background:var(--warm);border-color:var(--warm);color:#000}
-.rates [data-r=e]{border-color:rgba(148,229,27,.55)}
-.rates [data-r=n]{border-color:rgba(255,159,28,.55)}
-.rates [data-r=h]{border-color:rgba(255,77,77,.55)}
-.rates [data-r=e].on{background:var(--easy);border-color:var(--easy);color:#000}
-.rates [data-r=n].on{background:var(--norm);border-color:var(--norm);color:#000}
-.rates [data-r=h].on{background:var(--hard);border-color:var(--hard);color:#000}
+.rates [data-r=w].on{background:var(--warm);border-color:var(--warm);color:var(--on)}
+.rates [data-r=e]{border-color:rgba(127,183,126,.55)}
+.rates [data-r=n]{border-color:rgba(226,176,74,.55)}
+.rates [data-r=h]{border-color:rgba(229,83,75,.55)}
+.rates [data-r=e].on{background:var(--easy);border-color:var(--easy);color:var(--on)}
+.rates [data-r=n].on{background:var(--norm);border-color:var(--norm);color:var(--on)}
+.rates [data-r=h].on{background:var(--hard);border-color:var(--hard);color:var(--on)}
 .addset{margin-top:12px;width:100%;height:42px;border-radius:14px;border:1.5px dashed var(--dark);color:var(--inactive);font-weight:600;font-size:14px}
 .addset:active{border-color:var(--lime);color:var(--lime)}
 .addex{margin-top:14px;width:100%;height:54px;border-radius:20px;border:1.5px dashed var(--outline);color:var(--text);font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
 .finish-fb{display:none}
 
 /* ---------- таймер отдыха ---------- */
-.timer{position:fixed;left:12px;right:12px;bottom:calc(var(--bot) + 12px);z-index:30;background:var(--lime);color:#000;
+.timer{position:fixed;left:12px;right:12px;bottom:calc(var(--bot) + 12px);z-index:30;background:var(--lime);color:var(--on);
   border-radius:24px;padding:14px 16px;display:flex;align-items:center;gap:14px;
   transform:translateY(160%);transition:transform .4s var(--ease)}
 .timer.show{transform:none}
@@ -221,11 +222,11 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .gtabs{display:flex;gap:8px;overflow-x:auto;margin:14px -16px 6px;padding:0 16px;scrollbar-width:none}
 .gtabs::-webkit-scrollbar{display:none}
 .gtabs button{flex:none;height:36px;padding:0 16px;border-radius:99px;border:1.5px solid var(--dark);color:var(--inactive);font-weight:600;font-size:14px;transition:all .2s}
-.gtabs button.on{background:var(--lime);border-color:var(--lime);color:#000}
+.gtabs button.on{background:var(--lime);border-color:var(--lime);color:var(--on)}
 .clist{display:flex;flex-direction:column}
-.crow{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid #17181a;text-align:left;width:100%}
+.crow{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid #2B2F33;text-align:left;width:100%}
 .crow:active{background:var(--card)}
-.crow .mini{width:46px;height:46px;border-radius:14px;background:#000;display:grid;place-items:center;flex:none;overflow:hidden}
+.crow .mini{width:46px;height:46px;border-radius:14px;background:var(--bg);display:grid;place-items:center;flex:none;overflow:hidden}
 .crow .mini svg{width:46px;height:46px}
 .crow .t{flex:1;min-width:0}
 .crow .t b{display:block;font-weight:600;font-size:15px}
@@ -236,9 +237,9 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 /* ---------- шторка ---------- */
 .scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;opacity:0;pointer-events:none;transition:opacity .3s}
 .scrim.show{opacity:1;pointer-events:auto}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:#0c0d0e;border-radius:28px 28px 0 0;
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:#1B1E21;border-radius:28px 28px 0 0;
   max-height:calc(100% - var(--top) - 40px);display:flex;flex-direction:column;
-  transform:translateY(100%);transition:transform .38s var(--ease);border-top:1px solid #1d1f22}
+  transform:translateY(100%);transition:transform .38s var(--ease);border-top:1px solid #2B2F33}
 .sheet.show{transform:none}
 .sheet .grip{width:40px;height:5px;border-radius:3px;background:var(--dark);margin:10px auto 4px;flex:none}
 .sheet .sh{padding:8px 16px 0;flex:none}
@@ -249,17 +250,17 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .sw{width:46px;height:28px;border-radius:99px;background:var(--dark);position:relative;flex:none;transition:background .2s}
 .sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--inactive);transition:all .2s var(--ease)}
 .toggle.on .sw{background:var(--lime)}
-.toggle.on .sw::after{left:21px;background:#000}
+.toggle.on .sw::after{left:21px;background:var(--on)}
 
 /* ---------- прогресс ---------- */
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .stat{background:var(--card);border-radius:20px;padding:16px}
 .stat b{display:block;font-size:30px;font-weight:800;letter-spacing:-.02em}
 .stat span{font-size:13px;color:var(--inactive)}
-.stat.acc{background:var(--lime);color:#000}
-.stat.acc span{color:#000;opacity:.65}
+.stat.acc{background:var(--lime);color:var(--on)}
+.stat.acc span{color:var(--on);opacity:.65}
 .plist{background:var(--card);border-radius:20px;overflow:hidden}
-.prow{display:flex;justify-content:space-between;gap:12px;padding:13px 16px;border-bottom:1px solid #1b1c1f}
+.prow{display:flex;justify-content:space-between;gap:12px;padding:13px 16px;border-bottom:1px solid #2B2F33}
 .prow:last-child{border:0}
 .prow span{color:var(--text);font-size:14px}
 .prow b{font-weight:700;white-space:nowrap}
@@ -267,14 +268,14 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 
 /* ---------- нижнее меню ---------- */
 .nav{position:fixed;left:12px;right:12px;bottom:calc(var(--bot) + 12px);z-index:20;height:64px;border-radius:22px;
-  background:rgba(27,29,32,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  background:rgba(35,38,41,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   display:grid;grid-template-columns:repeat(3,1fr);padding:6px;transition:transform .35s var(--ease)}
 .nav.hide{transform:translateY(160%)}
 .nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:16px;color:var(--mid);font-size:11px;font-weight:600}
 .nav button svg{width:22px;height:22px}
-.nav button.on{color:var(--lime);background:rgba(148,229,27,.08)}
+.nav button.on{color:var(--lime);background:rgba(217,120,69,.08)}
 
-.toast{position:fixed;left:50%;top:calc(var(--top) + 14px);z-index:60;background:var(--text);color:#000;font-weight:600;font-size:14px;
+.toast{position:fixed;left:50%;top:calc(var(--top) + 14px);z-index:60;background:var(--text);color:var(--on);font-weight:600;font-size:14px;
   padding:10px 16px;border-radius:14px;transform:translate(-50%,-180%);transition:transform .35s var(--ease);max-width:90%;text-align:center}
 .toast.show{transform:translate(-50%,0)}
 
@@ -291,7 +292,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 <section class="view" id="v-home">
   <div class="head">
     <div><div class="eyebrow" id="today-lbl"></div><h1>Дневник</h1></div>
-    <div class="iconbtn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#94E51B" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/></svg></div>
+    <div class="iconbtn" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#D97845" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/></svg></div>
   </div>
   <div class="cal">
     <div class="calhead">
@@ -309,7 +310,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
     <div class="illus" id="illus"></div>
     <h2>Добавьте новую тренировку</h2>
     <p>Выберите мышцы — и я соберу упражнения с твоими рабочими весами</p>
-    <button class="cta" id="add-workout"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Добавить тренировку</button>
+    <button class="cta" id="add-workout"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#151719" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Добавить тренировку</button>
     <button class="plan-link" id="plan-link"></button>
   </div>
 </section>
@@ -325,7 +326,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
     <div class="pfig" id="pk-fig"></div>
   </div>
   <div class="pksum" id="pk-sum"></div>
-  <button class="cta" id="pk-start">Старт<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  <button class="cta" id="pk-start">Старт<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#151719" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
 </section>
 
 <!-- ============ ТРЕНИРОВКА ============ -->
@@ -363,7 +364,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 
 <!-- ============ таймер ============ -->
 <div class="timer" id="timer">
-  <div class="ring"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="22" stroke="rgba(0,0,0,.15)"/><circle id="t-arc" cx="26" cy="26" r="22" stroke="#000" stroke-linecap="round" stroke-dasharray="138.2" stroke-dashoffset="0"/></svg></div>
+  <div class="ring"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="22" stroke="rgba(0,0,0,.15)"/><circle id="t-arc" cx="26" cy="26" r="22" stroke="#151719" stroke-linecap="round" stroke-dasharray="138.2" stroke-dashoffset="0"/></svg></div>
   <div class="lbl"><small id="t-lbl">Отдых</small><b id="t-val">1:30</b></div>
   <button id="t-plus">+30 с</button>
   <button id="t-stop" aria-label="Пропустить отдых">✕</button>
@@ -392,8 +393,8 @@ const H = (t) => { try { tg.HapticFeedback.impactOccurred(t || "light"); } catch
 const HN = (t) => { try { tg.HapticFeedback.notificationOccurred(t || "success"); } catch (e) {} };
 if (tg) {
   try { tg.ready(); tg.expand(); } catch (e) {}
-  try { tg.setHeaderColor("#000000"); tg.setBackgroundColor("#000000"); } catch (e) {}
-  try { tg.setBottomBarColor && tg.setBottomBarColor("#000000"); } catch (e) {}
+  try { tg.setHeaderColor("#151719"); tg.setBackgroundColor("#151719"); } catch (e) {}
+  try { tg.setBottomBarColor && tg.setBottomBarColor("#151719"); } catch (e) {}
   try { tg.disableVerticalSwipes && tg.disableVerticalSwipes(); } catch (e) {}
   try {
     if (inTG && tg.isVersionAtLeast && tg.isVersionAtLeast("8.0") && ["ios","android"].includes(tg.platform)) tg.requestFullscreen();
@@ -484,9 +485,9 @@ function bodySVG(view, prim, sec, opt) {
     <filter id="t${id}" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="${m}"/></filter>
     <filter id="b${id}"><feGaussianBlur stdDeviation="${blur}"/></filter>
     <mask id="m${id}" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1536"><g fill="#fff" filter="url(#b${id})">${maskPolys(set)}</g></mask>` : "";
-  // серое → лайм #94E51B / олива #669C18
-  const G = ".55 .55 .55 0 .02  .86 .86 .86 0 .05  .1 .1 .1 0 0  0 0 0 1 0";
-  const O = ".34 .34 .34 0 0  .52 .52 .52 0 0  .08 .08 .08 0 0  0 0 0 1 0";
+  // серое → лайм #D97845 / олива #A85A32
+  const G = ".6 .6 .6 0 .02  .32 .32 .32 0 .01  .18 .18 .18 0 0  0 0 0 1 0";
+  const O = ".4 .4 .4 0 0  .22 .22 .22 0 0  .13 .13 .13 0 0  0 0 0 1 0";
   const img = (attrs) => `<image href="${MAN_SRC}" x="120" y="0" width="780" height="1536" preserveAspectRatio="none" ${attrs}/>`;
   return `<svg viewBox="${vb}" role="img" aria-label="Мышцы"><defs>${layer(sec, n + "s", O)}${layer(prim, n + "p", G)}</defs>
     ${img('opacity=".92"')}
@@ -495,7 +496,7 @@ function bodySVG(view, prim, sec, opt) {
 }
 function bodies(prim, sec) { return `<div class="fig">${bodySVG("front", prim, sec)}</div>`; }
 function muscleChips(prim, sec) {
-  const ck = `<svg viewBox="0 0 12 12" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg>`;
+  const ck = `<svg viewBox="0 0 12 12" fill="none" stroke="#151719" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg>`;
   return [...prim].map(m => `<span class="chip"><i>${ck}</i>${MUSCLES[m]}</span>`).join("") +
          [...sec].map(m => `<span class="chip sec2"><i>${ck}</i>${MUSCLES[m]}</span>`).join("");
 }
@@ -592,23 +593,23 @@ if (tg && tg.BackButton) tg.BackButton.onClick(back);
 
 /* ---------- главная ---------- */
 const ILLUS = `<svg viewBox="0 0 240 230" aria-hidden="true">
-  <ellipse cx="120" cy="214" rx="78" ry="9" fill="#1B1D20"/>
-  <circle cx="58" cy="70" r="3" fill="#94E51B"/><circle cx="190" cy="96" r="2.5" fill="#94E51B"/><circle cx="176" cy="60" r="1.8" fill="#669C18"/><circle cx="44" cy="120" r="2" fill="#669C18"/>
-  <path d="M93 108 L74 52 M147 108 L166 52" stroke="#383838" stroke-width="15" stroke-linecap="round"/>
-  <path d="M93 108 L74 52 M147 108 L166 52" stroke="#30363D" stroke-width="9" stroke-linecap="round"/>
-  <rect x="22" y="44" width="196" height="7" rx="3.5" fill="#A8ABB1"/>
-  <rect x="26" y="22" width="16" height="52" rx="5" fill="#94E51B"/><rect x="44" y="30" width="10" height="36" rx="4" fill="#669C18"/>
-  <rect x="198" y="22" width="16" height="52" rx="5" fill="#94E51B"/><rect x="186" y="30" width="10" height="36" rx="4" fill="#669C18"/>
-  <circle cx="70" cy="48" r="7" fill="#383838"/><circle cx="170" cy="48" r="7" fill="#383838"/>
-  <path d="M90 106 Q120 96 150 106 L144 156 Q120 162 96 156 Z" fill="#30363D"/>
-  <path d="M96 112 Q120 104 144 112 L141 132 Q120 138 99 132 Z" fill="#94E51B"/>
-  <path d="M120 112 V134" stroke="#669C18" stroke-width="1.5"/>
-  <path d="M96 156 Q120 164 144 156 L146 170 Q120 176 94 170 Z" fill="#383838"/>
-  <path d="M103 168 L96 192 L100 210 M137 168 L144 192 L140 210" stroke="#383838" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  <path d="M92 211 h16 M132 211 h16" stroke="#94E51B" stroke-width="7" stroke-linecap="round"/>
-  <rect x="113" y="88" width="14" height="14" rx="5" fill="#383838"/>
-  <circle cx="120" cy="76" r="15" fill="#383838"/>
-  <path d="M106 70 Q120 58 134 70" stroke="#94E51B" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <ellipse cx="120" cy="214" rx="78" ry="9" fill="#232629"/>
+  <circle cx="58" cy="70" r="3" fill="#D97845"/><circle cx="190" cy="96" r="2.5" fill="#D97845"/><circle cx="176" cy="60" r="1.8" fill="#A85A32"/><circle cx="44" cy="120" r="2" fill="#A85A32"/>
+  <path d="M93 108 L74 52 M147 108 L166 52" stroke="#393D41" stroke-width="15" stroke-linecap="round"/>
+  <path d="M93 108 L74 52 M147 108 L166 52" stroke="#2B2F33" stroke-width="9" stroke-linecap="round"/>
+  <rect x="22" y="44" width="196" height="7" rx="3.5" fill="#9AA0A6"/>
+  <rect x="26" y="22" width="16" height="52" rx="5" fill="#D97845"/><rect x="44" y="30" width="10" height="36" rx="4" fill="#A85A32"/>
+  <rect x="198" y="22" width="16" height="52" rx="5" fill="#D97845"/><rect x="186" y="30" width="10" height="36" rx="4" fill="#A85A32"/>
+  <circle cx="70" cy="48" r="7" fill="#393D41"/><circle cx="170" cy="48" r="7" fill="#393D41"/>
+  <path d="M90 106 Q120 96 150 106 L144 156 Q120 162 96 156 Z" fill="#2B2F33"/>
+  <path d="M96 112 Q120 104 144 112 L141 132 Q120 138 99 132 Z" fill="#D97845"/>
+  <path d="M120 112 V134" stroke="#A85A32" stroke-width="1.5"/>
+  <path d="M96 156 Q120 164 144 156 L146 170 Q120 176 94 170 Z" fill="#393D41"/>
+  <path d="M103 168 L96 192 L100 210 M137 168 L144 192 L140 210" stroke="#393D41" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M92 211 h16 M132 211 h16" stroke="#D97845" stroke-width="7" stroke-linecap="round"/>
+  <rect x="113" y="88" width="14" height="14" rx="5" fill="#393D41"/>
+  <circle cx="120" cy="76" r="15" fill="#393D41"/>
+  <path d="M106 70 Q120 58 134 70" stroke="#D97845" stroke-width="4" stroke-linecap="round" fill="none"/>
 </svg>`;
 function findDraft() {
   for (const d of [...DAYS, "X"]) { const w = store.get(dkey(d)); if (w && w.items && w.items.length) return w; }
@@ -620,7 +621,7 @@ function renderHome() {
   const dr = findDraft();
   if (dr) {
     const all = dr.items.reduce((a, it) => a + it.sets.length, 0), done = dr.items.reduce((a, it) => a + it.sets.filter(s => s.rt).length, 0);
-    $("resume").innerHTML = `<button class="resume" id="resume-btn"><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M8 5v14l11-7z"/></svg></div>
+    $("resume").innerHTML = `<button class="resume" id="resume-btn"><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" fill="#151719"><path d="M8 5v14l11-7z"/></svg></div>
       <div class="t"><small>Незаконченная тренировка</small><b>${esc(wTitle(dr))}</b><span>${done} из ${all} подходов</span></div>
       <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
     $("resume-btn").onclick = () => startWorkout(dr);
@@ -660,7 +661,7 @@ const BIG_FIRST = ["legs","back","chest","shoulders","arms","abs"];
 let pk = { sel: new Set(), side: "front" };
 function openPick() { pk = { sel: new Set(), side: "front" }; renderPick(); go("pick"); }
 function renderPick() {
-  const ck = `<svg viewBox="0 0 12 12" fill="none" stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg>`;
+  const ck = `<svg viewBox="0 0 12 12" fill="none" stroke="#151719" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg>`;
   const allOn = Object.keys(GMUS).every(g => pk.sel.has(g));
   $("pk-groups").innerHTML = PGROUPS.map(([g, t]) => `<button class="gbtn ${(g === "all" ? allOn : pk.sel.has(g)) ? "on" : ""}" data-g="${g}"><i>${ck}</i>${t}</button>`).join("");
   $("pk-groups").querySelectorAll(".gbtn").forEach(b => b.onclick = () => {
@@ -853,7 +854,7 @@ function updateMain() {
   } else if (current === "home") text = null;
   if (inTG && tg.MainButton) {
     try {
-      tg.MainButton.setParams({ color: "#94E51B", text_color: "#000000" });
+      tg.MainButton.setParams({ color: "#D97845", text_color: "#151719" });
       if (text) { tg.MainButton.setText(text); tg.MainButton.show(); } else tg.MainButton.hide();
     } catch (e) {}
     fb.style.display = "none";
@@ -952,7 +953,7 @@ function openDetail(id) {
   openSheet(`<h2 style="margin-top:6px">${esc(e.name)}</h2><div style="color:var(--inactive);font-size:14px;margin-top:4px">${GROUPS[e.group]}${e.step ? ` · шаг ${fmt(e.step)} кг` : " · свой вес"} · ${e.reps[0]}–${e.reps[1]} повторов</div>`,
     `<div class="bodies">${bodies(p, s)}</div>
      <div class="chips">${muscleChips(p, s)}</div>
-     ${e.tip ? `<div class="sec">Техника</div><div style="font-size:15px;line-height:1.5;color:#d9dadc">${esc(e.tip)}</div>` : ""}
+     ${e.tip ? `<div class="sec">Техника</div><div style="font-size:15px;line-height:1.5;color:#D8D5D0">${esc(e.tip)}</div>` : ""}
      <div class="sec">Твой рабочий вес</div><div style="font-size:22px;font-weight:700">${st && st[0] != null ? (e.step ? fmt(st[0]) + " кг × " + st[1] : st[1] + " повторов") : '<span style="color:var(--mid);font-weight:500;font-size:15px">Ещё не делал</span>'}</div>`);
 }
 
