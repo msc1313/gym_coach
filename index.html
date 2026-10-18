@@ -101,6 +101,60 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .dayrow .t span{font-size:13px;color:var(--inactive);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chev{color:var(--mid);flex:none}
 
+/* ---------- анкета ---------- */
+#v-onb:not(.hidden){display:flex;flex-direction:column;padding-bottom:calc(var(--bot) + 24px)}
+.onb-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.dots{display:flex;gap:6px;flex:1;justify-content:center}
+.dots i{width:22px;height:5px;border-radius:3px;background:var(--dark);transition:all .3s}
+.dots i.on{background:var(--lime);width:34px}
+.onb-step{flex:1;display:flex;flex-direction:column;justify-content:center;animation:fade .35s var(--ease)}
+.onb-step h1{font-size:30px;text-align:center}
+.onb-step p{color:var(--inactive);text-align:center;margin-top:8px;font-size:15px}
+.bigval{text-align:center;margin:44px 0 18px;font-size:64px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.bigval small{font-size:20px;color:var(--inactive);font-weight:600;margin-left:6px}
+.ruler{position:relative;height:84px;margin:0 -16px}
+.ruler .track{height:100%;overflow-x:scroll;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
+.ruler .track::-webkit-scrollbar{display:none}
+.ruler .ticks{display:flex;align-items:flex-start;height:100%}
+.ruler .tk{flex:none;width:12px;height:100%;scroll-snap-align:center;position:relative}
+.ruler .tk::before{content:"";position:absolute;left:50%;top:0;width:2px;height:22px;margin-left:-1px;border-radius:1px;background:var(--dark)}
+.ruler .tk.mid::before{height:32px;background:var(--mid)}
+.ruler .tk.big::before{height:44px;background:var(--inactive)}
+.ruler .tk span{position:absolute;top:52px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--mid);font-weight:600}
+.ruler .needle{position:absolute;left:50%;top:-6px;width:4px;height:60px;margin-left:-2px;border-radius:2px;background:var(--lime);pointer-events:none;box-shadow:0 0 14px rgba(217,120,69,.6)}
+.ruler::before,.ruler::after{content:"";position:absolute;top:0;bottom:0;width:70px;z-index:1;pointer-events:none}
+.ruler::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.ruler::after{right:0;background:linear-gradient(-90deg,var(--bg),transparent)}
+.fine{display:flex;justify-content:center;gap:12px;margin-top:14px}
+.fine button{width:52px;height:44px;border-radius:14px;background:var(--card);font-size:22px;color:var(--lime);font-weight:600}
+.sexes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:40px}
+.sexes button{height:120px;border-radius:24px;border:1.5px solid var(--outline);background:var(--card);font-size:18px;font-weight:700;color:var(--inactive);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:all .25s}
+.sexes button svg{width:36px;height:36px}
+.sexes button.on{border-color:var(--lime);color:var(--text);box-shadow:0 0 22px rgba(217,120,69,.18)}
+.datebox{margin:40px auto 0;display:block;width:100%;max-width:320px;height:64px;border-radius:20px;border:1.5px solid var(--outline);background:var(--card);
+  color:var(--text);font-size:22px;font-weight:700;text-align:center;padding:0 16px;-webkit-appearance:none;appearance:none}
+.datebox::-webkit-date-and-time-value{text-align:center}
+.agehint{text-align:center;color:var(--lime);font-weight:600;margin-top:14px;min-height:22px}
+
+/* ---------- спросить тренера ---------- */
+.ask{background:var(--card);border-radius:22px;padding:16px;margin-top:14px}
+.ask small{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--lime);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.ask .row{display:flex;gap:8px;margin-top:12px}
+.ask textarea{flex:1;min-height:48px;max-height:120px;resize:none;background:var(--card2);border:1.5px solid transparent;border-radius:16px;padding:13px 14px;
+  color:var(--text);font:inherit;font-size:15px;outline:none;transition:border-color .2s}
+.ask textarea:focus{border-color:var(--lime)}
+.ask textarea::placeholder{color:var(--mid)}
+.ask .send{width:48px;height:48px;border-radius:16px;background:var(--lime);display:grid;place-items:center;flex:none;align-self:flex-end}
+.ask .send:active{background:var(--green)}
+.qchips{display:flex;gap:8px;overflow-x:auto;margin:12px -16px 0;padding:0 16px;scrollbar-width:none}
+.qchips::-webkit-scrollbar{display:none}
+.qchips button{flex:none;height:34px;padding:0 14px;border-radius:99px;border:1.5px solid var(--outline);color:var(--inactive);font-size:13px;font-weight:600}
+.qchips button:active{border-color:var(--lime);color:var(--text)}
+.profile{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:var(--card);border-radius:20px;padding:14px;margin-top:10px}
+.profile div{text-align:center}
+.profile b{display:block;font-size:20px;font-weight:800}
+.profile span{font-size:12px;color:var(--inactive)}
+
 /* ---------- пустой дневник ---------- */
 .empty-hero{text-align:center;padding:10px 6px 0}
 .illus{display:flex;justify-content:center;margin:18px 0 6px}
@@ -165,6 +219,19 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .exbtns button{width:34px;height:34px;border-radius:11px;background:var(--card2);display:grid;place-items:center;color:var(--inactive)}
 .exbtns button:active{color:var(--lime)}
 .exbtns svg{width:17px;height:17px}
+.favbtn{float:right;display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:99px;border:1.5px solid var(--outline);color:var(--inactive);font-size:13px;font-weight:600;margin:4px 0 0 10px}
+.favbtn svg{width:16px;height:16px}
+.ai{background:var(--card);border:1.5px solid rgba(217,120,69,.45);border-radius:22px;padding:16px;margin-top:14px;animation:fade .35s var(--ease)}
+.ai small{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--lime);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.ai h3{font-size:19px;font-weight:700;margin:8px 0 4px}
+.ai p{font-size:14px;color:var(--inactive);line-height:1.45}
+.ai ol{margin:12px 0 0;padding-left:20px;font-size:14px;line-height:1.7}
+.ai ol span{color:var(--inactive)}
+.ai .cta{margin-top:14px;height:50px}
+.mode{display:flex;background:var(--card);border-radius:14px;padding:4px;margin:12px auto 0;max-width:340px}
+.mode button{flex:1;height:36px;border-radius:11px;font-size:14px;font-weight:600;color:var(--inactive);transition:all .2s}
+.mode button.on{background:var(--dark);color:var(--text)}
+.pklist{font-size:13px;color:var(--inactive);text-align:center;margin-top:6px;line-height:1.5}
 .target{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 4px}
 .target span{font-size:12px;font-weight:600;color:var(--lime);background:rgba(217,120,69,.08);border:1px solid rgba(217,120,69,.22);padding:4px 10px;border-radius:99px}
 .tip{display:none;font-size:13px;color:var(--inactive);background:var(--card2);border-radius:14px;padding:10px 12px;margin-top:10px;line-height:1.45}
@@ -304,7 +371,16 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
     <div class="week" id="week"></div>
     <div class="calnote" id="calnote"></div>
   </div>
+  <div class="ask">
+    <small><svg width="14" height="14" viewBox="0 0 24 24" fill="#D97845"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg>Спроси тренера</small>
+    <div class="row">
+      <textarea id="ask-q" rows="1" placeholder="Давай тренировку на спину…" maxlength="400"></textarea>
+      <button class="send" id="ask-send" aria-label="Отправить"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#151719" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+    <div class="qchips" id="ask-chips"></div>
+  </div>
   <div id="resume"></div>
+  <div id="aiplan"></div>
   <div class="empty-hero">
     <div class="illus" id="illus"></div>
     <h2>Добавьте новую тренировку</h2>
@@ -312,6 +388,17 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
     <button class="cta" id="add-workout"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#151719" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Добавить тренировку</button>
     <button class="plan-link" id="plan-link"></button>
   </div>
+</section>
+
+<!-- ============ АНКЕТА ============ -->
+<section class="view hidden" id="v-onb">
+  <div class="onb-top">
+    <button class="iconbtn" id="onb-back" aria-label="Назад"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="dots" id="onb-dots"></div>
+    <div style="width:42px"></div>
+  </div>
+  <div class="onb-step" id="onb-step"></div>
+  <button class="cta" id="onb-next">Далее</button>
 </section>
 
 <!-- ============ ВЫБОР МЫШЦ ============ -->
@@ -324,7 +411,9 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
     <div class="gcol" id="pk-groups"></div>
     <div class="pfig" id="pk-fig"></div>
   </div>
+  <div id="pk-mode"></div>
   <div class="pksum" id="pk-sum"></div>
+  <div class="pklist" id="pk-list"></div>
   <button class="cta" id="pk-start">Старт<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#151719" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
 </section>
 
@@ -416,7 +505,7 @@ if (tg) {
 
 /* ---------- данные от бота (в ссылке) ---------- */
 function readState() {
-  const empty = { n: "A", c: 0, w: {}, s: {}, h: "" };
+  const empty = { n: "A", c: 0, w: {}, s: {}, h: "", f: [], u: {}, a: null };
   try {
     const d = new URLSearchParams(location.search).get("d");
     if (!d) return empty;
@@ -426,6 +515,14 @@ function readState() {
   } catch (e) { return empty; }
 }
 const S = readState();
+const FAV = new Set((store0("fav") || S.f || []).filter(id => CAT[id]));
+function store0(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+function toggleFav(id) {
+  if (FAV.has(id)) FAV.delete(id); else FAV.add(id);
+  try { localStorage.setItem("fav", JSON.stringify([...FAV])); } catch (e) {}
+  H("medium"); toast(FAV.has(id) ? "Добавлено в любимые ♥" : "Убрано из любимых");
+}
+const HEART = (on) => `<svg viewBox="0 0 24 24" fill="${on ? "#D97845" : "none"}" stroke="${on ? "#D97845" : "currentColor"}" stroke-width="2.2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5C19 15.6 12 20 12 20z"/></svg>`;
 const hist = {};
 for (let i = 0; i + 7 <= String(S.h || "").length; i += 7) {
   const d = S.h.slice(i, i + 6); hist["20" + d.slice(0,2) + "-" + d.slice(2,4) + "-" + d.slice(4,6)] = S.h[i + 6];
@@ -590,6 +687,109 @@ function back() {
 document.querySelectorAll("[data-back]").forEach(b => b.onclick = back);
 if (tg && tg.BackButton) tg.BackButton.onClick(back);
 
+/* ---------- анкета: пол, вес, рост, дата рождения ---------- */
+const PROFILE = Object.assign({}, S.p || {}, store0("profile") || {});
+const hasProfile = () => PROFILE.w && PROFILE.h && PROFILE.b;
+let onb = { k: 0, edit: false };
+const ONB = [
+  { key: "s", title: "Твой пол", sub: "Чтобы подбирать нагрузку и веса" },
+  { key: "w", title: "Твой вес", sub: "Можно примерно — потом поменяешь", min: 35, max: 200, step: 0.5, def: 75, unit: "кг", every: 10 },
+  { key: "h", title: "Твой рост", sub: "В сантиметрах", min: 130, max: 220, step: 1, def: 175, unit: "см", every: 10 },
+  { key: "b", title: "Дата рождения", sub: "Возраст важен для восстановления и нагрузки" },
+];
+function age(b) {
+  if (!b) return null;
+  const [y, m, d] = b.split("-").map(Number), t = new Date();
+  return t.getFullYear() - y - ((t.getMonth() + 1 < m || (t.getMonth() + 1 === m && t.getDate() < d)) ? 1 : 0);
+}
+function openOnb(edit) {
+  onb = { k: 0, edit: !!edit };
+  ["home","cat","prog"].forEach(x => $("v-" + x).classList.add("hidden"));
+  $("v-onb").classList.remove("hidden"); $("nav").classList.add("hide");
+  renderOnb();
+}
+function closeOnb() {
+  try { localStorage.setItem("profile", JSON.stringify(PROFILE)); } catch (e) {}
+  $("v-onb").classList.add("hidden"); $("nav").classList.remove("hide");
+  current = "home"; $("v-home").classList.remove("hidden");
+  document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.v === "home"));
+  renderHome(); HN("success");
+  if (onb.edit) toast("Профиль обновлён");
+}
+function renderOnb() {
+  const st = ONB[onb.k];
+  $("onb-dots").innerHTML = ONB.map((_, i) => `<i class="${i <= onb.k ? "on" : ""}"></i>`).join("");
+  $("onb-back").style.visibility = onb.k || onb.edit ? "visible" : "hidden";
+  $("onb-next").textContent = onb.k === ONB.length - 1 ? "Готово" : "Далее";
+  let body = `<h1>${st.title}</h1><p>${st.sub}</p>`;
+  if (st.key === "s") {
+    const ic = (f) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="7.5" r="3.5"/><path d="${f ? "M12 11c-3 0-5 2.5-5.5 6h11C17 13.5 15 11 12 11zM10 17v4M14 17v4" : "M6 21v-3a6 6 0 0 1 12 0v3"}"/></svg>`;
+    body += `<div class="sexes"><button data-s="m" class="${PROFILE.s === "m" ? "on" : ""}">${ic(0)}Мужской</button><button data-s="f" class="${PROFILE.s === "f" ? "on" : ""}">${ic(1)}Женский</button></div>`;
+  } else if (st.key === "b") {
+    body += `<input class="datebox" id="onb-date" type="date" max="${iso(new Date(today.getFullYear() - 12, 0, 1))}" min="1930-01-01" value="${PROFILE.b || "1997-01-01"}"><div class="agehint" id="onb-age"></div>`;
+  } else {
+    body += `<div class="bigval"><span id="onb-val"></span><small>${st.unit}</small></div><div class="ruler"><div class="track" id="onb-track"><div class="ticks" id="onb-ticks"></div></div><div class="needle"></div></div>
+      <div class="fine"><button data-d="-1" aria-label="Меньше">−</button><button data-d="1" aria-label="Больше">+</button></div>`;
+  }
+  $("onb-step").innerHTML = body;
+  $("onb-step").style.animation = "none"; void $("onb-step").offsetWidth; $("onb-step").style.animation = "";
+  if (st.key === "s") $("onb-step").querySelectorAll("[data-s]").forEach(b => b.onclick = () => {
+    H("medium"); PROFILE.s = b.dataset.s; $("onb-step").querySelectorAll("[data-s]").forEach(x => x.classList.toggle("on", x === b));
+  });
+  if (st.key === "b") {
+    const upd = () => { PROFILE.b = $("onb-date").value; const a = age(PROFILE.b); $("onb-age").textContent = a != null && a > 0 ? a + " " + plural(a, "год", "года", "лет") : ""; };
+    $("onb-date").oninput = upd; $("onb-date").onchange = upd; upd();
+  }
+  if (st.min != null) buildRuler(st);
+}
+function buildRuler(st) {
+  const n = Math.round((st.max - st.min) / st.step), track = $("onb-track"), W = 12;
+  const pad = `<div style="flex:none;width:calc(50% - ${W / 2}px)"></div>`;
+  let h = "";
+  for (let i = 0; i <= n; i++) {
+    const v = Math.round((st.min + i * st.step) * 10) / 10;
+    const big = v % st.every === 0, mid = !big && v % (st.every / 2) === 0;
+    h += `<div class="tk ${big ? "big" : mid ? "mid" : ""}">${big ? `<span>${v}</span>` : ""}</div>`;
+  }
+  $("onb-ticks").innerHTML = pad + h + pad;
+  if (PROFILE[st.key] == null) PROFILE[st.key] = st.def;
+  const toX = (v) => Math.round((v - st.min) / st.step) * W;
+  const show = () => { $("onb-val").textContent = String(PROFILE[st.key]).replace(".", ","); };
+  requestAnimationFrame(() => { track.scrollLeft = toX(PROFILE[st.key]); show(); });
+  let last = null;
+  track.onscroll = () => {
+    const i = Math.max(0, Math.min(n, Math.round(track.scrollLeft / W)));
+    const v = Math.round((st.min + i * st.step) * 10) / 10;
+    if (v !== last) { last = v; PROFILE[st.key] = v; show(); try { tg.HapticFeedback.selectionChanged(); } catch (e) {} }
+  };
+  $("onb-step").querySelectorAll("[data-d]").forEach(b => b.onclick = () => {
+    const v = Math.min(st.max, Math.max(st.min, Math.round((PROFILE[st.key] + st.step * Number(b.dataset.d)) * 10) / 10));
+    PROFILE[st.key] = v; track.scrollTo({ left: toX(v), behavior: "smooth" }); show(); H();
+  });
+}
+$("onb-next").onclick = () => {
+  const st = ONB[onb.k];
+  if (st.key === "s" && !PROFILE.s) { toast("Выбери вариант"); HN("error"); return; }
+  if (st.key === "b") { const a = age(PROFILE.b); if (!PROFILE.b || a == null || a < 12 || a > 95) { toast("Проверь дату рождения"); HN("error"); return; } }
+  H("medium");
+  if (onb.k < ONB.length - 1) { onb.k++; renderOnb(); } else closeOnb();
+};
+$("onb-back").onclick = () => { H(); if (onb.k > 0) { onb.k--; renderOnb(); } else if (onb.edit) closeOnb(); };
+
+/* ---------- спросить тренера ---------- */
+const QUICK = ["Тренировка на спину", "Грудь и трицепс", "Ноги, но полегче", "Всё тело за 45 минут", "Не чувствую грудь в жиме"];
+$("ask-chips").innerHTML = QUICK.map(q => `<button>${q}</button>`).join("");
+$("ask-chips").querySelectorAll("button").forEach(b => b.onclick = () => { H(); $("ask-q").value = b.textContent; $("ask-q").focus(); autoGrow(); });
+function autoGrow() { const t = $("ask-q"); t.style.height = "auto"; t.style.height = Math.min(120, t.scrollHeight) + "px"; }
+$("ask-q").oninput = autoGrow;
+$("ask-send").onclick = () => {
+  const q = $("ask-q").value.trim();
+  if (q.length < 3) { toast("Напиши, что хочешь потренировать"); HN("error"); $("ask-q").focus(); return; }
+  HN("success");
+  if (inTG) tg.sendData(JSON.stringify({ type: "ai", q, p: PROFILE }));
+  else toast("Откройте приложение из Telegram");
+};
+
 /* ---------- главная ---------- */
 const ILLUS = `<svg viewBox="0 0 240 230" aria-hidden="true">
   <ellipse cx="120" cy="214" rx="78" ry="9" fill="#232629"/>
@@ -625,7 +825,22 @@ function renderHome() {
       <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
     $("resume-btn").onclick = () => startWorkout(dr);
   } else $("resume").innerHTML = "";
+  renderAI(dr);
   $("plan-link").innerHTML = `или по программе тренера: <b>День ${S.n} · ${esc(PLAN[S.n].title)}</b>`;
+}
+function aiKey() { return S.a ? "ai_done_" + JSON.stringify(S.a.i) : ""; }
+function renderAI(dr) {
+  const a = S.a;
+  if (!a || !a.i || store.get(aiKey()) || (dr && dr.ai)) { $("aiplan").innerHTML = ""; return; }
+  const items = a.i.filter(([id]) => CAT[id]);
+  $("aiplan").innerHTML = `<div class="ai"><small><svg width="14" height="14" viewBox="0 0 24 24" fill="#D97845"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg>Тренер собрал тренировку</small>
+    <h3>${esc(a.t)}</h3>${a.n ? `<p>${esc(a.n)}</p>` : ""}
+    <ol>${items.map(([id, n]) => `<li>${esc(CAT[id].name)} <span>· ${n} подх.</span></li>`).join("")}</ol>
+    <button class="cta" id="ai-start">Начать<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#151719" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>`;
+  $("ai-start").onclick = () => {
+    store.set(aiKey(), 1);
+    startWorkout({ day: "X", title: a.t, ai: 1, start: Date.now(), items: items.map(([id, n]) => freshItem(id, id, n)) });
+  };
 }
 $("plan-link").onclick = () => startWorkout(store.get(dkey(S.n)) || newPlanWorkout(S.n));
 $("add-workout").onclick = () => {
@@ -657,8 +872,8 @@ const PGROUPS = [["chest","Грудь"],["back","Спина"],["shoulders","Пл
 const GMUS = { chest: ["chest"], back: ["traps","lats","midback","lowerback"], shoulders: ["delts"],
   arms: ["biceps","triceps","forearms"], legs: ["quads","hamstrings","glutes","calves","adductors"], abs: ["abs","obliques"] };
 const BIG_FIRST = ["legs","back","chest","shoulders","arms","abs"];
-let pk = { sel: new Set(), side: "front" };
-function openPick() { pk = { sel: new Set(), side: "front" }; renderPick(); go("pick"); }
+let pk = { sel: new Set(), side: "front", mode: "usual" };
+function openPick() { pk = { sel: new Set(), side: "front", mode: "usual" }; renderPick(); go("pick"); }
 function renderPick() {
   const ck = `<svg viewBox="0 0 12 12" fill="none" stroke="#151719" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg>`;
   const allOn = Object.keys(GMUS).every(g => pk.sel.has(g));
@@ -671,18 +886,31 @@ function renderPick() {
   });
   const prim = new Set(); pk.sel.forEach(g => GMUS[g].forEach(m => prim.add(m)));
   $("pk-fig").innerHTML = bodySVG("front", prim, new Set());
-  const ids = buildCustom([...pk.sel]);
-  const sets = ids.length * 3;
-  $("pk-sum").innerHTML = ids.length ? `<b>${ids.length} ${plural(ids.length,"упражнение","упражнения","упражнений")}</b> · ${sets} подходов · ~${Math.round(sets * 2.6)} мин` : "Нажми на группу мышц слева";
+  const canUsual = hasUsual([...pk.sel]);
+  $("pk-mode").innerHTML = canUsual ? `<div class="mode"><button data-m="usual" class="${pk.mode === "usual" ? "on" : ""}">Как обычно</button><button data-m="new" class="${pk.mode === "new" ? "on" : ""}">Новая подборка</button></div>` : "";
+  $("pk-mode").querySelectorAll("button").forEach(b => b.onclick = () => { H(); pk.mode = b.dataset.m; renderPick(); });
+  const plan = pickPlan([...pk.sel]);
+  const sets = plan.reduce((a, x) => a + x[1], 0);
+  $("pk-sum").innerHTML = plan.length ? `<b>${plan.length} ${plural(plan.length,"упражнение","упражнения","упражнений")}</b> · ${sets} подходов · ~${Math.round(sets * 2.6)} мин` : "Нажми на группу мышц слева";
+  $("pk-list").textContent = plan.map(([id]) => CAT[id].name).join(" · ");
 }
 $("pk-start").onclick = () => {
   if (!pk.sel.size) { toast("Выбери хотя бы одну группу мышц"); HN("error"); return; }
   const groups = BIG_FIRST.filter(g => pk.sel.has(g));
   const all = groups.length === Object.keys(GMUS).length;
   const title = all ? "Всё тело" : groups.map(g => GROUPS[g]).join(" + ");
-  const w = { day: "X", title, groups, start: Date.now(), items: buildCustom(groups).map(id => freshItem(id, id, 3)) };
+  const w = { day: "X", title, groups, start: Date.now(), items: pickPlan(groups).map(([id, n]) => freshItem(id, id, n)) };
   startWorkout(w, true);
 };
+function hasUsual(groups) {
+  const u = S.u || {};
+  return groups.length > 0 && groups.every(g => u[g] && u[g].length);
+}
+function pickPlan(groups) {
+  groups = BIG_FIRST.filter(g => groups.includes(g));
+  if (pk.mode === "usual" && hasUsual(groups)) return groups.flatMap(g => S.u[g].filter(([id]) => CAT[id]));
+  return buildCustom(groups).map(id => [id, 3]);
+}
 function buildCustom(groups) {
   groups = BIG_FIRST.filter(g => groups.includes(g));
   if (!groups.length) return [];
@@ -692,7 +920,7 @@ function buildCustom(groups) {
   const out = [];
   groups.forEach((g, gi) => {
     let ids = Object.keys(CAT).filter(id => CAT[id].group === g);
-    const score = (id) => ((S.w || {})[id] ? 0 : inPlan.has(id) ? 1 : 2);
+    const score = (id) => (FAV.has(id) ? -1 : (S.w || {})[id] ? 0 : inPlan.has(id) ? 1 : 2);
     ids = ids.map((id, k) => [id, k]).sort((a, b) => score(a[0]) - score(b[0]) || a[1] - b[1]).map(x => x[0]);
     if (g === "arms") {
       const bi = ids.filter(id => CAT[id].m[0] === "biceps" || CAT[id].m.includes("biceps") && !CAT[id].m.includes("triceps"));
@@ -765,6 +993,7 @@ function exCard(it, i) {
       <div class="exnum">${i + 1}</div>
       <div class="exname"><b>${esc(e.name)}</b><span>${e.m.map(m => MUSCLES[m]).join(" · ")}${swapped ? " · замена" : ""}</span></div>
       <div class="exbtns">
+        <button data-act="fav" aria-label="Любимое">${HEART(FAV.has(it.id))}</button>
         ${e.tip ? `<button data-act="tip" aria-label="Техника">${IC.info}</button>` : ""}
         <button data-act="swap" aria-label="Заменить">${IC.swap}</button>
         ${!it.slot || !PLAN[W.day] ? `<button data-act="remove" aria-label="Убрать">${IC.trash}</button>` : ""}
@@ -793,6 +1022,7 @@ function bindCards() {
     const i = Number(card.dataset.i), it = W.items[i];
     card.querySelectorAll("[data-act]").forEach(b => b.onclick = () => {
       const a = b.dataset.act;
+      if (a === "fav") { toggleFav(it.id); b.innerHTML = HEART(FAV.has(it.id)); return; }
       if (a === "tip") { it.tip = !it.tip; card.querySelector(".tip").classList.toggle("open", it.tip); H(); save(); }
       if (a === "swap") openPicker("swap", i);
       if (a === "remove") { if (W.items.length <= 1) { toast("В тренировке должно остаться упражнение"); return; } H("medium"); W.items.splice(i, 1); save(); renderWorkout(); updateMain(); }
@@ -868,7 +1098,7 @@ function finish() {
     sets: it.sets.filter(s => s.rt).map(s => [Number(s.w) || 0, Number(s.r) || 0, s.rt]) })).filter(it => it.sets.length);
   if (!items.length) return;
   const send = () => {
-    const payload = JSON.stringify({ day: W.day, items });
+    const payload = JSON.stringify({ day: W.day, items, fav: [...FAV].slice(0, 40), ai: W.ai ? 1 : 0, p: PROFILE });
     store.del(dkey(W.day));
     HN("success");
     if (inTG) tg.sendData(payload);
@@ -948,8 +1178,9 @@ $("scrim").onclick = closeSheet;
 
 function openDetail(id) {
   H();
+  setTimeout(() => { const fb = $("det-fav"); if (fb) fb.onclick = () => { toggleFav(id); fb.innerHTML = HEART(FAV.has(id)) + (FAV.has(id) ? "В любимых" : "В любимые"); }; }, 0);
   const e = CAT[id], [p, s] = musclesOf([id]), st = (S.w || {})[id];
-  openSheet(`<h2 style="margin-top:6px">${esc(e.name)}</h2><div style="color:var(--inactive);font-size:14px;margin-top:4px">${GROUPS[e.group]}${e.step ? ` · шаг ${fmt(e.step)} кг` : " · свой вес"} · ${e.reps[0]}–${e.reps[1]} повторов</div>`,
+  openSheet(`<button class="favbtn" id="det-fav">${HEART(FAV.has(id))}${FAV.has(id) ? "В любимых" : "В любимые"}</button><h2 style="margin-top:6px">${esc(e.name)}</h2><div style="color:var(--inactive);font-size:14px;margin-top:4px">${GROUPS[e.group]}${e.step ? ` · шаг ${fmt(e.step)} кг` : " · свой вес"} · ${e.reps[0]}–${e.reps[1]} повторов</div>`,
     `<div class="bodies">${bodies(p, s)}</div>
      <div class="chips">${muscleChips(p, s)}</div>
      ${e.tip ? `<div class="sec">Техника</div><div style="font-size:15px;line-height:1.5;color:#D8D5D0">${esc(e.tip)}</div>` : ""}
@@ -994,11 +1225,14 @@ function choose(id) {
 
 /* ---------- прогресс ---------- */
 function renderProgress() {
+  setTimeout(() => { const b = $("prof-edit"); if (b) b.onclick = () => openOnb(true); }, 0);
   const now = Date.now();
   const last30 = Object.keys(hist).filter(k => (now - new Date(k).getTime()) / 864e5 <= 30).length;
   const known = Object.keys(S.w || {}).filter(k => CAT[k]).length;
   $("v-prog").innerHTML = `
     <div class="head"><div><div class="eyebrow">Твои рабочие веса</div><h1>Прогресс</h1></div></div>
+    <div class="profile" id="prof-card"><div><b>${PROFILE.w ? String(PROFILE.w).replace(".", ",") : "—"}</b><span>кг</span></div><div><b>${PROFILE.h || "—"}</b><span>см</span></div><div><b>${age(PROFILE.b) ?? "—"}</b><span>${plural(age(PROFILE.b) || 0, "год", "года", "лет")}</span></div></div>
+    <button class="plan-link" id="prof-edit" style="display:block;margin:2px auto 8px">Изменить профиль</button>
     <div class="stats">
       <div class="stat acc"><b>${S.c}</b><span>${plural(S.c,"тренировка","тренировки","тренировок")} всего</span></div>
       <div class="stat"><b>${last30}</b><span>за 30 дней</span></div>
@@ -1014,6 +1248,7 @@ function renderProgress() {
 
 /* ---------- старт ---------- */
 renderWeek(); renderHome(); updateMain();
+if (!hasProfile()) openOnb(false);
 </script>
 </body>
 </html>
