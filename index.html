@@ -476,7 +476,12 @@ const RATES = [["w","РАЗМ"],["e","ЛЕГК"],["n","НОРМ"],["h","СЛОЖ
 
 /* ---------- Telegram ---------- */
 const tg = window.Telegram && window.Telegram.WebApp;
-const inTG = !!(tg && tg.initData);
+// При запуске с кнопки внизу чата Telegram не передаёт initData — поэтому проверяем платформу
+const inTG = !!(tg && tg.platform && tg.platform !== "unknown");
+function sendToBot(payload) {
+  try { tg.sendData(payload); return true; }
+  catch (e) { toast("Открой приложение кнопкой «🏋️ Тренировка» внизу чата"); HN("error"); return false; }
+}
 const H = (t) => { try { tg.HapticFeedback.impactOccurred(t || "light"); } catch (e) {} };
 const HN = (t) => { try { tg.HapticFeedback.notificationOccurred(t || "success"); } catch (e) {} };
 if (tg) {
@@ -786,7 +791,7 @@ $("ask-send").onclick = () => {
   const q = $("ask-q").value.trim();
   if (q.length < 3) { toast("Напиши, что хочешь потренировать"); HN("error"); $("ask-q").focus(); return; }
   HN("success");
-  if (inTG) tg.sendData(JSON.stringify({ type: "ai", q, p: PROFILE }));
+  if (inTG) sendToBot(JSON.stringify({ type: "ai", q, p: PROFILE }));
   else toast("Откройте приложение из Telegram");
 };
 
@@ -1099,10 +1104,10 @@ function finish() {
   if (!items.length) return;
   const send = () => {
     const payload = JSON.stringify({ day: W.day, items, fav: [...FAV].slice(0, 40), ai: W.ai ? 1 : 0, p: PROFILE });
-    store.del(dkey(W.day));
-    HN("success");
-    if (inTG) tg.sendData(payload);
-    else { toast("Откройте приложение из Telegram"); console.log(payload); }
+    if (!inTG) { toast("Открой приложение из Telegram"); return; }
+    const key = dkey(W.day), saved = store.get(key);
+    store.del(key);
+    if (sendToBot(payload)) HN("success"); else store.set(key, saved);
   };
   const left = W.items.length - items.length;
   if (left && inTG && tg.showConfirm) tg.showConfirm(`Не отмечено упражнений: ${left}. Завершить без них?`, ok => ok && send());
