@@ -76,8 +76,26 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .wd.sel .n::after{background:var(--on)}
 .calnote{font-size:13px;color:var(--inactive);text-align:center;margin-top:10px;min-height:18px}
 .calnote b{color:var(--text);font-weight:600}
-.dsess{background:var(--card2);border-radius:16px;padding:14px;margin-bottom:12px}
-.dsess h3{font-size:16px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.dsess{background:var(--card2);border-radius:18px;padding:14px;margin-bottom:12px}
+.dhead{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.dhead h3{flex:1}
+.dtrash{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;color:var(--mid);flex:none}
+.dtrash:active{color:#E5484D;background:rgba(229,72,77,.12)}
+.dconfirm{display:none;align-items:center;gap:8px;background:rgba(229,72,77,.1);border:1px solid rgba(229,72,77,.35);border-radius:12px;padding:8px 8px 8px 12px;margin-bottom:8px;font-size:14px}
+.dconfirm span{flex:1;font-weight:600}
+.dconfirm button{height:34px;padding:0 12px;border-radius:10px;font-weight:600;font-size:13px}
+.dconfirm .dno{color:var(--inactive)}
+.dconfirm .dyes{background:#E5484D;color:#fff}
+.dsess.ask .dconfirm{display:flex}
+.dex{padding:9px 0;border-top:1px solid var(--line)}
+.dex b{font-size:14.5px;font-weight:600}
+.dsets{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.dsets span{background:var(--card);border-radius:8px;padding:4px 8px;font-size:13px;font-weight:600;color:var(--text2)}
+.donecard{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border-radius:20px;padding:14px 16px;margin-top:14px;text-align:left;font:inherit;color:inherit}
+.donecard .dot{width:40px;height:40px;border-radius:12px;background:rgba(var(--acc-rgb),.16);display:grid;place-items:center;flex:none;color:var(--lime);font-size:20px;font-weight:800}
+.donecard .t{flex:1}.donecard small{display:block;font-size:12px;color:var(--lime);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.donecard b{font-size:16px}
+.dsess h3{font-size:16px;font-weight:700;margin:0;display:flex;align-items:center;gap:8px}
 .dsess h3 span{font-size:11px;font-weight:600;color:var(--inactive);background:var(--card);border-radius:99px;padding:3px 8px}
 .dsess ul{margin:0;padding-left:16px;font-size:14px;line-height:1.65}
 .dsess ul span{color:var(--inactive)}
@@ -88,6 +106,18 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .cx-opts button{height:38px;padding:0 14px;border-radius:99px;border:1.5px solid var(--outline);color:var(--inactive);font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
 .cx-opts button.on{border-color:var(--lime);color:var(--text);background:rgba(var(--acc-rgb),.12)}
 .cx-opts button small{font-weight:500;color:var(--mid);font-size:12px}
+.hint{font-size:12.5px;color:var(--mid);text-align:center;margin:12px 0 0}
+button.prow{width:100%;text-align:left;font:inherit;color:inherit}
+.gift{background:var(--card);border-radius:20px;padding:14px}
+.gift .prem{margin:0 0 12px}
+.gift .btn2{margin:12px 0 0}
+.promo{display:flex;gap:8px}
+.promo input{flex:1;min-width:0;background:var(--card2);border:1.5px solid transparent;border-radius:14px;padding:13px 14px;color:var(--text);font:inherit;font-size:15px;outline:none;text-transform:uppercase}
+.promo input::placeholder{text-transform:none;color:var(--mid)}
+.promo input:focus{border-color:var(--lime)}
+.promo button{background:var(--lime);color:var(--on);border-radius:14px;padding:0 16px;font-weight:700;font-size:14px}
+.wedit{display:flex;align-items:center;gap:10px;margin-top:8px}
+.wedit .val{flex:1}
 .wdel{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:44px;margin-top:12px;border-radius:12px;border:1.5px solid rgba(229,72,77,.45);color:#E5484D;font-weight:600;font-size:14px}
 .wdel.sure{background:#E5484D;color:#fff;border-color:#E5484D}
 
@@ -591,6 +621,11 @@ function toggleFav(id) {
 }
 const HEART = (on) => `<svg viewBox="0 0 24 24" style="fill:${on ? "var(--lime)" : "none"};stroke:${on ? "var(--lime)" : "currentColor"}" stroke-width="2.2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5C19 15.6 12 20 12 20z"/></svg>`;
 const hist = {};
+function histEntries() {  // каждая тренировка отдельно (в один день их может быть несколько)
+  const out = [];
+  for (let i = 0; i + 7 <= String(S.h || "").length; i += 7) { const d = S.h.slice(i, i + 6); out.push(["20" + d.slice(0,2) + "-" + d.slice(2,4) + "-" + d.slice(4,6), S.h[i + 6]]); }
+  return out;
+}
 function buildHist() {
   Object.keys(hist).forEach(k => delete hist[k]);
   for (let i = 0; i + 7 <= String(S.h || "").length; i += 7) {
@@ -751,6 +786,7 @@ function showTab(v) {
 }
 document.querySelectorAll(".nav button").forEach(b => b.onclick = () => showTab(b.dataset.v));
 
+document.addEventListener("visibilitychange", () => { if (document.hidden) { const el = $("toast"); el && el.classList.remove("show"); } });
 function toast(t) {
   const el = $("toast"); el.textContent = t; el.classList.add("show");
   clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("show"), 2200);
@@ -784,7 +820,7 @@ function renderWeek() {
     if (hist[d] && hasAPI()) { selDay = d; renderWeek(); openDay(d); return; }
     selDay = selDay === d ? null : d; renderWeek();
   });
-  const total = Object.keys(hist).length;
+  const total = histEntries().length;
   let note = "";
   if (selDay) {
     const [y, m, dd] = selDay.split("-").map(Number);
@@ -1056,6 +1092,11 @@ function renderHome() {
       <div class="t"><small>Незаконченная тренировка</small><b>${esc(wTitle(dr))}</b><span>${done} из ${all} подходов</span></div>
       <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
     $("resume-btn").onclick = () => startWorkout(dr);
+  } else if (hist[iso(today)] && hasAPI()) {
+    const n = histEntries().filter(([k]) => k === iso(today)).length;
+    $("resume").innerHTML = `<button class="donecard" id="done-btn"><div class="dot">✓</div><div class="t"><small>Сегодня</small><b>${n > 1 ? "Сделано " + n + " " + plural(n, "тренировка", "тренировки", "тренировок") : "Тренировка сделана"}</b></div>
+      <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
+    $("done-btn").onclick = () => { H(); openDay(iso(today)); };
   } else $("resume").innerHTML = "";
   renderAI(dr);
   $("plan-link").innerHTML = `или по программе тренера: <b>День ${dlabel(S.n)} · ${esc(PLAN[S.n].title)}</b>`;
@@ -1376,6 +1417,7 @@ async function finishServer(w) {
     if (W && W.ai) store.set(aiKey(), 1);
     closeSheet();
     while (stack.length > 1) back();
+    weekOff = 0; selDay = null;
     applyState(d.state);
     HN("success");
     openSheet(`<h2 style="margin:6px 0 4px">Тренировка сохранена 🔥</h2>`, `<div class="fbtext">${esc(d.text || "")}</div><button class="cta" id="fb-ok">Отлично</button>`);
@@ -1512,39 +1554,67 @@ function renderProgress() {
       try { tg.openTelegramLink(url); } catch (e) { try { navigator.clipboard.writeText(S.rl); toast("Ссылка скопирована"); } catch (e2) { toast(S.rl); } }
     };
     const po = $("promo-ok"); if (po) po.onclick = async () => {
-      const code = $("promo-in").value.trim(); if (code.length < 2) return;
+      const code = $("promo-in").value.trim(); if (code.length < 2) { $("promo-in").focus(); return; }
       H(); po.disabled = true;
       try { const d = await api("promo", { code }); if (d.ok) { applyState(d.state); HN("success"); toast(`Промокод принят: +${d.days} дней Premium`); } else { HN("error"); toast(d.err || "Не подошёл"); } }
       catch (e) { toast("Не получилось — проверь интернет"); } finally { po.disabled = false; }
     };
     const pi = $("prog-import"); if (pi) pi.onclick = () => { H(); $("ask-file").click(); showTab("home"); };
-    document.querySelectorAll("[data-nid]").forEach(x => x.onclick = () => noteOp({ nid: +x.dataset.nid }));
-    const na = $("note-add"); if (na) na.onclick = () => { const v = $("note-in").value.trim(); if (v.length > 2) noteOp({ add: v }); };
+    document.querySelectorAll(".prow[data-ex]").forEach(r => r.onclick = () => editWeight(r.dataset.ex));
   }, 0);
   const now = Date.now();
-  const last30 = Object.keys(hist).filter(k => (now - new Date(k).getTime()) / 864e5 <= 30).length;
-  const known = Object.keys(S.w || {}).filter(k => CAT[k]).length;
+  const last30 = histEntries().filter(([k]) => (now - new Date(k).getTime()) / 864e5 <= 30).length;
+  const W0 = S.w || {}, shown = new Set();
+  const row = (id) => {
+    const e = CAT[id]; if (!e) return ""; shown.add(id);
+    const w = W0[id], v = w && w[0] != null ? tgtText(e, w[0], w[1]) : "";
+    return `<button class="prow" data-ex="${id}"><span>${esc(e.name)}</span><b class="${v ? "" : "none"}">${v || "—"}</b></button>`;
+  };
+  const days = DAYS.map(d => `<div class="sec">День ${dlabel(d)} · ${esc(PLAN[d].title)}</div><div class="plist">` + dayPlan(d).map(x => row(x.id)).join("") + `</div>`).join("");
+  const other = Object.keys(W0).filter(id => CAT[id] && !shown.has(id) && W0[id] && W0[id][0] != null);
+  const ICG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>`;
+  const ICC = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg>`;
   $("v-prog").innerHTML = `
     <div class="head"><div><div class="eyebrow">Твои рабочие веса</div><h1>Прогресс</h1></div></div>
     <div class="profile" id="prof-card"><div><b>${PROFILE.w ? String(PROFILE.w).replace(".", ",") : "—"}</b><span>кг</span></div><div><b>${PROFILE.h || "—"}</b><span>см</span></div><div><b>${age(PROFILE.b) ?? "—"}</b><span>${plural(age(PROFILE.b) || 0, "год", "года", "лет")}</span></div></div>
     <button class="plan-link" id="prof-edit" style="display:block;margin:2px auto 8px">Изменить профиль</button>
-    ${hasAPI() ? `<div class="sec">Тренер помнит о тебе</div><div class="notes">${(S.nt || []).map(([id, t]) => `<div class="nrow"><span>${esc(t)}</span><button data-nid="${id}" aria-label="Удалить">×</button></div>`).join("")}
-      <div class="nadd"><input id="note-in" maxlength="200" placeholder="Например: болит колено, не делаю выпады"><button id="note-add">+</button></div></div>
-      ${S.pu && S.pu >= iso(today) ? `<div class="prem">⭐ Premium до ${new Date(S.pu + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" })}</div>` : ""}
-      ${S.rl ? `<button class="btn2" id="prog-invite"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>Пригласить друга — месяц Premium обоим</button>` : ""}
-      <div class="notes" style="padding:0 14px"><div class="nadd"><input id="promo-in" maxlength="32" placeholder="Есть промокод?" autocapitalize="characters"><button id="promo-ok">OK</button></div></div>
-      <button class="btn2" id="prog-import"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg>Перенести тренировки со скриншотов</button>` : ""}
     <div class="stats">
       <div class="stat acc"><b>${S.c}</b><span>${plural(S.c,"тренировка","тренировки","тренировок")} всего</span></div>
       <div class="stat"><b>${last30}</b><span>за 30 дней</span></div>
-    </div>` +
-    DAYS.map(d => `<div class="sec">День ${dlabel(d)} · ${esc(PLAN[d].title)}</div><div class="plist">` +
-      dayPlan(d).map(x => {
-        const e = CAT[x.id], w = (S.w || {})[x.id];
-        const v = w && w[0] != null ? tgtText(e, w[0], w[1]) : "";
-        return `<div class="prow"><span>${esc(e.name)}</span><b class="${v ? "" : "none"}">${v || "—"}</b></div>`;
-      }).join("") + `</div>`).join("") +
-    (known ? "" : `<div class="empty" style="padding-top:24px">Закончи первую тренировку — здесь появятся твои веса</div>`);
+    </div>
+    <div class="hint">Нажми на упражнение, чтобы поправить или сбросить вес</div>` +
+    days + (other.length ? `<div class="sec">Другие упражнения</div><div class="plist">${other.map(row).join("")}</div>` : "") +
+    (Object.keys(W0).length ? "" : `<div class="empty" style="padding-top:24px">Закончи первую тренировку — здесь появятся твои веса</div>`) +
+    (hasAPI() ? `<div class="sec">Premium и подарки</div>
+      <div class="gift">
+        ${S.pu && S.pu >= iso(today) ? `<div class="prem">⭐ Premium до ${new Date(S.pu + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" })}</div>` : ""}
+        <div class="promo"><input id="promo-in" maxlength="32" placeholder="Промокод" autocapitalize="characters" autocomplete="off"><button id="promo-ok">Применить</button></div>
+        ${S.rl ? `<button class="btn2" id="prog-invite">${ICG}Пригласить друга · месяц обоим</button>` : ""}
+      </div>
+      <button class="btn2" id="prog-import" style="margin-top:12px">${ICC}Перенести тренировки со скриншотов</button>` : "");
+}
+
+/* ---------- поправить или сбросить рабочий вес ---------- */
+function editWeight(id) {
+  const e = CAT[id]; if (!e) return;
+  H();
+  const w = (S.w || {})[id] || [], two = e.kind === "w" || e.kind === "k";
+  const u1 = e.kind === "k" ? "мин" : "кг", u2 = unitOf(e).replace(".", "");
+  openSheet(`<h2 style="margin:6px 0 4px">${esc(e.name)}</h2><p style="color:var(--inactive);font-size:14px;margin:0">Сейчас: ${w[0] != null ? tgtText(e, w[0], w[1]) : "вес не задан"}</p>`,
+    `<div class="wedit">${two ? `<label class="val"><input id="we-w" type="number" inputmode="decimal" step="any" value="${w[0] != null ? fmt(w[0]) : ""}" placeholder="—"><small>${u1}</small></label><span class="x">${e.kind === "k" ? "·" : "×"}</span>` : ""}
+      <label class="val reps"><input id="we-r" type="number" inputmode="numeric" value="${w[1] ?? ""}" placeholder="—"><small>${u2}</small></label></div>
+     <button class="cta" id="we-save" style="margin-top:16px">Сохранить</button>
+     <button class="wdel" id="we-reset">Сбросить — как будто ещё не делал</button>`);
+  const send = async (body, msg) => {
+    try { const d = await api("weight", Object.assign({ ex: id }, body)); closeSheet(); applyState(d.state); HN("success"); toast(msg); }
+    catch (er) { toast("Не получилось — проверь интернет"); HN("error"); }
+  };
+  $("we-save").onclick = () => {
+    const r = parseInt($("we-r").value, 10), ww = two ? Number($("we-w").value) : 0;
+    if (!(r > 0) || (two && e.step && !(ww > 0))) { toast("Заполни значения"); HN("error"); return; }
+    send({ w: ww, r }, "Сохранено");
+  };
+  $("we-reset").onclick = () => send({ reset: 1 }, "Вес сброшен");
 }
 
 /* ---------- своё упражнение ---------- */
@@ -1581,24 +1651,30 @@ $("cat-add").onclick = () => {
 /* ---------- тренировки за день: просмотр и удаление ---------- */
 async function openDay(d) {
   const [y, m, dd] = d.split("-").map(Number);
-  const head = `<h2 style="margin:6px 0 4px">${dd} ${MONTHS_G[m - 1]}</h2>`;
-  openSheet(head, THINK("Загружаю…"));
+  const wd = ["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"][new Date(y, m - 1, dd).getDay()];
+  openSheet(`<h2 style="margin:6px 0 2px">${dd} ${MONTHS_G[m - 1]}</h2><p style="color:var(--inactive);font-size:14px;margin:0">${wd}</p>`, THINK("Загружаю…"));
   let res;
   try { res = await api("day", { d }); } catch (e) { $("sh-body").innerHTML = `<p style="color:var(--inactive)">Не загрузилось — проверь интернет</p>`; return; }
   const ss = res.sessions || [];
   if (!ss.length) { $("sh-body").innerHTML = `<p style="color:var(--inactive)">В этот день тренировок нет</p>`; return; }
-  const setsTxt = (id, xs) => { const e = CAT[id]; return xs.map(([w, r]) => e.kind === "k" ? `${fmt(w)} мин · ${r} ккал` : e.kind === "w" && w ? `${fmt(w)}×${r}` : r + (e.kind === "t" ? "с" : e.kind === "c" ? "мин" : "")).join(", "); };
-  const TRASH = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-  $("sh-body").innerHTML = ss.map(x => `<div class="dsess"><h3>${esc(x.day === "X" || !PLAN[x.day] ? x.t : "День " + dlabel(x.day) + " · " + x.t)}${x.imp ? "<span>перенесена</span>" : ""}</h3>
-    <ul>${x.i.filter(([id]) => CAT[id]).map(([id, xs]) => `<li>${esc(CAT[id].name)} <span>· ${setsTxt(id, xs)}</span></li>`).join("")}</ul>
-    <button class="wdel" data-sid="${x.sid}">${TRASH}Удалить тренировку</button></div>`).join("");
-  document.querySelectorAll(".wdel[data-sid]").forEach(b => b.onclick = async () => {
-    if (!b.classList.contains("sure")) { H("medium"); b.classList.add("sure"); b.innerHTML = TRASH + "Точно удалить? Нажми ещё раз"; return; }
-    b.disabled = true; b.textContent = "Удаляю…";
-    try {
-      const r = await api("session/del", { sid: +b.dataset.sid });
-      closeSheet(); selDay = null; applyState(r.state); HN("success"); toast("Тренировка удалена");
-    } catch (e) { b.disabled = false; b.textContent = "Не вышло — попробуй ещё раз"; HN("error"); }
+  const one = (id, w, r) => { const e = CAT[id]; return e.kind === "k" ? `${fmt(w)} мин · ${r} ккал` : e.kind === "w" && w ? `${fmt(w)} × ${r}` : r + (e.kind === "t" ? " сек" : e.kind === "c" ? " мин" : " повт"); };
+  const TRASH = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
+  $("sh-body").innerHTML = ss.map(x => `<div class="dsess" data-sid="${x.sid}">
+    <div class="dhead"><h3>${esc(x.day === "X" || !PLAN[x.day] ? x.t : "День " + dlabel(x.day) + " · " + x.t)}${x.imp ? "<span>перенесена</span>" : ""}</h3>
+      <button class="dtrash" aria-label="Удалить тренировку">${TRASH}</button></div>
+    <div class="dconfirm"><span>Удалить тренировку?</span><button class="dno">Отмена</button><button class="dyes">Удалить</button></div>
+    ${x.i.filter(([id]) => CAT[id]).map(([id, xs]) => `<div class="dex"><b>${esc(CAT[id].name)}</b><div class="dsets">${xs.map(([w, r]) => `<span>${one(id, w, r)}</span>`).join("")}</div></div>`).join("")}
+  </div>`).join("");
+  document.querySelectorAll(".dsess").forEach(card => {
+    card.querySelector(".dtrash").onclick = () => { H("medium"); card.classList.add("ask"); };
+    card.querySelector(".dno").onclick = () => { H(); card.classList.remove("ask"); };
+    card.querySelector(".dyes").onclick = async (ev) => {
+      const b = ev.currentTarget; b.disabled = true; b.textContent = "Удаляю…";
+      try {
+        const r = await api("session/del", { sid: +card.dataset.sid });
+        closeSheet(); selDay = null; applyState(r.state); HN("success"); toast("Тренировка удалена");
+      } catch (e) { b.disabled = false; b.textContent = "Удалить"; toast("Не получилось — проверь интернет"); HN("error"); }
+    };
   });
 }
 
