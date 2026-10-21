@@ -76,6 +76,20 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .wd.sel .n::after{background:var(--on)}
 .calnote{font-size:13px;color:var(--inactive);text-align:center;margin-top:10px;min-height:18px}
 .calnote b{color:var(--text);font-weight:600}
+.dsess{background:var(--card2);border-radius:16px;padding:14px;margin-bottom:12px}
+.dsess h3{font-size:16px;font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.dsess h3 span{font-size:11px;font-weight:600;color:var(--inactive);background:var(--card);border-radius:99px;padding:3px 8px}
+.dsess ul{margin:0;padding-left:16px;font-size:14px;line-height:1.65}
+.dsess ul span{color:var(--inactive)}
+.cx-in{width:100%;background:var(--card2);border:1.5px solid transparent;border-radius:14px;padding:14px;color:var(--text);font:inherit;font-size:16px;outline:none}
+.cx-in:focus{border-color:var(--lime)}
+.cx-in::placeholder{color:var(--mid)}
+.cx-opts{display:flex;flex-wrap:wrap;gap:8px}
+.cx-opts button{height:38px;padding:0 14px;border-radius:99px;border:1.5px solid var(--outline);color:var(--inactive);font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+.cx-opts button.on{border-color:var(--lime);color:var(--text);background:rgba(var(--acc-rgb),.12)}
+.cx-opts button small{font-weight:500;color:var(--mid);font-size:12px}
+.wdel{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:44px;margin-top:12px;border-radius:12px;border:1.5px solid rgba(229,72,77,.45);color:#E5484D;font-weight:600;font-size:14px}
+.wdel.sure{background:#E5484D;color:#fff;border-color:#E5484D}
 
 /* ---------- карточка «сегодня» ---------- */
 .hero{background:var(--card);border-radius:26px;padding:18px;margin-top:14px;position:relative;overflow:hidden}
@@ -184,6 +198,7 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .notes .nadd{display:flex;gap:8px;padding:10px 0}
 .notes .nadd input{flex:1;background:var(--card2);border:0;border-radius:12px;padding:10px 12px;color:var(--text);font:inherit;font-size:14px;outline:none}
 .notes .nadd button{background:var(--lime);color:var(--on);border-radius:12px;padding:0 14px;font-weight:700}
+.prem{background:rgba(var(--acc-rgb),.14);border:1.5px solid rgba(var(--acc-rgb),.45);border-radius:14px;padding:12px 14px;font-weight:700;font-size:15px;margin:0 0 10px;text-align:center}
 .btn2{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;border-radius:16px;border:1.5px solid var(--outline);color:var(--text);font-weight:600;font-size:15px;margin:6px 0 14px}
 .btn2:active{border-color:var(--lime)}
 .qchips{display:flex;gap:8px;overflow-x:auto;margin:12px -16px 0;padding:0 16px;scrollbar-width:none}
@@ -476,7 +491,8 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 
 <!-- ============ КАТАЛОГ ============ -->
 <section class="view hidden" id="v-cat">
-  <div class="head"><div><div class="eyebrow" id="cat-count"></div><h1>Каталог</h1></div></div>
+  <div class="head"><div><div class="eyebrow" id="cat-count"></div><h1>Каталог</h1></div>
+    <button class="iconbtn" id="cat-add" aria-label="Добавить упражнение"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--lime)" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
   <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="cat-q" placeholder="Поиск упражнения" autocomplete="off"></div>
   <div class="gtabs" id="cat-tabs"></div>
   <div class="clist" id="cat-list"></div>
@@ -515,8 +531,8 @@ const D = {"catalog":{"bench":{"name":"Жим штанги лёжа","group":"ch
 const CAT = D.catalog, PLAN = D.plan, GROUPS = D.groups, MUSCLES = D.muscles;
 let DAYS = D.days;
 const dlabel = (d) => d && d[0] === "W" ? d.slice(1) : d;
-const unitOf = (e) => e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : "повт.";
-const tgtText = (e, w, r) => e.kind === "t" ? `${r} сек` : e.kind === "c" ? `${r} мин` : e.step ? `${fmt(w)} кг × ${r}` : `${r} повт.`;
+const unitOf = (e) => e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : e.kind === "k" ? "ккал" : "повт.";
+const tgtText = (e, w, r) => e.kind === "t" ? `${r} сек` : e.kind === "c" ? `${r} мин` : e.kind === "k" ? `${fmt(w) || 0} мин · ${r} ккал` : e.step ? `${fmt(w)} кг × ${r}` : `${r} повт.`;
 const REST = 90, REST_WARM = 60;
 const RATES = [["w","РАЗМ"],["e","ЛЕГК"],["n","НОРМ"],["h","СЛОЖ"]];
 
@@ -565,6 +581,7 @@ function readState() {
   } catch (e) { return empty; }
 }
 const S = readState();
+Object.assign(CAT, S.cx || {});
 const FAV = new Set((store0("fav") || S.f || []).filter(id => CAT[id]));
 function store0(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
 function toggleFav(id) {
@@ -599,7 +616,8 @@ async function api(path, body, ms) {
 function applyState(st) {
   if (!st || typeof st !== "object") return;
   ["n", "c", "w", "s", "h", "f", "u"].forEach(k => { if (k in st) S[k] = st[k]; });
-  S.a = st.a || null; S.nt = st.nt || [];
+  if (st.cx) { S.cx = st.cx; Object.assign(CAT, st.cx); }
+  S.a = st.a || null; S.nt = st.nt || []; S.pu = st.pu || null; if (st.rl) S.rl = st.rl;
   if (st.id) { S.id = st.id; S.k = st.k; }
   buildHist();
   if (!store0("fav")) { FAV.clear(); (S.f || []).filter(id => CAT[id]).forEach(id => FAV.add(id)); }
@@ -762,7 +780,9 @@ function renderWeek() {
   }
   $("week").innerHTML = html;
   $("week").querySelectorAll(".wd").forEach(b => b.onclick = () => {
-    H(); selDay = selDay === b.dataset.d ? null : b.dataset.d; renderWeek();
+    H(); const d = b.dataset.d;
+    if (hist[d] && hasAPI()) { selDay = d; renderWeek(); openDay(d); return; }
+    selDay = selDay === d ? null : d; renderWeek();
   });
   const total = Object.keys(hist).length;
   let note = "";
@@ -992,7 +1012,7 @@ async function importShots(files) {
     if (!r.ok) throw new Error(d.error);
     box.innerHTML = ""; $("ask-q").value = ""; autoGrow();
     IMP = d.workouts || [];
-    if (!IMP.length) { box.innerHTML = `<div class="ans">Не нашёл тренировок на скриншотах 😕 Нужны экраны, где видны упражнения, веса и повторы.</div>`; HN("error"); return; }
+    if (!IMP.length) { box.innerHTML = `<div class="ans">Не нашёл тренировок на скриншотах 😕 Нужны экраны, где видны упражнения, веса и повторы.${d.err ? `<span class="note" style="color:var(--inactive);font-weight:500">Техническая причина: ${esc(d.err)}</span>` : ""}</div>`; HN("error"); return; }
     showImport(); HN("success");
   } catch (e) {
     box.innerHTML = ""; toast("Не получилось прочитать — попробуй ещё раз"); HN("error");
@@ -1000,7 +1020,7 @@ async function importShots(files) {
 }
 function showImport() {
   const fmtD = (d) => d ? new Date(d + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" }) : "";
-  const setsTxt = (id, ss) => { const e = CAT[id]; return ss.map(([w, r]) => e.kind === "w" && w ? `${fmt(w)}×${r}` : r + (e.kind === "t" ? "с" : e.kind === "c" ? "мин" : "")).join(", "); };
+  const setsTxt = (id, ss) => { const e = CAT[id]; return ss.map(([w, r]) => e.kind === "k" ? `${fmt(w)} мин · ${r} ккал` : e.kind === "w" && w ? `${fmt(w)}×${r}` : r + (e.kind === "t" ? "с" : e.kind === "c" ? "мин" : "")).join(", "); };
   const unk = [...new Set(IMP.flatMap(w => w.u || []))];
   openSheet(`<h2 style="margin:6px 0 4px">Нашёл ${IMP.length} ${plural(IMP.length, "тренировку", "тренировки", "тренировок")}</h2><p style="color:var(--inactive);font-size:14px;margin:0">Отметь, что сохранить в историю — веса подтянутся в приложение</p>`,
     IMP.map((w, i) => `<label class="imp"><input type="checkbox" data-i="${i}" ${w.dup ? "" : "checked"}><div style="flex:1;min-width:0">
@@ -1095,7 +1115,7 @@ const SPECIAL = { cardio: 1, pilates: 5, stretch: 4 };
 const fem = () => PROFILE.s === "f";
 const pg = () => PG[fem() ? "f" : "m"];
 const gLabel = (g) => (pg().groups.find(x => x[0] === g) || [g, GROUPS[g] || g])[1];
-const defSets = (id) => { const e = CAT[id]; return e.kind === "c" ? 1 : (e.group === "stretch" || e.group === "pilates") ? 2 : 3; };
+const defSets = (id) => { const e = CAT[id]; return e.kind === "c" || e.kind === "k" ? 1 : (e.group === "stretch" || e.group === "pilates") ? 2 : 3; };
 let pk = { sel: new Set(), mode: "usual" };
 function openPick() { pk = { sel: new Set(), mode: "usual" }; renderPick(); go("pick"); }
 function renderPick() {
@@ -1171,7 +1191,7 @@ const dkey = (day) => "w2_" + day + "_" + S.c;
 function freshItem(id, slot, sets) {
   const e = CAT[id], st = (S.w || {})[id];
   const w = st && st[0] != null ? st[0] : (e.step ? "" : 0);
-  if (e.kind === "c") sets = Math.min(sets, 1);
+  if (e.kind === "c" || e.kind === "k") sets = Math.min(sets, 1);
   const r = st ? st[1] : e.reps[0];
   return { id, slot, perm: false, sets: Array.from({ length: sets }, () => ({ w, r, rt: null })), tip: false };
 }
@@ -1233,7 +1253,7 @@ function exCard(it, i) {
         ${!it.slot || !PLAN[W.day] ? `<button data-act="remove" aria-label="Убрать">${IC.trash}</button>` : ""}
       </div>
     </div>
-    <div class="target"><span>Цель: ${e.kind === "c" ? "" : it.sets.length + " × "}${e.reps[0]}–${e.reps[1]} ${e.kind === "w" ? "" : unitOf(e)}</span><span>${tgt}</span></div>
+    <div class="target"><span>${e.kind === "k" ? "Запиши время и калории" : `Цель: ${e.kind === "c" ? "" : it.sets.length + " × "}${e.reps[0]}–${e.reps[1]} ${e.kind === "w" ? "" : unitOf(e)}`}</span><span>${tgt}</span></div>
     <div class="tip ${it.tip ? "open" : ""}">${esc(e.tip || "")}</div>
     ${it.sets.map((x, k) => setRow(e, x, k)).join("")}
     <button class="addset" data-act="addset">+ Подход</button>
@@ -1243,9 +1263,9 @@ function setRow(e, x, k) {
   return `<div class="set ${x.rt ? "rated" : ""}" data-k="${k}">
     <div class="setline">
       <div class="setno">${k + 1}.</div>
-      ${e.kind === "w" ? `<label class="val"><input type="number" inputmode="decimal" step="any" data-f="w" value="${fmt(x.w)}" placeholder="—"><small>${e.step ? "кг" : "+кг"}</small></label>
-      <span class="x">×</span>` : ""}
-      <label class="val reps"><input type="number" inputmode="numeric" data-f="r" value="${x.r ?? ""}" placeholder="—"><small>${e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : "повт"}</small></label>
+      ${e.kind === "w" || e.kind === "k" ? `<label class="val"><input type="number" inputmode="decimal" step="any" data-f="w" value="${fmt(x.w)}" placeholder="—"><small>${e.kind === "k" ? "мин" : e.step ? "кг" : "+кг"}</small></label>
+      <span class="x">${e.kind === "k" ? "·" : "×"}</span>` : ""}
+      <label class="val reps"><input type="number" inputmode="numeric" data-f="r" value="${x.r ?? ""}" placeholder="—"><small>${e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : e.kind === "k" ? "ккал" : "повт"}</small></label>
       <button class="del" data-act="delset" aria-label="Удалить подход">${IC.del}</button>
     </div>
     <div class="rates">${RATES.map(([r, t]) => `<button data-r="${r}" class="${x.rt === r ? "on" : ""}">${t}</button>`).join("")}</div>
@@ -1283,7 +1303,7 @@ function bindCards() {
       row.querySelectorAll(".rates button").forEach(b => b.onclick = () => {
         const e = CAT[it.id];
         if (e.step && !(Number(x.w) > 0)) { toast("Сначала укажи вес"); HN("error"); row.querySelector("[data-f=w]").focus(); return; }
-        if (!(Number(x.r) > 0)) { toast(e.kind === "t" ? "Укажи секунды" : e.kind === "c" ? "Укажи минуты" : "Укажи повторы"); HN("error"); row.querySelector("[data-f=r]").focus(); return; }
+        if (!(Number(x.r) > 0)) { toast(e.kind === "t" ? "Укажи секунды" : e.kind === "c" ? "Укажи минуты" : e.kind === "k" ? "Укажи калории" : "Укажи повторы"); HN("error"); row.querySelector("[data-f=r]").focus(); return; }
         const was = x.rt;
         x.rt = was === b.dataset.r ? null : b.dataset.r;
         row.querySelectorAll(".rates button").forEach(bb => bb.classList.toggle("on", bb.dataset.r === x.rt));
@@ -1401,11 +1421,12 @@ function catRows(filter, mark) {
   const list = Object.entries(CAT).filter(([id, e]) =>
     (filter.g === "all" || e.group === filter.g) && (!q || e.name.toLowerCase().includes(q)));
   if (!list.length) return `<div class="empty">Ничего не нашлось</div>`;
+  list.sort((a, b) => (b[1].custom ? 1 : 0) - (a[1].custom ? 1 : 0));
   return list.map(([id, e]) => {
     const [p, s] = musclesOf([id]);
     return `<button class="crow ${mark === id ? "cur" : ""}" data-id="${id}">
       <div class="mini">${bodySVG(BACK_ONLY.has(e.m[0]) ? "back" : "front", p, s, { mini: 1, crop: e.group === "legs" ? "legs" : "upper" })}</div>
-      <div class="t"><b>${esc(e.name)}</b><span>${e.m.concat(e.m2).slice(0, 3).map(m => MUSCLES[m]).join(" · ")}${e.kind === "t" ? " · на время" : e.kind === "c" ? " · кардио" : e.step ? "" : " · свой вес"}</span></div>
+      <div class="t"><b>${esc(e.name)}</b><span>${e.m.concat(e.m2).slice(0, 3).map(m => MUSCLES[m]).join(" · ")}${e.kind === "t" ? " · на время" : e.kind === "c" ? " · кардио" : e.kind === "k" ? " · время и ккал" : e.step ? "" : " · свой вес"}${e.custom ? " · своё" : ""}</span></div>
       <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
   }).join("");
 }
@@ -1439,7 +1460,7 @@ function openDetail(id) {
   H();
   setTimeout(() => { const fb = $("det-fav"); if (fb) fb.onclick = () => { toggleFav(id); fb.innerHTML = HEART(FAV.has(id)) + (FAV.has(id) ? "В любимых" : "В любимые"); }; }, 0);
   const e = CAT[id], [p, s] = musclesOf([id]), st = (S.w || {})[id];
-  openSheet(`<button class="favbtn" id="det-fav">${HEART(FAV.has(id))}${FAV.has(id) ? "В любимых" : "В любимые"}</button><h2 style="margin-top:6px">${esc(e.name)}</h2><div style="color:var(--inactive);font-size:14px;margin-top:4px">${GROUPS[e.group]}${e.kind !== "w" ? "" : e.step ? ` · шаг ${fmt(e.step)} кг` : " · свой вес"} · ${e.reps[0]}–${e.reps[1]} ${e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : "повторов"}</div>`,
+  openSheet(`<button class="favbtn" id="det-fav">${HEART(FAV.has(id))}${FAV.has(id) ? "В любимых" : "В любимые"}</button><h2 style="margin-top:6px">${esc(e.name)}</h2><div style="color:var(--inactive);font-size:14px;margin-top:4px">${GROUPS[e.group]}${e.kind !== "w" ? "" : e.step ? ` · шаг ${fmt(e.step)} кг` : " · свой вес"} · ${e.kind === "k" ? "время и калории" : `${e.reps[0]}–${e.reps[1]} ${e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : "повторов"}`}${e.custom ? " · твоё упражнение" : ""}</div>`,
     `<div class="bodies">${bodies(p, s)}</div>
      <div class="chips">${muscleChips(p, s)}</div>
      ${e.tip ? `<div class="sec">Техника</div><div style="font-size:15px;line-height:1.5;color:var(--text2)">${esc(e.tip)}</div>` : ""}
@@ -1486,6 +1507,16 @@ function choose(id) {
 function renderProgress() {
   setTimeout(() => {
     const b = $("prof-edit"); if (b) b.onclick = () => openOnb(true);
+    const inv = $("prog-invite"); if (inv) inv.onclick = () => {
+      H(); const url = "https://t.me/share/url?url=" + encodeURIComponent(S.rl) + "&text=" + encodeURIComponent("Мой ИИ-тренер в Telegram: собирает тренировки и ведёт веса. По ссылке — месяц Premium нам обоим 💪");
+      try { tg.openTelegramLink(url); } catch (e) { try { navigator.clipboard.writeText(S.rl); toast("Ссылка скопирована"); } catch (e2) { toast(S.rl); } }
+    };
+    const po = $("promo-ok"); if (po) po.onclick = async () => {
+      const code = $("promo-in").value.trim(); if (code.length < 2) return;
+      H(); po.disabled = true;
+      try { const d = await api("promo", { code }); if (d.ok) { applyState(d.state); HN("success"); toast(`Промокод принят: +${d.days} дней Premium`); } else { HN("error"); toast(d.err || "Не подошёл"); } }
+      catch (e) { toast("Не получилось — проверь интернет"); } finally { po.disabled = false; }
+    };
     const pi = $("prog-import"); if (pi) pi.onclick = () => { H(); $("ask-file").click(); showTab("home"); };
     document.querySelectorAll("[data-nid]").forEach(x => x.onclick = () => noteOp({ nid: +x.dataset.nid }));
     const na = $("note-add"); if (na) na.onclick = () => { const v = $("note-in").value.trim(); if (v.length > 2) noteOp({ add: v }); };
@@ -1499,6 +1530,9 @@ function renderProgress() {
     <button class="plan-link" id="prof-edit" style="display:block;margin:2px auto 8px">Изменить профиль</button>
     ${hasAPI() ? `<div class="sec">Тренер помнит о тебе</div><div class="notes">${(S.nt || []).map(([id, t]) => `<div class="nrow"><span>${esc(t)}</span><button data-nid="${id}" aria-label="Удалить">×</button></div>`).join("")}
       <div class="nadd"><input id="note-in" maxlength="200" placeholder="Например: болит колено, не делаю выпады"><button id="note-add">+</button></div></div>
+      ${S.pu && S.pu >= iso(today) ? `<div class="prem">⭐ Premium до ${new Date(S.pu + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" })}</div>` : ""}
+      ${S.rl ? `<button class="btn2" id="prog-invite"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>Пригласить друга — месяц Premium обоим</button>` : ""}
+      <div class="notes" style="padding:0 14px"><div class="nadd"><input id="promo-in" maxlength="32" placeholder="Есть промокод?" autocapitalize="characters"><button id="promo-ok">OK</button></div></div>
       <button class="btn2" id="prog-import"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg>Перенести тренировки со скриншотов</button>` : ""}
     <div class="stats">
       <div class="stat acc"><b>${S.c}</b><span>${plural(S.c,"тренировка","тренировки","тренировок")} всего</span></div>
@@ -1511,6 +1545,61 @@ function renderProgress() {
         return `<div class="prow"><span>${esc(e.name)}</span><b class="${v ? "" : "none"}">${v || "—"}</b></div>`;
       }).join("") + `</div>`).join("") +
     (known ? "" : `<div class="empty" style="padding-top:24px">Закончи первую тренировку — здесь появятся твои веса</div>`);
+}
+
+/* ---------- своё упражнение ---------- */
+const METRICS = [["w", "Вес и повторы", "кг × повт"], ["r", "Повторы", "свой вес"], ["t", "Время", "секунды"], ["c", "Время", "минуты"], ["k", "Время и калории", "мин · ккал"]];
+$("cat-add").onclick = () => {
+  H();
+  if (!hasAPI()) { toast("Добавлять упражнения можно, когда приложение подключено к серверу"); return; }
+  const nx = { m: "w", g: catGroup !== "all" ? catGroup : "" };
+  openSheet(`<h2 style="margin:6px 0 4px">Добавить упражнение</h2><p style="color:var(--inactive);font-size:14px;margin:0">Появится в каталоге и в тренировках</p>`,
+    `<input class="cx-in" id="cx-name" maxlength="60" placeholder="Название, например «Падел» или «Жим в хаммере»" autocomplete="off">
+     <div class="sec">Что записываем</div><div class="cx-opts" id="cx-m"></div>
+     <div class="sec">Раздел</div><div class="cx-opts" id="cx-g"></div>
+     <button class="cta" id="cx-save" style="margin-top:20px">Добавить упражнение</button>`);
+  const draw = () => {
+    $("cx-m").innerHTML = METRICS.map(([k, t, sub]) => `<button data-k="${k}" class="${nx.m === k ? "on" : ""}">${t} <small>${sub}</small></button>`).join("");
+    $("cx-g").innerHTML = Object.entries(GROUPS).map(([k, t]) => `<button data-g="${k}" class="${nx.g === k ? "on" : ""}">${t}</button>`).join("");
+    $("cx-m").querySelectorAll("button").forEach(b => b.onclick = () => { H(); nx.m = b.dataset.k; draw(); });
+    $("cx-g").querySelectorAll("button").forEach(b => b.onclick = () => { H(); nx.g = b.dataset.g; draw(); });
+  };
+  draw();
+  $("cx-save").onclick = async () => {
+    const name = $("cx-name").value.trim();
+    if (name.length < 2) { toast("Напиши название"); $("cx-name").focus(); HN("error"); return; }
+    if (!nx.g) { toast("Выбери раздел"); HN("error"); return; }
+    $("cx-save").disabled = true; $("cx-save").textContent = "Добавляю…";
+    try {
+      const d = await api("custom/add", { name, group: nx.g, metric: nx.m });
+      closeSheet(); applyState(d.state); catGroup = nx.g; catQ = ""; $("cat-q").value = ""; renderCatalog();
+      HN("success"); toast(`Добавлено в «${GROUPS[nx.g]}»`);
+    } catch (e) { $("cx-save").disabled = false; $("cx-save").textContent = "Добавить упражнение"; toast("Не получилось — проверь интернет"); HN("error"); }
+  };
+};
+
+/* ---------- тренировки за день: просмотр и удаление ---------- */
+async function openDay(d) {
+  const [y, m, dd] = d.split("-").map(Number);
+  const head = `<h2 style="margin:6px 0 4px">${dd} ${MONTHS_G[m - 1]}</h2>`;
+  openSheet(head, THINK("Загружаю…"));
+  let res;
+  try { res = await api("day", { d }); } catch (e) { $("sh-body").innerHTML = `<p style="color:var(--inactive)">Не загрузилось — проверь интернет</p>`; return; }
+  const ss = res.sessions || [];
+  if (!ss.length) { $("sh-body").innerHTML = `<p style="color:var(--inactive)">В этот день тренировок нет</p>`; return; }
+  const setsTxt = (id, xs) => { const e = CAT[id]; return xs.map(([w, r]) => e.kind === "k" ? `${fmt(w)} мин · ${r} ккал` : e.kind === "w" && w ? `${fmt(w)}×${r}` : r + (e.kind === "t" ? "с" : e.kind === "c" ? "мин" : "")).join(", "); };
+  const TRASH = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
+  $("sh-body").innerHTML = ss.map(x => `<div class="dsess"><h3>${esc(x.day === "X" || !PLAN[x.day] ? x.t : "День " + dlabel(x.day) + " · " + x.t)}${x.imp ? "<span>перенесена</span>" : ""}</h3>
+    <ul>${x.i.filter(([id]) => CAT[id]).map(([id, xs]) => `<li>${esc(CAT[id].name)} <span>· ${setsTxt(id, xs)}</span></li>`).join("")}</ul>
+    <button class="wdel" data-sid="${x.sid}">${TRASH}Удалить тренировку</button></div>`).join("");
+  document.querySelectorAll(".wdel[data-sid]").forEach(b => b.onclick = async () => {
+    if (!b.classList.contains("sure")) { H("medium"); b.classList.add("sure"); b.innerHTML = TRASH + "Точно удалить? Нажми ещё раз"; return; }
+    b.disabled = true; b.textContent = "Удаляю…";
+    try {
+      const r = await api("session/del", { sid: +b.dataset.sid });
+      closeSheet(); selDay = null; applyState(r.state); HN("success"); toast("Тренировка удалена");
+    } catch (e) { b.disabled = false; b.textContent = "Не вышло — попробуй ещё раз"; HN("error"); }
+  });
 }
 
 async function noteOp(body) {
