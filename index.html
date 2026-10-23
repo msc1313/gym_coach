@@ -20,8 +20,21 @@
   --ease:cubic-bezier(.2,.8,.2,1);
   color-scheme:dark;
 }
-/* женская тема: Soft Peach × Dusty Rose */
+/* светлая тема (графит × сиена) */
+html.light{
+  --lime:#D2703C; --green:#E69A70; --olive:#A85A32; --on:#FFFFFF; --acc-rgb:210,112,60;
+  --bg:#F6F3F0; --graphite:#B8B0A9; --dark:#E4DDD7; --mid:#A39A93;
+  --inactive:#857C76; --text:#24201D; --text2:#4A433F; --outline:#DDD5CE;
+  --card:#EEE8E3; --card2:#E7E0D9; --line:#E2DAD3; --done:#F6E7DC; --sheet:#FBF9F7; --navbg:rgba(238,232,227,.94);
+  --easy:#6FA86E; --norm:#D9A53A; --hard:#DC5148; --warm:#A39A93;
+  color-scheme:light;
+}
+/* тёмная тема с розовым акцентом (женский профиль) */
 html.fem{
+  --lime:#D98F9D; --green:#F2C5B5; --olive:#C98877; --on:#1E1A1C; --acc-rgb:217,143,157; --done:#2A2224;
+}
+/* женская светлая тема: Soft Peach × Dusty Rose */
+html.fem.light{
   --lime:#D98F9D; --green:#F2C5B5; --olive:#C98877; --on:#443A3D; --acc-rgb:217,143,157;
   --bg:#FAF7F5; --graphite:#B9A9A8; --dark:#E6D9D6; --mid:#B3A5A7;
   --inactive:#988A8D; --text:#443A3D; --text2:#5E5154; --outline:#DDCFCE;
@@ -41,7 +54,7 @@ svg{display:block}
 .view{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
   padding:calc(var(--top) + 16px) 16px calc(var(--bot) + 110px);
   transition:transform .38s var(--ease),opacity .38s var(--ease)}
-html.fem .scrim{background:rgba(68,58,61,.35)}
+html.light .scrim{background:rgba(68,58,61,.35)}
 .view.off-right{transform:translateX(100%);opacity:.4;pointer-events:none}
 .view.off-left{transform:translateX(-22%);opacity:0;pointer-events:none}
 .view.hidden{display:none}
@@ -106,6 +119,22 @@ h2{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .cx-opts button{height:38px;padding:0 14px;border-radius:99px;border:1.5px solid var(--outline);color:var(--inactive);font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
 .cx-opts button.on{border-color:var(--lime);color:var(--text);background:rgba(var(--acc-rgb),.12)}
 .cx-opts button small{font-weight:500;color:var(--mid);font-size:12px}
+.phead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 2px 18px}
+.phead h1{font-size:30px;line-height:1.1;word-break:break-word}
+.ava{width:60px;height:60px;border-radius:50%;background:rgba(var(--acc-rgb),.18);color:var(--lime);display:grid;place-items:center;font-size:24px;font-weight:800;flex:none;overflow:hidden}
+.ava img{width:100%;height:100%;object-fit:cover}
+.plist2{background:var(--card);border-radius:20px;overflow:hidden;margin-top:14px}
+.prow2{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;text-align:left;border-bottom:1px solid var(--line)}
+.prow2:last-child{border:0}
+.prow2 .pi{width:36px;height:36px;border-radius:11px;background:var(--card2);color:var(--lime);display:grid;place-items:center;flex:none}
+.prow2 .pi svg{width:19px;height:19px}
+.prow2 .pt{flex:1;min-width:0}.prow2 b{display:block;font-size:15px;font-weight:600}
+.prow2 span{display:block;font-size:12.5px;color:var(--inactive);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prow2 .chev{color:var(--mid)}
+.prow2.danger .pi,.prow2.danger b{color:#E5484D}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{height:40px;padding:0 14px;border-radius:12px;border:1.5px solid var(--outline);color:var(--inactive);font-weight:600;font-size:14px}
+.seg button.on{border-color:var(--lime);color:var(--text);background:rgba(var(--acc-rgb),.12)}
 .hint{font-size:12.5px;color:var(--mid);text-align:center;margin:12px 0 0}
 button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 .gift{background:var(--card);border-radius:20px;padding:14px}
@@ -182,6 +211,11 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 .ruler::after{right:0;background:linear-gradient(-90deg,var(--bg),transparent)}
 .fine{display:flex;justify-content:center;gap:12px;margin-top:14px}
 .fine button{width:52px;height:44px;border-radius:14px;background:var(--card);font-size:22px;color:var(--lime);font-weight:600}
+.choices{display:flex;flex-direction:column;gap:10px;margin-top:28px}
+.choices button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:16px 18px;border-radius:18px;border:1.5px solid var(--outline);background:var(--card);text-align:left;transition:all .2s}
+.choices button b{font-size:17px;font-weight:700}
+.choices button span{font-size:13.5px;color:var(--inactive)}
+.choices button.on{border-color:var(--lime);background:rgba(var(--acc-rgb),.12)}
 .sexes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:40px}
 .sexes button{height:120px;border-radius:24px;border:1.5px solid var(--outline);background:var(--card);font-size:18px;font-weight:700;color:var(--inactive);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:all .25s}
 .sexes button svg{width:36px;height:36px}
@@ -377,6 +411,7 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 .clist{display:flex;flex-direction:column}
 .crow{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line);text-align:left;width:100%}
 .crow:active{background:var(--card)}
+.crow{content-visibility:auto;contain-intrinsic-size:auto 71px}
 .crow .mini{width:46px;height:46px;border-radius:14px;background:var(--bg);display:grid;place-items:center;flex:none;overflow:hidden}
 .crow .mini svg{width:46px;height:46px}
 .crow .t{flex:1;min-width:0}
@@ -392,6 +427,10 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
   max-height:calc(100% - var(--top) - 40px);display:flex;flex-direction:column;
   transform:translateY(100%);transition:transform .38s var(--ease);border-top:1px solid var(--line)}
 .sheet.show{transform:none}
+.sheet.full{height:calc(100% - var(--top) - 24px)}
+.mkown{display:flex;align-items:center;gap:12px;width:100%;padding:12px 2px;border-bottom:1px solid var(--line);text-align:left}
+.mkown .ic{width:46px;height:46px;border-radius:14px;background:rgba(var(--acc-rgb),.14);color:var(--lime);display:grid;place-items:center;font-size:24px;font-weight:600;flex:none}
+.mkown b{display:block;font-size:15px}.mkown span{font-size:12.5px;color:var(--inactive)}
 .sheet .grip{width:40px;height:5px;border-radius:3px;background:var(--dark);margin:10px auto 4px;flex:none}
 .sheet .sh{padding:8px 16px 0;flex:none}
 .sheet .sb{overflow-y:auto;padding:0 16px calc(var(--bot) + 24px);flex:1}
@@ -420,7 +459,7 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 /* ---------- нижнее меню ---------- */
 .nav{position:fixed;left:12px;right:12px;bottom:calc(var(--bot) + 12px);z-index:20;height:64px;border-radius:22px;
   background:var(--navbg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  display:grid;grid-template-columns:repeat(3,1fr);padding:6px;transition:transform .35s var(--ease)}
+  display:grid;grid-template-columns:repeat(2,1fr);padding:6px;transition:transform .35s var(--ease)}
 .nav.hide{transform:translateY(160%)}
 .nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:16px;color:var(--mid);font-size:11px;font-weight:600}
 .nav button svg{width:22px;height:22px}
@@ -529,13 +568,12 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 </section>
 
 <!-- ============ ПРОГРЕСС ============ -->
-<section class="view hidden" id="v-prog"></section>
+<section class="view hidden" id="v-prof"></section>
 
 <!-- ============ нижнее меню ============ -->
 <nav class="nav" id="nav">
   <button data-v="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>Дневник</button>
-  <button data-v="cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/></svg>Каталог</button>
-  <button data-v="prog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M7 15l4-4 3 3 5-6"/></svg>Прогресс</button>
+  <button data-v="prof"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>Профиль</button>
 </nav>
 
 <!-- ============ таймер ============ -->
@@ -562,8 +600,25 @@ const CAT = D.catalog, PLAN = D.plan, GROUPS = D.groups, MUSCLES = D.muscles;
 let DAYS = D.days;
 const dlabel = (d) => d && d[0] === "W" ? d.slice(1) : d;
 const unitOf = (e) => e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : e.kind === "k" ? "ккал" : "повт.";
-const tgtText = (e, w, r) => e.kind === "t" ? `${r} сек` : e.kind === "c" ? `${r} мин` : e.kind === "k" ? `${fmt(w) || 0} мин · ${r} ккал` : e.step ? `${fmt(w)} кг × ${r}` : `${r} повт.`;
+const tgtText = (e, w, r) => e.kind === "t" ? `${r} сек` : e.kind === "c" ? `${r} мин` : e.kind === "k" ? `${fmt(w) || 0} мин · ${r} ккал` : e.step ? `${fmt(wShow(w))} ${UW()} × ${r}` : `${r} повт.`;
+/* ---------- настройки устройства: тема и единицы ---------- */
+const SET = Object.assign({ theme: "auto", unit: "kg" }, (() => { try { return JSON.parse(localStorage.getItem("settings")) || {}; } catch (e) { return {}; } })());
+const saveSet = () => { try { localStorage.setItem("settings", JSON.stringify(SET)); } catch (e) {} };
+const LB = 2.20462;
+const UW = () => SET.unit === "lb" ? "lb" : "кг";
+const wShow = (kg) => kg === "" || kg == null ? kg : SET.unit === "lb" ? Math.round(Number(kg) * LB * 2) / 2 : kg;
+const wIn = (v) => v === "" || v == null ? v : SET.unit === "lb" ? Math.round(Number(v) / LB * 100) / 100 : Number(v);
 const REST = 90, REST_WARM = 60;
+// отдых подбирается сам: по типу упражнения и цели (тяжёлая база — дольше, изоляция и похудение — короче)
+function restFor(id) {
+  const e = CAT[id]; if (!e) return REST;
+  let t = e.kind !== "w" ? 60 : !e.step ? 75 : e.reps[0] <= 5 ? 180 : e.reps[0] <= 8 ? 120 : 90;
+  const g = PROFILE.g || "";
+  if (g === "lose") t = Math.max(45, Math.round(t * 0.7 / 15) * 15);
+  else if (g === "strength") t += 30;
+  else if (g === "health" || g === "fit") t = Math.max(60, Math.round(t * 0.85 / 15) * 15);
+  return t;
+}
 const RATES = [["w","РАЗМ"],["e","ЛЕГК"],["n","НОРМ"],["h","СЛОЖ"]];
 
 /* ---------- Telegram ---------- */
@@ -658,8 +713,11 @@ function applyState(st) {
   if (!store0("fav")) { FAV.clear(); (S.f || []).filter(id => CAT[id]).forEach(id => FAV.add(id)); }
   if (st.p) Object.assign(PROFILE, st.p, store0("profile") || {});
   applyTheme(); renderWeek(); renderHome();
-  if (current === "prog") renderProgress();
-  if (hasProfile() && !$("v-onb").classList.contains("hidden") && !onb.edit) closeOnb();
+  if (current === "prof") renderProfile();
+  if (!$("v-onb").classList.contains("hidden") && !onb.edit && hasProfile()) {
+    if (PROFILE.g) closeOnb();
+    else if (onb.k < ONB_IDX("g")) { onb.k = onb.start = ONB_IDX("g"); renderOnb(); }
+  }
 }
 
 const store = {
@@ -755,7 +813,7 @@ function bodySVG(view, prim, sec, opt) {
   // серое → акцент темы
   const G = F ? ".16 .16 .16 0 .56  .16 .16 .16 0 .26  .16 .16 .16 0 .31  0 0 0 1 0" : ".6 .6 .6 0 .02  .32 .32 .32 0 .01  .18 .18 .18 0 0  0 0 0 1 0";
   const O = F ? ".11 .11 .11 0 .62  .11 .11 .11 0 .46  .11 .11 .11 0 .48  0 0 0 1 0" : ".4 .4 .4 0 0  .22 .22 .22 0 0  .13 .13 .13 0 0  0 0 0 1 0";
-  const BASE = F ? ".17 .17 .17 0 .42  .15 .15 .15 0 .37  .15 .15 .15 0 .36  0 0 0 1 0" : null;
+  const BASE = F && document.documentElement.classList.contains("light") ? ".17 .17 .17 0 .42  .15 .15 .15 0 .37  .15 .15 .15 0 .36  0 0 0 1 0" : null;
   const img = (attrs) => F ? `<image href="${WOMAN_SRC}" x="0" y="0" width="1024" height="1536" preserveAspectRatio="none" ${attrs}/>`
                             : `<image href="${MAN_SRC}" x="120" y="0" width="780" height="1536" preserveAspectRatio="none" ${attrs}/>`;
   return `<svg viewBox="${vb}" role="img" aria-label="Мышцы"><defs>${layer(sec, n + "s", O)}${layer(prim, n + "p", G)}</defs>
@@ -776,11 +834,10 @@ let current = "home";
 function showTab(v) {
   if (v === current) return;
   H();
-  ["home","cat","prog"].forEach(x => $("v-" + x).classList.toggle("hidden", x !== v));
+  ["home","prof"].forEach(x => $("v-" + x).classList.toggle("hidden", x !== v));
   document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.v === v));
   current = v;
-  if (v === "cat") renderCatalog();
-  if (v === "prog") renderProgress();
+  if (v === "prof") renderProfile();
   $("v-" + v).scrollTop = 0;
   updateMain();
 }
@@ -873,15 +930,21 @@ const ONB = [
   { key: "w", title: "Твой вес", sub: "Можно примерно — потом поменяешь", min: 35, max: 200, step: 0.5, def: 75, unit: "кг", every: 10 },
   { key: "h", title: "Твой рост", sub: "В сантиметрах", min: 130, max: 220, step: 1, def: 175, unit: "см", every: 10 },
   { key: "b", title: "Дата рождения", sub: "Возраст важен для восстановления и нагрузки" },
+  { key: "g", title: "Твоя цель", sub: "Под неё тренер будет собирать тренировки", opts: [["lose", "Похудеть", "сбросить жир, подтянуть тело"], ["mass", "Набрать мышцы", "больше объёма и формы"], ["strength", "Стать сильнее", "расти в рабочих весах"], ["fit", "Держать форму", "регулярно и без перегрузок"], ["health", "Здоровье и самочувствие", "энергия, спина, суставы"]] },
+  { key: "lv", title: "Опыт тренировок", sub: "Чтобы не перегрузить и не заскучать", opts: [["new", "Только начинаю"], ["y1", "До года"], ["y3", "От года до трёх"], ["pro", "Больше трёх лет"]] },
+  { key: "fr", title: "Сколько раз в неделю", sub: "Сколько реально готов ходить", opts: [["2", "2 раза"], ["3", "3 раза"], ["4", "4 раза"], ["5", "5 и больше"]] },
+  { key: "du", title: "Время на тренировку", sub: "Тренер уложит тренировку в это время", opts: [["30", "30 минут"], ["45", "45 минут"], ["60", "Час"], ["90", "Полтора часа"]] },
+  { key: "pl", title: "Где тренируешься", sub: "Чтобы предлагать то, что тебе доступно", opts: [["gym", "В зале"], ["home", "Дома"], ["both", "И там, и там"]] },
 ];
+const ONB_IDX = (k) => ONB.findIndex(x => x.key === k);
 function age(b) {
   if (!b) return null;
   const [y, m, d] = b.split("-").map(Number), t = new Date();
   return t.getFullYear() - y - ((t.getMonth() + 1 < m || (t.getMonth() + 1 === m && t.getDate() < d)) ? 1 : 0);
 }
-function openOnb(edit) {
-  onb = { k: 0, edit: !!edit };
-  ["home","cat","prog"].forEach(x => $("v-" + x).classList.add("hidden"));
+function openOnb(edit, from, to) {
+  onb = { k: from ? ONB_IDX(from) : 0, start: from ? ONB_IDX(from) : 0, end: to ? ONB_IDX(to) : ONB.length - 1, edit: !!edit, ret: current };
+  ["home","prof"].forEach(x => $("v-" + x).classList.add("hidden"));
   $("v-onb").classList.remove("hidden"); $("nav").classList.add("hide");
   renderOnb();
 }
@@ -889,20 +952,23 @@ function closeOnb() {
   try { localStorage.setItem("profile", JSON.stringify(PROFILE)); } catch (e) {}
   applyTheme(); renderWeek();
   $("v-onb").classList.add("hidden"); $("nav").classList.remove("hide");
-  current = "home"; $("v-home").classList.remove("hidden");
-  document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.v === "home"));
-  renderHome(); HN("success");
-  if (onb.edit) toast("Профиль обновлён");
+  current = onb.edit && onb.ret ? onb.ret : "home"; $("v-" + current).classList.remove("hidden");
+  document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.v === current));
+  renderHome(); if (current === "prof") renderProfile(); HN("success");
+  syncProfile();
+  if (onb.edit) toast("Сохранено");
 }
 function renderOnb() {
   const st = ONB[onb.k];
-  $("onb-dots").innerHTML = ONB.map((_, i) => `<i class="${i <= onb.k ? "on" : ""}"></i>`).join("");
-  $("onb-back").style.visibility = onb.k || onb.edit ? "visible" : "hidden";
-  $("onb-next").textContent = onb.k === ONB.length - 1 ? "Готово" : "Далее";
+  $("onb-dots").innerHTML = ONB.slice(onb.start, onb.end + 1).map((_, i) => `<i class="${i <= onb.k - onb.start ? "on" : ""}"></i>`).join("");
+  $("onb-back").style.visibility = onb.k > onb.start || onb.edit ? "visible" : "hidden";
+  $("onb-next").textContent = onb.k === onb.end ? "Готово" : "Далее";
   let body = `<h1>${st.title}</h1><p>${st.sub}</p>`;
   if (st.key === "s") {
     const ic = (f) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="7.5" r="3.5"/><path d="${f ? "M12 11c-3 0-5 2.5-5.5 6h11C17 13.5 15 11 12 11zM10 17v4M14 17v4" : "M6 21v-3a6 6 0 0 1 12 0v3"}"/></svg>`;
     body += `<div class="sexes"><button data-s="m" class="${PROFILE.s === "m" ? "on" : ""}">${ic(0)}Мужской</button><button data-s="f" class="${PROFILE.s === "f" ? "on" : ""}">${ic(1)}Женский</button></div>`;
+  } else if (st.opts) {
+    body += `<div class="choices">${st.opts.map(([v, t, sub]) => `<button data-o="${v}" class="${String(PROFILE[st.key]) === v ? "on" : ""}"><b>${t}</b>${sub ? `<span>${sub}</span>` : ""}</button>`).join("")}</div>`;
   } else if (st.key === "b") {
     body += `<input class="datebox" id="onb-date" type="date" max="${iso(new Date(today.getFullYear() - 12, 0, 1))}" min="1930-01-01" value="${PROFILE.b || "1997-01-01"}"><div class="agehint" id="onb-age"></div>`;
   } else {
@@ -913,6 +979,9 @@ function renderOnb() {
   $("onb-step").style.animation = "none"; void $("onb-step").offsetWidth; $("onb-step").style.animation = "";
   if (st.key === "s") $("onb-step").querySelectorAll("[data-s]").forEach(b => b.onclick = () => {
     H("medium"); PROFILE.s = b.dataset.s; $("onb-step").querySelectorAll("[data-s]").forEach(x => x.classList.toggle("on", x === b)); applyTheme();
+  });
+  if (st.opts) $("onb-step").querySelectorAll("[data-o]").forEach(b => b.onclick = () => {
+    H("medium"); PROFILE[st.key] = b.dataset.o; $("onb-step").querySelectorAll("[data-o]").forEach(x => x.classList.toggle("on", x === b));
   });
   if (st.key === "b") {
     const upd = () => { PROFILE.b = $("onb-date").value; const a = age(PROFILE.b); $("onb-age").textContent = a != null && a > 0 ? a + " " + plural(a, "год", "года", "лет") : ""; };
@@ -947,18 +1016,28 @@ function buildRuler(st) {
 }
 $("onb-next").onclick = () => {
   const st = ONB[onb.k];
-  if (st.key === "s" && !PROFILE.s) { toast("Выбери вариант"); HN("error"); return; }
+  if ((st.key === "s" || st.opts) && !PROFILE[st.key]) { toast("Выбери вариант"); HN("error"); return; }
   if (st.key === "b") { const a = age(PROFILE.b); if (!PROFILE.b || a == null || a < 12 || a > 95) { toast("Проверь дату рождения"); HN("error"); return; } }
   H("medium");
-  if (onb.k < ONB.length - 1) { onb.k++; renderOnb(); } else closeOnb();
+  if (onb.k < onb.end) { onb.k++; renderOnb(); } else closeOnb();
 };
-$("onb-back").onclick = () => { H(); if (onb.k > 0) { onb.k--; renderOnb(); } else if (onb.edit) closeOnb(); };
+$("onb-back").onclick = () => { H(); if (onb.k > onb.start) { onb.k--; renderOnb(); } else if (onb.edit) closeOnb(); };
+// профиль (с целью) — на сервер, чтобы тренер его учитывал
+function syncProfile() { if (hasAPI()) api("profile", { p: PROFILE }).catch(() => {}); }
 
 /* ---------- тема ---------- */
 const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function themeIsLight() {
+  const t = SET.theme || "auto";
+  if (t === "light") return true;
+  if (t === "dark") return false;
+  if (t === "system") return !!(tg && tg.colorScheme === "light");
+  return PROFILE.s === "f";   // по умолчанию: девушкам светлая, парням тёмная
+}
 function applyTheme() {
   const f = PROFILE.s === "f";
   document.documentElement.classList.toggle("fem", f);
+  document.documentElement.classList.toggle("light", themeIsLight());
   DAYS = f && D.days_w ? D.days_w : D.days;
   if (!DAYS.includes(S.n)) S.n = DAYS[0];
   const bg = cssVar("--bg");
@@ -1056,7 +1135,7 @@ async function importShots(files) {
 }
 function showImport() {
   const fmtD = (d) => d ? new Date(d + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" }) : "";
-  const setsTxt = (id, ss) => { const e = CAT[id]; return ss.map(([w, r]) => e.kind === "k" ? `${fmt(w)} мин · ${r} ккал` : e.kind === "w" && w ? `${fmt(w)}×${r}` : r + (e.kind === "t" ? "с" : e.kind === "c" ? "мин" : "")).join(", "); };
+  const setsTxt = (id, ss) => { const e = CAT[id]; return ss.map(([w, r]) => e.kind === "k" ? `${fmt(w)} мин · ${r} ккал` : e.kind === "w" && w ? `${fmt(wShow(w))}×${r}` : r + (e.kind === "t" ? "с" : e.kind === "c" ? "мин" : "")).join(", "); };
   const unk = [...new Set(IMP.flatMap(w => w.u || []))];
   openSheet(`<h2 style="margin:6px 0 4px">Нашёл ${IMP.length} ${plural(IMP.length, "тренировку", "тренировки", "тренировок")}</h2><p style="color:var(--inactive);font-size:14px;margin:0">Отметь, что сохранить в историю — веса подтянутся в приложение</p>`,
     IMP.map((w, i) => `<label class="imp"><input type="checkbox" data-i="${i}" ${w.dup ? "" : "checked"}><div style="flex:1;min-width:0">
@@ -1231,7 +1310,7 @@ let W = null;
 const dkey = (day) => "w2_" + day + "_" + S.c;
 function freshItem(id, slot, sets) {
   const e = CAT[id], st = (S.w || {})[id];
-  const w = st && st[0] != null ? st[0] : (e.step ? "" : 0);
+  const w = st && st[0] != null ? st[0] : (e.step || e.kind === "k" ? "" : 0);
   if (e.kind === "c" || e.kind === "k") sets = Math.min(sets, 1);
   const r = st ? st[1] : e.reps[0];
   return { id, slot, perm: false, sets: Array.from({ length: sets }, () => ({ w, r, rt: null })), tip: false };
@@ -1304,7 +1383,7 @@ function setRow(e, x, k) {
   return `<div class="set ${x.rt ? "rated" : ""}" data-k="${k}">
     <div class="setline">
       <div class="setno">${k + 1}.</div>
-      ${e.kind === "w" || e.kind === "k" ? `<label class="val"><input type="number" inputmode="decimal" step="any" data-f="w" value="${fmt(x.w)}" placeholder="—"><small>${e.kind === "k" ? "мин" : e.step ? "кг" : "+кг"}</small></label>
+      ${e.kind === "w" || e.kind === "k" ? `<label class="val"><input type="number" inputmode="decimal" step="any" data-f="w" value="${fmt(e.kind === "k" ? x.w : wShow(x.w))}" placeholder="—"><small>${e.kind === "k" ? "мин" : e.step ? UW() : "+" + UW()}</small></label>
       <span class="x">${e.kind === "k" ? "·" : "×"}</span>` : ""}
       <label class="val reps"><input type="number" inputmode="numeric" data-f="r" value="${x.r ?? ""}" placeholder="—"><small>${e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : e.kind === "k" ? "ккал" : "повт"}</small></label>
       <button class="del" data-act="delset" aria-label="Удалить подход">${IC.del}</button>
@@ -1334,11 +1413,11 @@ function bindCards() {
       const k = Number(row.dataset.k), x = it.sets[k];
       row.querySelectorAll("input").forEach(inp => inp.oninput = () => {
         const v = String(inp.value).replace(",", ".");
-        if (inp.dataset.f === "w") x.w = v === "" ? "" : Number(v);
+        if (inp.dataset.f === "w") x.w = v === "" ? "" : (CAT[it.id].kind === "k" ? Number(v) : wIn(v));
         else x.r = v === "" ? "" : parseInt(v, 10);
         // вес/повторы следующих неотмеченных подходов подтягиваем
         for (let j = k + 1; j < it.sets.length; j++) if (!it.sets[j].rt) it.sets[j][inp.dataset.f] = inp.dataset.f === "w" ? x.w : x.r;
-        card.querySelectorAll(".set").forEach((r2, j) => { if (j > k && !it.sets[j].rt) r2.querySelector(`[data-f=${inp.dataset.f}]`).value = inp.dataset.f === "w" ? fmt(x.w) : x.r; });
+        card.querySelectorAll(".set").forEach((r2, j) => { if (j > k && !it.sets[j].rt) r2.querySelector(`[data-f=${inp.dataset.f}]`).value = inp.dataset.f === "w" ? fmt(CAT[it.id].kind === "k" ? x.w : wShow(x.w)) : x.r; });
         save();
       });
       row.querySelectorAll(".rates button").forEach(b => b.onclick = () => {
@@ -1353,7 +1432,7 @@ function bindCards() {
         if (x.rt) { b.classList.add("pop"); setTimeout(() => b.classList.remove("pop"), 300); H("medium"); }
         if (x.rt && !was) {
           const left = W.items.some(t => t.sets.some(s => !s.rt));
-          if (left) startTimer(x.rt === "w" ? REST_WARM : REST);
+          if (left) startTimer(x.rt === "w" ? REST_WARM : restFor(it.id));
         }
         save(); updateProgress(); updateMain();
       });
@@ -1486,7 +1565,8 @@ function renderCatalog() {
 $("cat-q").oninput = (e) => { catQ = e.target.value; $("cat-list").innerHTML = catRows({ g: catGroup, q: catQ }); $("cat-list").querySelectorAll(".crow").forEach(b => b.onclick = () => openDetail(b.dataset.id)); };
 
 /* ---------- шторка ---------- */
-function openSheet(head, body) {
+function openSheet(head, body, full) {
+  $("sheet").classList.toggle("full", !!full);
   $("sh-head").innerHTML = head; $("sh-body").innerHTML = body; $("sh-body").scrollTop = 0;
   $("scrim").classList.add("show"); $("sheet").classList.add("show");
   if (tg && tg.BackButton) { try { tg.BackButton.show(); } catch (e) {} }
@@ -1502,7 +1582,7 @@ function openDetail(id) {
   H();
   setTimeout(() => { const fb = $("det-fav"); if (fb) fb.onclick = () => { toggleFav(id); fb.innerHTML = HEART(FAV.has(id)) + (FAV.has(id) ? "В любимых" : "В любимые"); }; }, 0);
   const e = CAT[id], [p, s] = musclesOf([id]), st = (S.w || {})[id];
-  openSheet(`<button class="favbtn" id="det-fav">${HEART(FAV.has(id))}${FAV.has(id) ? "В любимых" : "В любимые"}</button><h2 style="margin-top:6px">${esc(e.name)}</h2><div style="color:var(--inactive);font-size:14px;margin-top:4px">${GROUPS[e.group]}${e.kind !== "w" ? "" : e.step ? ` · шаг ${fmt(e.step)} кг` : " · свой вес"} · ${e.kind === "k" ? "время и калории" : `${e.reps[0]}–${e.reps[1]} ${e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : "повторов"}`}${e.custom ? " · твоё упражнение" : ""}</div>`,
+  openSheet(`<button class="favbtn" id="det-fav">${HEART(FAV.has(id))}${FAV.has(id) ? "В любимых" : "В любимые"}</button><h2 style="margin-top:6px">${esc(e.name)}</h2><div style="color:var(--inactive);font-size:14px;margin-top:4px">${GROUPS[e.group]}${e.kind !== "w" ? "" : e.step ? ` · шаг ${fmt(wShow(e.step))} ${UW()}` : " · свой вес"} · ${e.kind === "k" ? "время и калории" : `${e.reps[0]}–${e.reps[1]} ${e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : "повторов"}`}${e.custom ? " · твоё упражнение" : ""}</div>`,
     `<div class="bodies">${bodies(p, s)}</div>
      <div class="chips">${muscleChips(p, s)}</div>
      ${e.tip ? `<div class="sec">Техника</div><div style="font-size:15px;line-height:1.5;color:var(--text2)">${esc(e.tip)}</div>` : ""}
@@ -1516,17 +1596,18 @@ function openPicker(mode, i) {
   pick = { mode, i, g: it ? CAT[it.id].group : "all", q: "", perm: false };
   const title = mode === "swap" ? `Замена: ${esc(CAT[it.id].name)}` : "Добавить упражнение";
   openSheet(`<h2 style="margin:6px 0 12px">${title}</h2>
-    <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="pk-q" placeholder="Поиск" autocomplete="off"></div>
+    <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="ex-q" placeholder="Поиск" autocomplete="off"></div>
     ${mode === "swap" && PLAN[W.day] && it.slot ? `<button class="toggle" id="pk-perm"><div><span>Заменить навсегда</span><small>В Дне ${W.day} всегда будет новое упражнение</small></div><div class="sw"></div></button>` : ""}
-    <div class="gtabs" id="pk-tabs"></div>`, `<div class="clist" id="pk-list"></div>`);
+    <div class="gtabs" id="ex-tabs"></div>`, `<button class="mkown" id="pk-new"><div class="ic">+</div><div><b>Создать своё упражнение</b><span>если нужного нет в списке</span></div></button><div class="clist" id="ex-list"></div>`, true);
   const draw = () => {
-    $("pk-tabs").innerHTML = tabsHTML(pick.g);
-    $("pk-tabs").querySelectorAll("button").forEach(b => b.onclick = () => { H(); pick.g = b.dataset.g; draw(); });
-    $("pk-list").innerHTML = catRows({ g: pick.g, q: pick.q }, it ? it.id : null);
-    $("pk-list").querySelectorAll(".crow").forEach(b => b.onclick = () => choose(b.dataset.id));
+    $("ex-tabs").innerHTML = tabsHTML(pick.g);
+    $("ex-tabs").querySelectorAll("button").forEach(b => b.onclick = () => { H(); pick.g = b.dataset.g; draw(); });
+    $("ex-list").innerHTML = catRows({ g: pick.g, q: pick.q }, it ? it.id : null);
+    $("ex-list").querySelectorAll(".crow").forEach(b => b.onclick = () => choose(b.dataset.id));
   };
-  $("pk-q").oninput = (e) => { pick.q = e.target.value; draw(); };
+  $("ex-q").oninput = (e) => { pick.q = e.target.value; draw(); };
   if ($("pk-perm")) $("pk-perm").onclick = () => { H(); pick.perm = !pick.perm; $("pk-perm").classList.toggle("on", pick.perm); };
+  $("pk-new").onclick = () => { const keep = pick; openCreateEx(pick.g !== "all" ? pick.g : "", (id) => { pick = keep; choose(id); }); };
   draw();
 }
 function choose(id) {
@@ -1545,53 +1626,115 @@ function choose(id) {
   if (pick.mode === "add") setTimeout(() => $("v-work").scrollTo({ top: $("v-work").scrollHeight, behavior: "smooth" }), 80);
 }
 
-/* ---------- прогресс ---------- */
-function renderProgress() {
-  setTimeout(() => {
-    const b = $("prof-edit"); if (b) b.onclick = () => openOnb(true);
-    const inv = $("prog-invite"); if (inv) inv.onclick = () => {
-      H(); const url = "https://t.me/share/url?url=" + encodeURIComponent(S.rl) + "&text=" + encodeURIComponent("Мой ИИ-тренер в Telegram: собирает тренировки и ведёт веса. По ссылке — месяц Premium нам обоим 💪");
-      try { tg.openTelegramLink(url); } catch (e) { try { navigator.clipboard.writeText(S.rl); toast("Ссылка скопирована"); } catch (e2) { toast(S.rl); } }
-    };
-    const po = $("promo-ok"); if (po) po.onclick = async () => {
-      const code = $("promo-in").value.trim(); if (code.length < 2) { $("promo-in").focus(); return; }
-      H(); po.disabled = true;
-      try { const d = await api("promo", { code }); if (d.ok) { applyState(d.state); HN("success"); toast(`Промокод принят: +${d.days} дней Premium`); } else { HN("error"); toast(d.err || "Не подошёл"); } }
-      catch (e) { toast("Не получилось — проверь интернет"); } finally { po.disabled = false; }
-    };
-    const pi = $("prog-import"); if (pi) pi.onclick = () => { H(); $("ask-file").click(); showTab("home"); };
-    document.querySelectorAll(".prow[data-ex]").forEach(r => r.onclick = () => editWeight(r.dataset.ex));
-  }, 0);
-  const now = Date.now();
-  const last30 = histEntries().filter(([k]) => (now - new Date(k).getTime()) / 864e5 <= 30).length;
-  const W0 = S.w || {}, shown = new Set();
-  const row = (id) => {
-    const e = CAT[id]; if (!e) return ""; shown.add(id);
-    const w = W0[id], v = w && w[0] != null ? tgtText(e, w[0], w[1]) : "";
-    return `<button class="prow" data-ex="${id}"><span>${esc(e.name)}</span><b class="${v ? "" : "none"}">${v || "—"}</b></button>`;
-  };
-  const days = DAYS.map(d => `<div class="sec">День ${dlabel(d)} · ${esc(PLAN[d].title)}</div><div class="plist">` + dayPlan(d).map(x => row(x.id)).join("") + `</div>`).join("");
-  const other = Object.keys(W0).filter(id => CAT[id] && !shown.has(id) && W0[id] && W0[id][0] != null);
-  const ICG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM19 8v6M22 11h-6"/></svg>`;
-  const ICC = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg>`;
-  $("v-prog").innerHTML = `
-    <div class="head"><div><div class="eyebrow">Твои рабочие веса</div><h1>Прогресс</h1></div></div>
-    <div class="profile" id="prof-card"><div><b>${PROFILE.w ? String(PROFILE.w).replace(".", ",") : "—"}</b><span>кг</span></div><div><b>${PROFILE.h || "—"}</b><span>см</span></div><div><b>${age(PROFILE.b) ?? "—"}</b><span>${plural(age(PROFILE.b) || 0, "год", "года", "лет")}</span></div></div>
-    <button class="plan-link" id="prof-edit" style="display:block;margin:2px auto 8px">Изменить профиль</button>
+/* ---------- профиль ---------- */
+const GOAL_T = { lose: "Похудеть", mass: "Набрать мышцы", strength: "Стать сильнее", fit: "Держать форму", health: "Здоровье и самочувствие" };
+const IC2 = {
+  me: '<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>',
+  goal: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+  dumb: '<path d="M6.5 6.5v11M17.5 6.5v11M3 9.5v5M21 9.5v5M6.5 12h11"/>',
+  clip: '<path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/>',
+  gift: '<rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-2-4-6-4-6-1s6 1 6 1zM12 8c2-4 6-4 6-1s-6 1-6 1z"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+  trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/>',
+};
+const ico = (k) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${IC2[k]}</svg>`;
+function tgUser() { try { return (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || {}; } catch (e) { return {}; } }
+function renderProfile() {
+  const u = tgUser(), name = [u.first_name, u.last_name].filter(Boolean).join(" ") || "Атлет";
+  const now = Date.now(), last30 = histEntries().filter(([k]) => (now - new Date(k).getTime()) / 864e5 <= 30).length;
+  const prem = S.pu && S.pu >= iso(today);
+  const row = (id, ic, t, sub, cls) => `<button class="prow2 ${cls || ""}" data-go="${id}"><div class="pi">${ico(ic)}</div><div class="pt"><b>${t}</b>${sub ? `<span>${sub}</span>` : ""}</div><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
+  const meSub = [PROFILE.w ? String(PROFILE.w).replace(".", ",") + " кг" : "", PROFILE.h ? PROFILE.h + " см" : "", age(PROFILE.b) != null ? age(PROFILE.b) + " " + plural(age(PROFILE.b), "год", "года", "лет") : ""].filter(Boolean).join(" · ");
+  const goalSub = [GOAL_T[PROFILE.g], PROFILE.fr ? PROFILE.fr + "× в неделю" : "", PROFILE.du ? PROFILE.du + " мин" : ""].filter(Boolean).join(" · ");
+  const nEx = Object.keys(S.w || {}).filter(k => CAT[k] && (S.w[k] || [])[1] != null).length;
+  $("v-prof").innerHTML = `
+    <div class="phead">
+      <div><div class="eyebrow">${prem ? "⭐ Premium" : "Профиль"}</div><h1>${esc(name)}</h1></div>
+      <div class="ava">${u.photo_url ? `<img src="${esc(u.photo_url)}" alt="">` : esc((name[0] || "А").toUpperCase())}</div>
+    </div>
     <div class="stats">
       <div class="stat acc"><b>${S.c}</b><span>${plural(S.c,"тренировка","тренировки","тренировок")} всего</span></div>
       <div class="stat"><b>${last30}</b><span>за 30 дней</span></div>
     </div>
-    <div class="hint">Нажми на упражнение, чтобы поправить или сбросить вес</div>` +
-    days + (other.length ? `<div class="sec">Другие упражнения</div><div class="plist">${other.map(row).join("")}</div>` : "") +
-    (Object.keys(W0).length ? "" : `<div class="empty" style="padding-top:24px">Закончи первую тренировку — здесь появятся твои веса</div>`) +
-    (hasAPI() ? `<div class="sec">Premium и подарки</div>
-      <div class="gift">
-        ${S.pu && S.pu >= iso(today) ? `<div class="prem">⭐ Premium до ${new Date(S.pu + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" })}</div>` : ""}
-        <div class="promo"><input id="promo-in" maxlength="32" placeholder="Промокод" autocapitalize="characters" autocomplete="off"><button id="promo-ok">Применить</button></div>
-        ${S.rl ? `<button class="btn2" id="prog-invite">${ICG}Пригласить друга · месяц обоим</button>` : ""}
-      </div>
-      <button class="btn2" id="prog-import" style="margin-top:12px">${ICC}Перенести тренировки со скриншотов</button>` : "");
+    <div class="plist2">
+      ${row("me", "me", "Обо мне", meSub)}
+      ${row("goal", "goal", "Моя цель", goalSub || "не указана")}
+      ${row("ex", "dumb", "Мои упражнения и веса", nEx ? nEx + " " + plural(nEx, "упражнение", "упражнения", "упражнений") : "пока пусто")}
+      ${hasAPI() ? row("imp", "clip", "Перенести тренировки", "со скриншотов другого приложения") : ""}
+    </div>
+    <div class="plist2">
+      ${hasAPI() ? row("gift", "gift", "Premium и подарки", prem ? "до " + new Date(S.pu + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" }) : "промокод, пригласить друга") : ""}
+      ${row("set", "gear", "Настройки приложения", (themeIsLight() ? "светлая тема" : "тёмная тема") + " · " + UW())}
+      ${row("docs", "doc", "Документы", "оферта и конфиденциальность")}
+    </div>
+    ${hasAPI() ? `<div class="plist2">${row("wipe", "trash", "Удалить мои данные", "", "danger")}</div>` : ""}`;
+  document.querySelectorAll("#v-prof [data-go]").forEach(b => b.onclick = () => { H(); PGO[b.dataset.go](); });
+}
+const PGO = {
+  me: () => openOnb(true, "s", "b"),
+  goal: () => openOnb(true, "g", "pl"),
+  ex: openMyEx,
+  imp: () => { $("ask-file").click(); showTab("home"); },
+  gift: openGift,
+  set: openSettings,
+  docs: () => openSheet(`<h2 style="margin:6px 0 4px">Документы</h2>`, `<p style="color:var(--inactive);font-size:15px;line-height:1.5">Публичная оферта и политика конфиденциальности появятся здесь перед запуском платной версии.</p>`),
+  wipe: openWipe,
+};
+function openMyEx() {
+  const W0 = S.w || {};
+  const ids = Object.keys(W0).filter(id => CAT[id] && W0[id] && W0[id][1] != null).sort((a, b) => CAT[a].name.localeCompare(CAT[b].name, "ru"));
+  openSheet(`<h2 style="margin:6px 0 4px">Мои упражнения и веса</h2><p style="color:var(--inactive);font-size:14px;margin:0">Нажми, чтобы поправить или сбросить</p>`,
+    ids.length ? `<div class="plist">${ids.map(id => `<button class="prow" data-ex="${id}"><span>${esc(CAT[id].name)}</span><b>${tgtText(CAT[id], W0[id][0], W0[id][1])}</b></button>`).join("")}</div>`
+               : `<p style="color:var(--inactive);font-size:15px">Здесь появятся упражнения и веса после первой тренировки или переноса со скриншотов.</p>`, true);
+  document.querySelectorAll("#sh-body [data-ex]").forEach(r => r.onclick = () => editWeight(r.dataset.ex));
+}
+function openGift() {
+  const prem = S.pu && S.pu >= iso(today);
+  openSheet(`<h2 style="margin:6px 0 4px">Premium и подарки</h2>`,
+    `${prem ? `<div class="prem">⭐ Premium до ${new Date(S.pu + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" })}</div>` : ""}
+     <div class="sec">Промокод</div>
+     <div class="promo"><input id="promo-in" maxlength="32" placeholder="Промокод" autocapitalize="characters" autocomplete="off"><button id="promo-ok">Применить</button></div>
+     ${S.rl ? `<div class="sec">Пригласить друга</div><p style="color:var(--inactive);font-size:14px;margin:0 0 10px">Друг получит месяц Premium, и ты тоже</p>
+     <button class="cta" id="prog-invite">Пригласить друга</button>` : ""}`);
+  const inv = $("prog-invite"); if (inv) inv.onclick = () => {
+    H(); const url = "https://t.me/share/url?url=" + encodeURIComponent(S.rl) + "&text=" + encodeURIComponent("Мой ИИ-тренер в Telegram: собирает тренировки и ведёт веса. По ссылке — месяц Premium нам обоим 💪");
+    try { tg.openTelegramLink(url); } catch (e) { try { navigator.clipboard.writeText(S.rl); toast("Ссылка скопирована"); } catch (e2) { toast(S.rl); } }
+  };
+  $("promo-ok").onclick = async () => {
+    const code = $("promo-in").value.trim(); if (code.length < 2) { $("promo-in").focus(); return; }
+    H(); $("promo-ok").disabled = true;
+    try { const d = await api("promo", { code }); if (d.ok) { applyState(d.state); HN("success"); toast(`Промокод принят: +${d.days} дней Premium`); closeSheet(); } else { HN("error"); toast(d.err || "Не подошёл"); } }
+    catch (e) { toast("Не получилось — проверь интернет"); } finally { const b = $("promo-ok"); if (b) b.disabled = false; }
+  };
+}
+function openSettings() {
+  const seg = (name, val, opts) => `<div class="seg" data-set="${name}">${opts.map(([v, t]) => `<button data-v="${v}" class="${val === v ? "on" : ""}">${t}</button>`).join("")}</div>`;
+  openSheet(`<h2 style="margin:6px 0 4px">Настройки приложения</h2>`,
+    `<div class="sec">Тема</div>${seg("theme", SET.theme || "auto", [["auto", "Авто"], ["dark", "Тёмная"], ["light", "Светлая"], ["system", "Как в Telegram"]])}
+     <div class="sec">Единицы веса</div>${seg("unit", SET.unit || "kg", [["kg", "Килограммы"], ["lb", "Фунты"]])}
+     <p style="color:var(--mid);font-size:12.5px;margin-top:14px;line-height:1.45">«Авто» — светлая тема для женского профиля, тёмная для мужского. Отдых между подходами приложение подбирает само: по упражнению и твоей цели.</p>`);
+  document.querySelectorAll("#sh-body .seg button").forEach(b => b.onclick = () => {
+    H(); const k = b.closest(".seg").dataset.set; SET[k] = b.dataset.v; saveSet();
+    b.parentNode.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    applyTheme(); renderWeek(); renderHome(); renderProfile();
+  });
+}
+function openWipe() {
+  openSheet(`<h2 style="margin:6px 0 4px">Удалить мои данные</h2>`,
+    `<p style="font-size:15px;line-height:1.5;color:var(--text2)">Удалятся все тренировки, рабочие веса, свои упражнения, переписка с тренером и всё, что он о тебе запомнил. Вернуть это будет нельзя.</p>
+     <button class="wdel" id="wipe-1" style="margin-top:18px">Удалить всё</button>`);
+  $("wipe-1").onclick = async () => {
+    const b = $("wipe-1");
+    if (!b.classList.contains("sure")) { H("medium"); b.classList.add("sure"); b.textContent = "Точно? Нажми ещё раз"; return; }
+    b.disabled = true; b.textContent = "Удаляю…";
+    try {
+      const d = await api("wipe", {});
+      ["ai_done_", "draft"].forEach(() => {});
+      try { Object.keys(localStorage).filter(k => k.startsWith("w_") || k.startsWith("ai_done_") || k === "fav").forEach(k => localStorage.removeItem(k)); } catch (e) {}
+      FAV.clear(); closeSheet(); applyState(d.state); HN("success"); toast("Данные удалены");
+    } catch (e) { b.disabled = false; b.textContent = "Не получилось — ещё раз"; HN("error"); }
+  };
 }
 
 /* ---------- поправить или сбросить рабочий вес ---------- */
@@ -1599,9 +1742,9 @@ function editWeight(id) {
   const e = CAT[id]; if (!e) return;
   H();
   const w = (S.w || {})[id] || [], two = e.kind === "w" || e.kind === "k";
-  const u1 = e.kind === "k" ? "мин" : "кг", u2 = unitOf(e).replace(".", "");
+  const u1 = e.kind === "k" ? "мин" : UW(), u2 = unitOf(e).replace(".", "");
   openSheet(`<h2 style="margin:6px 0 4px">${esc(e.name)}</h2><p style="color:var(--inactive);font-size:14px;margin:0">Сейчас: ${w[0] != null ? tgtText(e, w[0], w[1]) : "вес не задан"}</p>`,
-    `<div class="wedit">${two ? `<label class="val"><input id="we-w" type="number" inputmode="decimal" step="any" value="${w[0] != null ? fmt(w[0]) : ""}" placeholder="—"><small>${u1}</small></label><span class="x">${e.kind === "k" ? "·" : "×"}</span>` : ""}
+    `<div class="wedit">${two ? `<label class="val"><input id="we-w" type="number" inputmode="decimal" step="any" value="${w[0] != null ? fmt(e.kind === "k" ? w[0] : wShow(w[0])) : ""}" placeholder="—"><small>${u1}</small></label><span class="x">${e.kind === "k" ? "·" : "×"}</span>` : ""}
       <label class="val reps"><input id="we-r" type="number" inputmode="numeric" value="${w[1] ?? ""}" placeholder="—"><small>${u2}</small></label></div>
      <button class="cta" id="we-save" style="margin-top:16px">Сохранить</button>
      <button class="wdel" id="we-reset">Сбросить — как будто ещё не делал</button>`);
@@ -1610,7 +1753,7 @@ function editWeight(id) {
     catch (er) { toast("Не получилось — проверь интернет"); HN("error"); }
   };
   $("we-save").onclick = () => {
-    const r = parseInt($("we-r").value, 10), ww = two ? Number($("we-w").value) : 0;
+    const r = parseInt($("we-r").value, 10), ww = two ? (e.kind === "k" ? Number($("we-w").value) : wIn($("we-w").value)) : 0;
     if (!(r > 0) || (two && e.step && !(ww > 0))) { toast("Заполни значения"); HN("error"); return; }
     send({ w: ww, r }, "Сохранено");
   };
@@ -1619,10 +1762,10 @@ function editWeight(id) {
 
 /* ---------- своё упражнение ---------- */
 const METRICS = [["w", "Вес и повторы", "кг × повт"], ["r", "Повторы", "свой вес"], ["t", "Время", "секунды"], ["c", "Время", "минуты"], ["k", "Время и калории", "мин · ккал"]];
-$("cat-add").onclick = () => {
+function openCreateEx(group, onDone) {
   H();
   if (!hasAPI()) { toast("Добавлять упражнения можно, когда приложение подключено к серверу"); return; }
-  const nx = { m: "w", g: catGroup !== "all" ? catGroup : "" };
+  const nx = { m: "w", g: group || "" };
   openSheet(`<h2 style="margin:6px 0 4px">Добавить упражнение</h2><p style="color:var(--inactive);font-size:14px;margin:0">Появится в каталоге и в тренировках</p>`,
     `<input class="cx-in" id="cx-name" maxlength="60" placeholder="Название, например «Падел» или «Жим в хаммере»" autocomplete="off">
      <div class="sec">Что записываем</div><div class="cx-opts" id="cx-m"></div>
@@ -1642,11 +1785,12 @@ $("cat-add").onclick = () => {
     $("cx-save").disabled = true; $("cx-save").textContent = "Добавляю…";
     try {
       const d = await api("custom/add", { name, group: nx.g, metric: nx.m });
-      closeSheet(); applyState(d.state); catGroup = nx.g; catQ = ""; $("cat-q").value = ""; renderCatalog();
+      closeSheet(); applyState(d.state);
       HN("success"); toast(`Добавлено в «${GROUPS[nx.g]}»`);
+      if (onDone && d.id) onDone(d.id);
     } catch (e) { $("cx-save").disabled = false; $("cx-save").textContent = "Добавить упражнение"; toast("Не получилось — проверь интернет"); HN("error"); }
   };
-};
+}
 
 /* ---------- тренировки за день: просмотр и удаление ---------- */
 async function openDay(d) {
@@ -1657,7 +1801,7 @@ async function openDay(d) {
   try { res = await api("day", { d }); } catch (e) { $("sh-body").innerHTML = `<p style="color:var(--inactive)">Не загрузилось — проверь интернет</p>`; return; }
   const ss = res.sessions || [];
   if (!ss.length) { $("sh-body").innerHTML = `<p style="color:var(--inactive)">В этот день тренировок нет</p>`; return; }
-  const one = (id, w, r) => { const e = CAT[id]; return e.kind === "k" ? `${fmt(w)} мин · ${r} ккал` : e.kind === "w" && w ? `${fmt(w)} × ${r}` : r + (e.kind === "t" ? " сек" : e.kind === "c" ? " мин" : " повт"); };
+  const one = (id, w, r) => { const e = CAT[id]; return e.kind === "k" ? `${fmt(w)} мин · ${r} ккал` : e.kind === "w" && w ? `${fmt(wShow(w))} × ${r}` : r + (e.kind === "t" ? " сек" : e.kind === "c" ? " мин" : " повт"); };
   const TRASH = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
   $("sh-body").innerHTML = ss.map(x => `<div class="dsess" data-sid="${x.sid}">
     <div class="dhead"><h3>${esc(x.day === "X" || !PLAN[x.day] ? x.t : "День " + dlabel(x.day) + " · " + x.t)}${x.imp ? "<span>перенесена</span>" : ""}</h3>
@@ -1680,13 +1824,14 @@ async function openDay(d) {
 
 async function noteOp(body) {
   H();
-  try { const d = await api("notes", body); S.nt = d.nt || []; renderProgress(); if (body.add) toast("Тренер запомнил 👍"); }
+  try { const d = await api("notes", body); S.nt = d.nt || []; if (body.add) toast("Тренер запомнил 👍"); }
   catch (e) { toast("Не получилось — проверь интернет"); }
 }
 
 /* ---------- старт ---------- */
 renderWeek(); renderHome(); updateMain();
 if (!hasProfile()) openOnb(false);
+else if (!PROFILE.g) openOnb(false, "g");
 if (hasAPI()) api("state", {}, 15000).then(applyState).catch(() => {});
 </script>
 </body>
