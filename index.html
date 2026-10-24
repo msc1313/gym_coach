@@ -226,7 +226,55 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 .agehint{text-align:center;color:var(--lime);font-weight:600;margin-top:14px;min-height:22px}
 
 /* ---------- спросить тренера ---------- */
-.ask{background:var(--card);border-radius:22px;padding:16px;margin-top:14px}
+.ask{background:var(--card);border-radius:22px;padding:16px;margin-top:14px;position:relative;overflow:hidden}
+.askhead{display:flex;align-items:center;justify-content:space-between;margin:-4px -4px 0 0}
+.askopen{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:var(--inactive);background:var(--card2)}
+.askcover{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 22px;text-align:center;
+  background:linear-gradient(135deg,rgba(var(--acc-rgb),.22),rgba(var(--acc-rgb),.06) 60%),var(--card);border-radius:22px;
+  transition:opacity .45s var(--ease),transform .45s var(--ease),filter .45s}
+.askcover .cv-ic{width:48px;height:48px;border-radius:16px;background:rgba(var(--acc-rgb),.18);display:grid;place-items:center;animation:twinkle 2.4s ease-in-out infinite}
+.askcover b{font-size:16.5px;line-height:1.35;font-weight:700;max-width:300px}
+.askcover span{font-size:12.5px;color:var(--lime);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.askcover.gone{opacity:0;transform:scale(1.06);filter:blur(6px);pointer-events:none}
+@keyframes twinkle{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.12) rotate(12deg)}}
+/* ---------- обучение при первом входе ---------- */
+.tour{position:fixed;inset:0;z-index:70;display:none}
+.tour.show{display:block}
+.tspot{position:absolute;border-radius:20px;box-shadow:0 0 0 9999px rgba(0,0,0,.72);transition:all .35s var(--ease);pointer-events:none}
+.tcard{position:absolute;left:16px;right:16px;background:var(--sheet);border-radius:20px;padding:16px;box-shadow:0 12px 40px rgba(0,0,0,.35);transition:top .35s var(--ease);animation:fade .3s var(--ease)}
+.tcard small{font-size:12px;font-weight:700;color:var(--lime);letter-spacing:.05em;text-transform:uppercase}
+.tcard b{display:block;font-size:18px;margin:4px 0 6px}
+.tcard p{font-size:14.5px;line-height:1.5;color:var(--text2);margin:0}
+.tcard .tbtns{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.tcard .tskip{color:var(--inactive);font-weight:600;font-size:14px}
+.tcard .tnext{height:42px;padding:0 20px;border-radius:13px;background:var(--lime);color:var(--on);font-weight:700}
+/* ---------- чат с тренером ---------- */
+#v-chat{padding-bottom:calc(var(--bot) + 96px)}
+.ctop{position:sticky;top:calc(-1 * var(--top) - 16px);margin:calc(-1 * var(--top) - 16px) -16px 8px;padding:calc(var(--top) + 12px) 16px 12px;display:flex;align-items:center;gap:12px;background:var(--bg);z-index:3;border-bottom:1px solid var(--line)}
+.ctop .t b{display:block;font-size:17px}.ctop .t span{font-size:12.5px;color:var(--inactive)}
+.cava{width:40px;height:40px;border-radius:14px;background:rgba(var(--acc-rgb),.16);display:grid;place-items:center;flex:none}
+.cmsgs{display:flex;flex-direction:column;gap:10px;padding-top:6px}
+.bub{max-width:84%;padding:11px 14px;border-radius:18px;font-size:15px;line-height:1.48;white-space:pre-wrap;word-wrap:break-word;animation:fade .3s var(--ease)}
+.bub.me{align-self:flex-end;background:var(--lime);color:var(--on);border-bottom-right-radius:6px}
+.bub.ai{align-self:flex-start;background:var(--card);border-bottom-left-radius:6px}
+.bub.ai .note{display:block;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);color:var(--lime);font-size:13px;font-weight:600}
+.bub.plan{width:84%;white-space:normal}
+.bub.plan h4{font-size:16px;margin:2px 0 4px}.bub.plan p{font-size:13.5px;color:var(--inactive);margin:0 0 8px}
+.bub.plan ol{margin:0 0 10px;padding-left:18px;font-size:14px;line-height:1.6}.bub.plan ol span{color:var(--inactive)}
+.bub.plan .cta{height:44px;font-size:15px}
+.bub .act{margin-top:10px;height:40px;width:100%;border-radius:12px;background:var(--lime);color:var(--on);font-weight:700}
+.chello{text-align:center;color:var(--inactive);font-size:14px;line-height:1.5;padding:18px 12px 4px}
+.chello b{display:block;color:var(--text);font-size:18px;margin-bottom:6px}
+.cchips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:6px 0 4px}
+.cchips button{height:36px;padding:0 14px;border-radius:99px;border:1.5px solid var(--outline);color:var(--text2);font-size:13.5px;font-weight:600}
+.cbar{position:fixed;left:0;right:0;bottom:0;z-index:25;display:flex;gap:8px;align-items:flex-end;padding:10px 12px calc(var(--bot) + 10px);background:var(--bg);border-top:1px solid var(--line);
+  transform:translateY(110%);transition:transform .35s var(--ease)}
+.cbar.show{transform:none}
+.cbar textarea{flex:1;min-height:46px;max-height:130px;resize:none;background:var(--card2);border:1.5px solid transparent;border-radius:16px;padding:12px 14px;color:var(--text);font:inherit;font-size:15px;outline:none}
+.cbar textarea:focus{border-color:var(--lime)}
+.cbar .send{width:46px;height:46px;border-radius:16px;background:var(--lime);display:grid;place-items:center;flex:none}
+.cbar .send:disabled{opacity:.5}
+.cbar .clip{width:40px;height:46px;display:grid;place-items:center;color:var(--inactive);flex:none}
 .ask small{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--lime);font-weight:700;letter-spacing:.05em;text-transform:uppercase}
 .ask .row{display:flex;gap:8px;margin-top:12px}
 .ask textarea{flex:1;min-height:48px;max-height:120px;resize:none;background:var(--card2);border:1.5px solid transparent;border-radius:16px;padding:13px 14px;
@@ -428,6 +476,14 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
   transform:translateY(100%);transition:transform .38s var(--ease);border-top:1px solid var(--line)}
 .sheet.show{transform:none}
 .sheet.full{height:calc(100% - var(--top) - 24px)}
+.cedit{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:var(--inactive);background:var(--card2);flex:none}
+.reorder{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:40px;margin:4px 0 10px;color:var(--inactive);font-size:14px;font-weight:600}
+.ord{display:flex;flex-direction:column;gap:8px;touch-action:none}
+.orow{display:flex;align-items:center;gap:12px;background:var(--card2);border-radius:14px;padding:12px 14px;user-select:none;-webkit-user-select:none;position:relative;transition:transform .15s}
+.orow.drag{transition:none;z-index:2;box-shadow:0 8px 24px rgba(0,0,0,.3);background:var(--card)}
+.orow .n{width:26px;height:26px;border-radius:8px;background:var(--card);display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
+.orow b{flex:1;font-size:15px;font-weight:600}
+.orow .hd{color:var(--mid);padding:6px;margin:-6px;touch-action:none;cursor:grab}
 .mkown{display:flex;align-items:center;gap:12px;width:100%;padding:12px 2px;border-bottom:1px solid var(--line);text-align:left}
 .mkown .ic{width:46px;height:46px;border-radius:14px;background:rgba(var(--acc-rgb),.14);color:var(--lime);display:grid;place-items:center;font-size:24px;font-weight:600;flex:none}
 .mkown b{display:block;font-size:15px}.mkown span{font-size:12.5px;color:var(--inactive)}
@@ -466,8 +522,9 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 .nav button.on{color:var(--lime);background:rgba(var(--acc-rgb),.08)}
 
 .toast{position:fixed;left:50%;top:calc(var(--top) + 14px);z-index:60;background:var(--text);color:var(--bg);font-weight:600;font-size:14px;
-  padding:10px 16px;border-radius:14px;transform:translate(-50%,-180%);transition:transform .35s var(--ease);max-width:90%;text-align:center}
-.toast.show{transform:translate(-50%,0)}
+  padding:10px 16px;border-radius:14px;transform:translate(-50%,-12px);opacity:0;visibility:hidden;pointer-events:none;
+  transition:transform .3s var(--ease),opacity .3s,visibility 0s .3s;max-width:90%;text-align:center}
+.toast.show{transform:translate(-50%,0);opacity:1;visibility:visible;transition:transform .3s var(--ease),opacity .3s,visibility 0s}
 
 @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 @keyframes pop{0%{transform:scale(.85)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
@@ -495,8 +552,9 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
     <div class="week" id="week"></div>
     <div class="calnote" id="calnote"></div>
   </div>
-  <div class="ask">
-    <small><svg width="14" height="14" viewBox="0 0 24 24" style="fill:var(--lime)"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg>Спроси тренера</small>
+  <div class="ask" id="ask-card">
+    <div class="askhead"><small><svg width="14" height="14" viewBox="0 0 24 24" style="fill:var(--lime)"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg>Твой ИИ-тренер</small>
+      <button class="askopen" id="ask-open" aria-label="Открыть чат на весь экран"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button></div>
     <div class="row">
       <button class="clip" id="ask-clip" aria-label="Прикрепить скриншоты"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg></button>
       <input type="file" id="ask-file" accept="image/*" multiple hidden>
@@ -505,6 +563,7 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
     </div>
     <div class="qchips" id="ask-chips"></div>
     <div id="ask-ans"></div>
+    <button class="askcover" id="ask-cover"><div class="cv-ic"><svg width="26" height="26" viewBox="0 0 24 24" style="fill:var(--lime)"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg></div><b id="cover-t"></b><span>Нажми, чтобы спросить тренера</span></button>
   </div>
   <div id="resume"></div>
   <div id="aiplan"></div>
@@ -554,6 +613,7 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
   <div class="chips" id="w-chips" style="justify-content:center"></div>
   <div class="progress"><div id="w-prog" style="width:0"></div></div>
   <div id="w-list"></div>
+  <button class="reorder" id="w-order"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4l-3 3M7 4l3 3M17 20V4M17 20l-3-3M17 20l3-3"/></svg>Поменять порядок</button>
   <button class="addex" id="w-add"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Добавить упражнение</button>
   <button class="cta finish-fb" id="w-finish">Завершить тренировку</button>
 </section>
@@ -571,6 +631,22 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 <section class="view hidden" id="v-prof"></section>
 
 <!-- ============ нижнее меню ============ -->
+<section class="view off-right" id="v-chat">
+  <div class="ctop">
+    <button class="iconbtn" data-back aria-label="Назад"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="cava"><svg width="20" height="20" viewBox="0 0 24 24" style="fill:var(--lime)"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg></div>
+    <div class="t"><b>Тренер</b><span>помнит твои тренировки и цель</span></div>
+  </div>
+  <div class="cmsgs" id="c-msgs"></div>
+</section>
+<div class="cbar" id="c-bar">
+  <button class="clip" id="c-clip" aria-label="Прикрепить скриншоты"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/></svg></button>
+  <textarea id="c-q" rows="1" placeholder="Сообщение тренеру…" maxlength="600"></textarea>
+  <button class="send" id="c-send" aria-label="Отправить"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+</div>
+
+<div class="tour" id="tour"><div class="tspot" id="tspot"></div><div class="tcard" id="tcard"></div></div>
+
 <nav class="nav" id="nav">
   <button data-v="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>Дневник</button>
   <button data-v="prof"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>Профиль</button>
@@ -580,6 +656,7 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 <div class="timer" id="timer">
   <div class="ring"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="22" stroke="rgba(0,0,0,.15)"/><circle id="t-arc" cx="26" cy="26" r="22" style="stroke:var(--on)" stroke-linecap="round" stroke-dasharray="138.2" stroke-dashoffset="0"/></svg></div>
   <div class="lbl"><small id="t-lbl">Отдых</small><b id="t-val">1:30</b></div>
+  <button id="t-minus">−30 с</button>
   <button id="t-plus">+30 с</button>
   <button id="t-stop" aria-label="Пропустить отдых">✕</button>
 </div>
@@ -595,7 +672,7 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 <div class="toast" id="toast"></div>
 
 <script>
-const D = {"catalog":{"bench":{"name":"Жим штанги лёжа","group":"chest","m":["chest"],"m2":["triceps","delts"],"step":2.5,"reps":[6,10],"tip":"Лопатки сведены, ноги упираются в пол, штанга опускается к низу груди.","kind":"w","inc":1},"incline_bb":{"name":"Жим штанги на наклонной","group":"chest","m":["chest","delts"],"m2":["triceps"],"step":2.5,"reps":[6,10],"tip":"Скамья 30°, гриф опускается к верху груди, локти не разводи в стороны.","kind":"w","inc":1},"decline_bb":{"name":"Жим штанги на скамье вниз головой","group":"chest","m":["chest"],"m2":["triceps"],"step":2.5,"reps":[6,10],"tip":"Ноги надёжно зафиксированы, штанга идёт к низу груди.","kind":"w","inc":1},"db_bench":{"name":"Жим гантелей лёжа","group":"chest","m":["chest"],"m2":["triceps","delts"],"step":2,"reps":[8,12],"tip":"Опускай гантели до растяжения груди, вверху своди, но не стучи ими.","kind":"w","inc":1},"incline_db":{"name":"Жим гантелей на наклонной","group":"chest","m":["chest","delts"],"m2":["triceps"],"step":2,"reps":[8,12],"tip":"Скамья 30°, локти под ~45° к корпусу, в нижней точке растяжение груди.","kind":"w","inc":1},"chest_machine":{"name":"Жим от груди в тренажёре","group":"chest","m":["chest"],"m2":["triceps","delts"],"step":5,"reps":[10,12],"tip":"Лопатки прижаты к спинке, вверху не выпрямляй локти до упора.","kind":"w","inc":1},"smith_bench":{"name":"Жим в тренажёре Смита","group":"chest","m":["chest"],"m2":["triceps","delts"],"step":2.5,"reps":[8,10],"tip":"Скамья так, чтобы гриф опускался к низу груди. Лопатки сведены.","kind":"w","inc":1},"pec_deck":{"name":"Баттерфляй","group":"chest","m":["chest"],"m2":["delts"],"step":5,"reps":[10,15],"tip":"Руки слегка согнуты, своди за счёт груди, в конце пауза на секунду.","kind":"w","inc":1},"cable_cross":{"name":"Кроссовер в блоках","group":"chest","m":["chest"],"m2":["delts"],"step":2.5,"reps":[12,15],"tip":"Корпус чуть вперёд, своди руки по дуге перед собой, не сгибай локти сильнее.","kind":"w","inc":1},"db_fly":{"name":"Разведение гантелей лёжа","group":"chest","m":["chest"],"m2":[],"step":1,"reps":[10,15],"tip":"Опускай по дуге до растяжения, локти слегка согнуты и не меняют угол.","kind":"w","inc":1},"dips":{"name":"Отжимания на брусьях","group":"chest","m":["chest","triceps"],"m2":["delts"],"step":0,"reps":[6,12],"tip":"Наклон корпуса вперёд — больше грудь, вертикально — больше трицепс.","kind":"w","inc":1},"pushups":{"name":"Отжимания от пола","group":"chest","m":["chest"],"m2":["triceps","delts","abs"],"step":0,"reps":[10,20],"tip":"Тело прямое, как доска. Грудь почти касается пола.","kind":"w","inc":1},"pullups":{"name":"Подтягивания широким хватом","group":"back","m":["lats"],"m2":["biceps","midback"],"step":0,"reps":[5,10],"tip":"Тянись грудью к перекладине, своди лопатки, без раскачки.","kind":"w","inc":1},"chinups":{"name":"Подтягивания обратным хватом","group":"back","m":["lats","biceps"],"m2":["midback"],"step":0,"reps":[5,10],"tip":"Ладони к себе, подбородок над перекладиной, опускайся полностью.","kind":"w","inc":1},"neutral_pullups":{"name":"Подтягивания нейтральным хватом","group":"back","m":["lats"],"m2":["biceps","midback"],"step":0,"reps":[5,10],"tip":"Ладони друг к другу, локти ведёшь вниз вдоль корпуса.","kind":"w","inc":1},"lat_pulldown":{"name":"Тяга верхнего блока к груди","group":"back","m":["lats"],"m2":["biceps","midback"],"step":5,"reps":[8,12],"tip":"Тяни локтями вниз к рёбрам, грудь вперёд, не раскачивайся корпусом.","kind":"w","inc":1},"close_pulldown":{"name":"Тяга верхнего блока узким хватом","group":"back","m":["lats"],"m2":["biceps"],"step":5,"reps":[10,12],"tip":"Рукоять к верху живота, в нижней точке своди лопатки.","kind":"w","inc":1},"bb_row":{"name":"Тяга штанги в наклоне","group":"back","m":["lats","midback"],"m2":["biceps","lowerback"],"step":2.5,"reps":[6,10],"tip":"Спина прямая, наклон ~45°, тяни штангу к низу живота.","kind":"w","inc":1},"db_row":{"name":"Тяга гантели одной рукой","group":"back","m":["lats","midback"],"m2":["biceps"],"step":2,"reps":[8,12],"tip":"Веди локоть назад вдоль корпуса, в верхней точке задержка на секунду.","kind":"w","inc":1},"tbar_row":{"name":"Тяга Т-грифа","group":"back","m":["midback","lats"],"m2":["biceps","lowerback"],"step":2.5,"reps":[8,10],"tip":"Грудь вперёд, спина нейтральная, тяни к животу, лопатки своди.","kind":"w","inc":1},"cable_row":{"name":"Тяга горизонтального блока","group":"back","m":["midback","lats"],"m2":["biceps"],"step":5,"reps":[10,12],"tip":"Своди лопатки в конце движения, корпус не заваливай назад.","kind":"w","inc":1},"machine_row":{"name":"Тяга в рычажном тренажёре","group":"back","m":["midback","lats"],"m2":["biceps"],"step":5,"reps":[10,12],"tip":"Грудь прижата к упору, тяни локтями назад, пауза в конце.","kind":"w","inc":1},"single_cable_row":{"name":"Тяга одной рукой в блоке","group":"back","m":["lats"],"m2":["biceps"],"step":2.5,"reps":[10,12],"tip":"Корпус не разворачивай, локоть идёт к бедру.","kind":"w","inc":1},"deadlift":{"name":"Становая тяга","group":"back","m":["lowerback","glutes","hamstrings"],"m2":["traps","quads","forearms"],"step":5,"reps":[4,8],"tip":"Гриф над серединой стопы, спина прямая, толкай пол ногами.","kind":"w","inc":1},"hyperext":{"name":"Гиперэкстензия","group":"back","m":["lowerback"],"m2":["glutes","hamstrings"],"step":0,"reps":[12,15],"tip":"Не переразгибайся вверху — корпус в одну линию с ногами.","kind":"w","inc":1},"db_shrug":{"name":"Шраги с гантелями","group":"back","m":["traps"],"m2":["forearms"],"step":2,"reps":[10,15],"tip":"Плечи строго вверх к ушам, без вращений, пауза вверху.","kind":"w","inc":1},"bb_shrug":{"name":"Шраги со штангой","group":"back","m":["traps"],"m2":["forearms"],"step":2.5,"reps":[10,15],"tip":"Руки прямые, поднимай плечи вверх, медленно опускай.","kind":"w","inc":1},"bb_curl":{"name":"Подъём штанги на бицепс","group":"arms","m":["biceps"],"m2":["forearms"],"step":2.5,"reps":[8,12],"tip":"Локти прижаты к корпусу, опускай медленно, без рывков спиной.","kind":"w","inc":1},"ez_curl":{"name":"Подъём EZ-штанги на бицепс","group":"arms","m":["biceps"],"m2":["forearms"],"step":2.5,"reps":[8,12],"tip":"Хват по изгибам грифа, локти неподвижны.","kind":"w","inc":1},"db_curl":{"name":"Подъём гантелей на бицепс стоя","group":"arms","m":["biceps"],"m2":["forearms"],"step":1,"reps":[8,12],"tip":"Поворачивай ладонь вверх в подъёме, без раскачки.","kind":"w","inc":1},"hammer":{"name":"Молотки с гантелями","group":"arms","m":["biceps","forearms"],"m2":[],"step":1,"reps":[10,12],"tip":"Ладони смотрят друг на друга, плечо не двигается.","kind":"w","inc":1},"incline_curl":{"name":"Подъём гантелей на наклонной скамье","group":"arms","m":["biceps"],"m2":[],"step":1,"reps":[10,12],"tip":"Руки свисают вниз, бицепс растянут — поднимай без движения плеча.","kind":"w","inc":1},"preacher":{"name":"Сгибания на скамье Скотта","group":"arms","m":["biceps"],"m2":["forearms"],"step":2.5,"reps":[8,12],"tip":"Не разгибай руку до конца внизу, поднимай подконтрольно.","kind":"w","inc":1},"cable_curl":{"name":"Сгибания на бицепс в кроссовере","group":"arms","m":["biceps"],"m2":[],"step":2.5,"reps":[10,15],"tip":"Локти неподвижны, вверху сожми бицепс на секунду.","kind":"w","inc":1},"conc_curl":{"name":"Концентрированный подъём гантели","group":"arms","m":["biceps"],"m2":[],"step":1,"reps":[10,12],"tip":"Локоть упирается в бедро, медленно вниз.","kind":"w","inc":1},"pushdown":{"name":"Разгибания на блоке","group":"arms","m":["triceps"],"m2":[],"step":2.5,"reps":[10,12],"tip":"Локти зафиксированы у корпуса, внизу полностью разгибай руки.","kind":"w","inc":1},"rope_pushdown":{"name":"Разгибания с канатом","group":"arms","m":["triceps"],"m2":[],"step":2.5,"reps":[10,15],"tip":"Внизу разводи концы каната в стороны, локти не гуляют.","kind":"w","inc":1},"skullcrusher":{"name":"Французский жим лёжа","group":"arms","m":["triceps"],"m2":[],"step":2.5,"reps":[8,12],"tip":"Опускай гриф ко лбу, локти смотрят в потолок и не расходятся.","kind":"w","inc":1},"oh_db_ext":{"name":"Разгибание гантели из-за головы","group":"arms","m":["triceps"],"m2":[],"step":1,"reps":[10,12],"tip":"Локти направлены вверх, опускай гантель за голову до растяжения.","kind":"w","inc":1},"close_bench":{"name":"Жим узким хватом","group":"arms","m":["triceps"],"m2":["chest","delts"],"step":2.5,"reps":[6,10],"tip":"Хват на ширине плеч, локти идут вдоль корпуса.","kind":"w","inc":1},"bench_dips":{"name":"Обратные отжимания от скамьи","group":"arms","m":["triceps"],"m2":["chest","delts"],"step":0,"reps":[10,15],"tip":"Спина близко к скамье, опускайся до угла 90° в локтях.","kind":"w","inc":1},"kickback":{"name":"Разгибание руки в наклоне","group":"arms","m":["triceps"],"m2":[],"step":1,"reps":[10,15],"tip":"Плечо параллельно полу и неподвижно, разгибай до прямой руки.","kind":"w","inc":1},"squat":{"name":"Присед со штангой","group":"legs","m":["quads","glutes"],"m2":["hamstrings","lowerback","adductors"],"step":2.5,"reps":[6,10],"tip":"Колени идут по линии носков, спина нейтральная, садись минимум до параллели.","kind":"w","inc":1},"front_squat":{"name":"Фронтальный присед","group":"legs","m":["quads"],"m2":["glutes","abs"],"step":2.5,"reps":[6,8],"tip":"Локти высоко, корпус вертикальный, гриф лежит на дельтах.","kind":"w","inc":1},"smith_squat":{"name":"Присед в Смите","group":"legs","m":["quads","glutes"],"m2":["hamstrings"],"step":2.5,"reps":[8,12],"tip":"Стопы чуть впереди грифа, колени по линии носков.","kind":"w","inc":1},"goblet":{"name":"Гоблет-присед","group":"legs","m":["quads","glutes"],"m2":["abs","adductors"],"step":2,"reps":[10,12],"tip":"Гантель у груди, локти между коленей, корпус прямо.","kind":"w","inc":1},"leg_press":{"name":"Жим ногами","group":"legs","m":["quads","glutes"],"m2":["hamstrings","adductors"],"step":10,"reps":[10,12],"tip":"Поясница прижата к спинке, колени не выпрямляй до щелчка.","kind":"w","inc":1},"leg_ext":{"name":"Разгибание ног в тренажёре","group":"legs","m":["quads"],"m2":[],"step":5,"reps":[12,15],"tip":"Вверху пауза и напряжение, опускай медленно.","kind":"w","inc":1},"rdl":{"name":"Румынская тяга","group":"legs","m":["hamstrings","glutes"],"m2":["lowerback"],"step":2.5,"reps":[8,10],"tip":"Таз уводи назад, гриф скользит по ногам, спина прямая, колени чуть согнуты.","kind":"w","inc":1},"sldl":{"name":"Становая на прямых ногах","group":"legs","m":["hamstrings"],"m2":["glutes","lowerback"],"step":2.5,"reps":[8,10],"tip":"Ноги почти прямые, наклон до растяжения задней поверхности, спина ровная.","kind":"w","inc":1},"leg_curl":{"name":"Сгибание ног лёжа","group":"legs","m":["hamstrings"],"m2":["calves"],"step":2.5,"reps":[10,12],"tip":"Подъём быстро, опускание медленно на 2–3 счёта.","kind":"w","inc":1},"seated_leg_curl":{"name":"Сгибание ног сидя","group":"legs","m":["hamstrings"],"m2":[],"step":2.5,"reps":[10,12],"tip":"Бёдра плотно прижаты, в нижней точке пауза.","kind":"w","inc":1},"lunges":{"name":"Выпады с гантелями","group":"legs","m":["quads","glutes"],"m2":["hamstrings","adductors"],"step":2,"reps":[8,10],"tip":"Шаг широкий, колено задней ноги почти касается пола, корпус ровно.","kind":"w","inc":1},"bulgarian":{"name":"Болгарские выпады","group":"legs","m":["quads","glutes"],"m2":["adductors"],"step":2,"reps":[8,10],"tip":"Задняя нога на скамье, опускайся вертикально, колено над стопой.","kind":"w","inc":1},"walking_lunge":{"name":"Ходьба выпадами","group":"legs","m":["quads","glutes"],"m2":["hamstrings"],"step":2,"reps":[10,12],"tip":"Контролируй каждый шаг, корпус не заваливай вперёд.","kind":"w","inc":1},"hip_thrust":{"name":"Ягодичный мост со штангой","group":"glutes","m":["glutes"],"m2":["hamstrings"],"step":5,"reps":[8,12],"tip":"Подбородок к груди, вверху сожми ягодицы, не прогибай поясницу.","kind":"w","inc":1},"abductor":{"name":"Отведение ног в тренажёре","group":"glutes","m":["glutes"],"m2":[],"step":5,"reps":[12,15],"tip":"Разводи ноги за счёт ягодиц, медленно своди обратно.","kind":"w","inc":1},"adductor":{"name":"Сведение ног в тренажёре","group":"legs","m":["adductors"],"m2":[],"step":5,"reps":[12,15],"tip":"Своди подконтрольно, не бросай вес.","kind":"w","inc":1},"cable_kickback":{"name":"Кик-бэк в кроссовере","group":"glutes","m":["glutes"],"m2":["hamstrings"],"step":2.5,"reps":[12,15],"tip":"Корпус неподвижен, отводи ногу назад за счёт ягодицы.","kind":"w","inc":1},"calf":{"name":"Подъёмы на носки стоя","group":"legs","m":["calves"],"m2":[],"step":5,"reps":[12,15],"tip":"Полная амплитуда: растяжение внизу, пауза наверху.","kind":"w","inc":1},"seated_calf":{"name":"Подъёмы на носки сидя","group":"legs","m":["calves"],"m2":[],"step":5,"reps":[12,15],"tip":"Медленно вниз до растяжения, вверху пауза.","kind":"w","inc":1},"ohp":{"name":"Жим штанги стоя","group":"shoulders","m":["delts"],"m2":["triceps","traps"],"step":2.5,"reps":[6,10],"tip":"Пресс и ягодицы напряжены, не отклоняйся назад.","kind":"w","inc":1},"db_press":{"name":"Жим гантелей сидя","group":"shoulders","m":["delts"],"m2":["triceps"],"step":2,"reps":[8,12],"tip":"Не прогибайся в пояснице, выжимай вверх, гантели не стучат.","kind":"w","inc":1},"arnold":{"name":"Жим Арнольда","group":"shoulders","m":["delts"],"m2":["triceps"],"step":2,"reps":[8,12],"tip":"Разворачивай ладони плавно по ходу подъёма.","kind":"w","inc":1},"machine_shoulder":{"name":"Жим в тренажёре сидя","group":"shoulders","m":["delts"],"m2":["triceps"],"step":5,"reps":[10,12],"tip":"Спина прижата, вверху не выпрямляй локти до упора.","kind":"w","inc":1},"lat_raise":{"name":"Махи гантелями в стороны","group":"shoulders","m":["delts"],"m2":["traps"],"step":1,"reps":[12,15],"tip":"Локоть чуть согнут, поднимай до уровня плеч, без раскачки.","kind":"w","inc":1},"cable_lat_raise":{"name":"Махи одной рукой в кроссовере","group":"shoulders","m":["delts"],"m2":[],"step":2.5,"reps":[12,15],"tip":"Тяни рукой в сторону до уровня плеча, плечо не поднимай к уху.","kind":"w","inc":1},"rear_delt":{"name":"Махи на заднюю дельту","group":"shoulders","m":["delts"],"m2":["midback"],"step":1,"reps":[12,15],"tip":"В наклоне разводи руки в стороны, лопатки не своди сильно.","kind":"w","inc":1},"reverse_pec":{"name":"Обратная бабочка","group":"shoulders","m":["delts"],"m2":["midback"],"step":5,"reps":[12,15],"tip":"Разводи руки за счёт задней дельты, пауза в конце.","kind":"w","inc":1},"front_raise":{"name":"Подъём гантелей перед собой","group":"shoulders","m":["delts"],"m2":[],"step":1,"reps":[10,12],"tip":"До уровня глаз, без раскачки корпусом.","kind":"w","inc":1},"upright_row":{"name":"Тяга штанги к подбородку","group":"shoulders","m":["delts","traps"],"m2":[],"step":2.5,"reps":[10,12],"tip":"Хват шире плеч, локти выше кистей, тяни до низа груди.","kind":"w","inc":1},"face_pull":{"name":"Тяга каната к лицу","group":"shoulders","m":["delts"],"m2":["midback","traps"],"step":2.5,"reps":[12,15],"tip":"Тяни к переносице, локти высоко, в конце разводи руки.","kind":"w","inc":1},"cable_crunch":{"name":"Скручивания на блоке","group":"abs","m":["abs"],"m2":["obliques"],"step":5,"reps":[12,15],"tip":"Скручивайся за счёт пресса, а не тяни руками.","kind":"w","inc":1},"crunch":{"name":"Скручивания на полу","group":"abs","m":["abs"],"m2":[],"step":0,"reps":[15,25],"tip":"Поясница прижата, поднимай лопатки, подбородок не прижимай.","kind":"w","inc":1},"incline_crunch":{"name":"Скручивания на наклонной скамье","group":"abs","m":["abs"],"m2":[],"step":0,"reps":[12,20],"tip":"Скручивай корпус, а не сгибайся в тазу.","kind":"w","inc":1},"oblique_crunch":{"name":"Косые скручивания","group":"abs","m":["obliques"],"m2":["abs"],"step":0,"reps":[15,20],"tip":"Тянись локтем к противоположному колену.","kind":"w","inc":1},"hanging_raise":{"name":"Подъёмы ног в висе","group":"abs","m":["abs"],"m2":["obliques"],"step":0,"reps":[8,15],"tip":"Без раскачки, подкручивай таз вверх в конце.","kind":"w","inc":1},"captain_raise":{"name":"Подъёмы ног в упоре на брусьях","group":"abs","m":["abs"],"m2":[],"step":0,"reps":[10,15],"tip":"Спина прижата к спинке, поднимай колени к груди.","kind":"w","inc":1},"v_ups":{"name":"V-подъёмы","group":"abs","m":["abs"],"m2":[],"step":0,"reps":[10,15],"tip":"Одновременно поднимай руки и ноги, касайся носков.","kind":"w","inc":1},"bicycle":{"name":"Велосипед лёжа","group":"abs","m":["obliques","abs"],"m2":[],"step":0,"reps":[20,30],"tip":"Медленно, локоть к противоположному колену.","kind":"w","inc":1},"glute_bridge_machine":{"name":"Ягодичный мост в тренажёре","group":"glutes","m":["glutes"],"m2":["hamstrings"],"step":5,"reps":[10,15],"tip":"Подбородок к груди, вверху пауза и сильное сжатие ягодиц.","kind":"w","inc":1},"glute_bridge":{"name":"Ягодичный мост лёжа","group":"glutes","m":["glutes"],"m2":["hamstrings"],"step":0,"reps":[15,25],"tip":"Пятки ближе к тазу, толкайся пятками, поясницу не прогибай.","kind":"w","inc":1},"sumo_squat":{"name":"Сумо-присед с гантелью","group":"glutes","m":["glutes","adductors"],"m2":["quads"],"step":2,"reps":[10,15],"tip":"Стопы широко, носки наружу, колени по линии носков, спина ровная.","kind":"w","inc":1},"step_up":{"name":"Зашагивания на платформу","group":"glutes","m":["glutes","quads"],"m2":["hamstrings"],"step":1,"reps":[10,12],"tip":"Толкайся пяткой ноги на платформе, вторую ногу не используй для толчка.","kind":"w","inc":1},"pull_through":{"name":"Протяжка каната между ног","group":"glutes","m":["glutes","hamstrings"],"m2":["lowerback"],"step":2.5,"reps":[12,15],"tip":"Таз назад, спина прямая, вперёд выходи за счёт ягодиц, а не рук.","kind":"w","inc":1},"glute_hyper":{"name":"Гиперэкстензия на ягодицы","group":"glutes","m":["glutes"],"m2":["hamstrings","lowerback"],"step":0,"reps":[12,20],"tip":"Спина слегка округлена, носки врозь, поднимайся за счёт ягодиц.","kind":"w","inc":1},"reverse_hyper":{"name":"Обратная гиперэкстензия","group":"glutes","m":["glutes","hamstrings"],"m2":["lowerback"],"step":0,"reps":[12,20],"tip":"Поднимай ноги до линии корпуса, без рывков и переразгибания.","kind":"w","inc":1},"cable_abduction":{"name":"Отведение ноги в сторону в кроссовере","group":"glutes","m":["glutes"],"m2":[],"step":2.5,"reps":[12,15],"tip":"Корпус ровно, отводи ногу в сторону без наклона туловища.","kind":"w","inc":1},"curtsy_lunge":{"name":"Реверанс-выпады","group":"glutes","m":["glutes","quads"],"m2":["adductors"],"step":1,"reps":[10,12],"tip":"Шаг назад по диагонали, колено передней ноги над стопой.","kind":"w","inc":1},"band_walk":{"name":"Шаги в сторону с резинкой","group":"glutes","m":["glutes"],"m2":[],"step":0,"reps":[12,20],"tip":"Полуприсед, колени в стороны, шаги короткие, резинка всё время натянута.","kind":"w","inc":1},"donkey_kick":{"name":"Отведение ноги назад на четвереньках","group":"glutes","m":["glutes"],"m2":["hamstrings"],"step":0,"reps":[15,20],"tip":"Спина неподвижна, поднимай ногу пяткой к потолку, без прогиба в пояснице.","kind":"w","inc":1},"fire_hydrant":{"name":"Отведение ноги в сторону на четвереньках","group":"glutes","m":["glutes"],"m2":[],"step":0,"reps":[15,20],"tip":"Таз не разворачивай, колено поднимай в сторону до уровня бедра.","kind":"w","inc":1},"plank":{"name":"Планка","group":"abs","m":["abs"],"m2":["obliques","delts"],"step":0,"reps":[30,90],"tip":"Тело прямой линией, пресс и ягодицы напряжены, таз не проваливается.","kind":"t","inc":5},"side_plank":{"name":"Боковая планка","group":"abs","m":["obliques"],"m2":["abs","glutes"],"step":0,"reps":[20,60],"tip":"Таз высоко, корпус в одну линию, локоть под плечом.","kind":"t","inc":5},"hollow_hold":{"name":"Лодочка","group":"abs","m":["abs"],"m2":[],"step":0,"reps":[20,45],"tip":"Поясница прижата к полу, руки и ноги вытянуты, держи напряжение.","kind":"t","inc":5},"dead_bug":{"name":"Мёртвый жук","group":"abs","m":["abs"],"m2":["obliques"],"step":0,"reps":[10,16],"tip":"Поясница прижата, опускай противоположные руку и ногу медленно.","kind":"w","inc":1},"bird_dog":{"name":"Птица-собака","group":"abs","m":["abs","lowerback"],"m2":["glutes"],"step":0,"reps":[10,16],"tip":"Вытягивай противоположные руку и ногу, корпус неподвижен.","kind":"w","inc":1},"pallof":{"name":"Паллоф-пресс","group":"abs","m":["obliques","abs"],"m2":[],"step":2.5,"reps":[10,12],"tip":"Не давай корпусу развернуться к блоку, выжимай рукоять от груди.","kind":"w","inc":1},"pil_hundred":{"name":"Сотня (Hundred)","group":"pilates","m":["abs"],"m2":[],"step":0,"reps":[45,100],"tip":"Лопатки над полом, ноги на 45°, быстрые хлопки руками в ритме дыхания.","kind":"t","inc":5},"pil_rollup":{"name":"Скручивание с перекатом (Roll Up)","group":"pilates","m":["abs"],"m2":[],"step":0,"reps":[6,10],"tip":"Поднимайся позвонок за позвонком, без рывка руками.","kind":"w","inc":1},"pil_single_leg":{"name":"Растяжка одной ноги (Single Leg Stretch)","group":"pilates","m":["abs"],"m2":["obliques"],"step":0,"reps":[10,20],"tip":"Голова и лопатки подняты, ноги меняй плавно, поясница прижата.","kind":"w","inc":1},"pil_scissors":{"name":"Ножницы","group":"pilates","m":["abs"],"m2":["hamstrings"],"step":0,"reps":[10,20],"tip":"Прямые ноги меняются у лица, корпус неподвижен.","kind":"w","inc":1},"pil_swimming":{"name":"Плавание (Swimming)","group":"pilates","m":["lowerback","glutes"],"m2":["delts"],"step":0,"reps":[20,45],"tip":"Лёжа на животе, попеременно поднимай руки и ноги, шея длинная.","kind":"t","inc":5},"pil_teaser":{"name":"Тизер","group":"pilates","m":["abs"],"m2":[],"step":0,"reps":[5,10],"tip":"Поднимайся в V-позицию плавно, держи баланс на копчике.","kind":"w","inc":1},"pil_bridge":{"name":"Мостик с перекатом","group":"pilates","m":["glutes","hamstrings"],"m2":["lowerback"],"step":0,"reps":[8,12],"tip":"Поднимай и опускай таз, разворачивая позвоночник по одному позвонку.","kind":"w","inc":1},"pil_side_kick":{"name":"Махи ногой лёжа на боку","group":"pilates","m":["glutes","adductors"],"m2":["obliques"],"step":0,"reps":[10,15],"tip":"Корпус неподвижен, нога движется вперёд-назад от бедра.","kind":"w","inc":1},"pil_saw":{"name":"Пила (Saw)","group":"pilates","m":["obliques"],"m2":["hamstrings"],"step":0,"reps":[6,10],"tip":"Скручивайся и тянись рукой к противоположной стопе, таз на полу.","kind":"w","inc":1},"st_pigeon":{"name":"Голубь","group":"stretch","m":["glutes"],"m2":[],"step":0,"reps":[30,60],"tip":"Передняя голень поперёк, таз ровно, дыши и расслабляйся.","kind":"t","inc":5},"st_butterfly":{"name":"Бабочка","group":"stretch","m":["adductors"],"m2":[],"step":0,"reps":[30,60],"tip":"Стопы вместе, спина прямая, колени мягко опускай вниз.","kind":"t","inc":5},"st_forward_fold":{"name":"Наклон к ногам сидя","group":"stretch","m":["hamstrings"],"m2":["lowerback"],"step":0,"reps":[30,60],"tip":"Тянись грудью к коленям, а не головой, колени можно чуть согнуть.","kind":"t","inc":5},"st_hip_flexor":{"name":"Растяжка сгибателей бедра в выпаде","group":"stretch","m":["quads"],"m2":[],"step":0,"reps":[30,60],"tip":"Подкрути таз и подай его вперёд, корпус вертикально.","kind":"t","inc":5},"st_quad":{"name":"Растяжка квадрицепса стоя","group":"stretch","m":["quads"],"m2":[],"step":0,"reps":[30,45],"tip":"Пятка к ягодице, колени вместе, таз подкручен.","kind":"t","inc":5},"st_chest":{"name":"Растяжка груди в дверном проёме","group":"stretch","m":["chest"],"m2":["delts"],"step":0,"reps":[30,45],"tip":"Предплечье на косяке, мягко шагни вперёд.","kind":"t","inc":5},"st_lat":{"name":"Растяжка широчайших у опоры","group":"stretch","m":["lats"],"m2":[],"step":0,"reps":[30,45],"tip":"Руки на опоре, таз назад, грудь вниз.","kind":"t","inc":5},"st_child":{"name":"Поза ребёнка","group":"stretch","m":["lowerback","lats"],"m2":[],"step":0,"reps":[30,90],"tip":"Таз на пятки, руки вперёд, дыши в спину.","kind":"t","inc":5},"st_cat_cow":{"name":"Кошка-корова","group":"stretch","m":["lowerback","midback"],"m2":[],"step":0,"reps":[30,60],"tip":"Медленно прогибай и округляй спину в такт дыханию.","kind":"t","inc":5},"st_thoracic":{"name":"Скручивание лёжа на боку","group":"stretch","m":["midback","obliques"],"m2":[],"step":0,"reps":[30,45],"tip":"Колени вместе, раскрывай верхнюю руку в сторону.","kind":"t","inc":5},"cd_incline_walk":{"name":"Ходьба в горку на дорожке","group":"cardio","m":["glutes","calves"],"m2":["hamstrings"],"step":0,"reps":[15,40],"tip":"Наклон 8–12%, не держись за поручни, шаг широкий.","kind":"c","inc":1},"cd_run":{"name":"Бег на дорожке","group":"cardio","m":["quads","calves"],"m2":["glutes"],"step":0,"reps":[10,30],"tip":"Темп, при котором можешь говорить короткими фразами.","kind":"c","inc":1},"cd_stairmaster":{"name":"Степпер-лестница","group":"cardio","m":["glutes","quads"],"m2":["calves"],"step":0,"reps":[10,25],"tip":"Не опирайся на поручни, ставь стопу целиком.","kind":"c","inc":1},"cd_elliptical":{"name":"Эллипс","group":"cardio","m":["quads","glutes"],"m2":[],"step":0,"reps":[15,40],"tip":"Ровный темп, давление через пятки.","kind":"c","inc":1},"cd_bike":{"name":"Велотренажёр","group":"cardio","m":["quads"],"m2":["calves"],"step":0,"reps":[15,40],"tip":"Седло на уровне бедра, колено не выпрямляй до конца.","kind":"c","inc":1},"cd_rower":{"name":"Гребной тренажёр","group":"cardio","m":["lats","quads"],"m2":["midback"],"step":0,"reps":[10,25],"tip":"Сначала толчок ногами, потом корпус и руки.","kind":"c","inc":1},"cd_jump_rope":{"name":"Скакалка","group":"cardio","m":["calves"],"m2":[],"step":0,"reps":[5,15],"tip":"Прыжки на носках, локти у корпуса.","kind":"c","inc":1},"cd_hiit":{"name":"Интервалы (HIIT)","group":"cardio","m":["quads","glutes"],"m2":[],"step":0,"reps":[10,20],"tip":"30 сек работа / 30 сек отдых, работай на максимум.","kind":"c","inc":1}},"plan":{"A":{"title":"Спина и бицепс","items":[["lat_pulldown",3],["bb_row",3],["db_row",3],["bb_curl",3],["hammer",3]]},"B":{"title":"Грудь, плечи, трицепс","items":[["bench",4],["incline_db",3],["db_press",3],["lat_raise",3],["pushdown",3]]},"C":{"title":"Ноги","items":[["squat",4],["rdl",3],["leg_press",3],["leg_curl",3],["calf",3]]},"D":{"title":"Всё тело","items":[["ohp",3],["lunges",3],["cable_row",3],["chest_machine",3],["cable_crunch",3]]},"W1":{"title":"Ягодицы и ноги","items":[["hip_thrust",4],["sumo_squat",3],["rdl",3],["abductor",3],["cable_kickback",3],["cd_incline_walk",1]]},"W2":{"title":"Верх тела и кор","items":[["lat_pulldown",3],["db_press",3],["cable_row",3],["lat_raise",3],["plank",3],["dead_bug",3]]},"W3":{"title":"Акцент на ягодицы","items":[["glute_bridge_machine",4],["bulgarian",3],["step_up",3],["pull_through",3],["cable_abduction",3],["glute_hyper",3]]},"W4":{"title":"Пилатес и растяжка","items":[["pil_hundred",1],["pil_rollup",2],["pil_single_leg",2],["pil_bridge",2],["pil_side_kick",2],["st_pigeon",2],["st_hip_flexor",2],["st_child",1]]}},"days":["A","B","C","D"],"days_w":["W1","W2","W3","W4"],"groups":{"chest":"Грудь","back":"Спина","arms":"Руки","legs":"Ноги","glutes":"Ягодицы","shoulders":"Плечи","abs":"Пресс","cardio":"Кардио","pilates":"Пилатес","stretch":"Растяжка"},"muscles":{"chest":"Грудь","delts":"Плечи","biceps":"Бицепс","triceps":"Трицепс","forearms":"Предплечья","abs":"Пресс","obliques":"Косые","traps":"Трапеции","lats":"Широчайшие","midback":"Середина спины","lowerback":"Поясница","glutes":"Ягодицы","quads":"Квадрицепс","hamstrings":"Бицепс бедра","adductors":"Приводящие","calves":"Икры"}};
+const D = {"catalog":{"bench":{"name":"Жим штанги лёжа","group":"chest","m":["chest"],"m2":["triceps","delts"],"step":2.5,"reps":[6,10],"tip":"Лопатки сведены, ноги упираются в пол, штанга опускается к низу груди.","kind":"w","inc":1},"incline_bb":{"name":"Жим штанги на наклонной","group":"chest","m":["chest","delts"],"m2":["triceps"],"step":2.5,"reps":[6,10],"tip":"Скамья 30°, гриф опускается к верху груди, локти не разводи в стороны.","kind":"w","inc":1},"decline_bb":{"name":"Жим штанги на скамье вниз головой","group":"chest","m":["chest"],"m2":["triceps"],"step":2.5,"reps":[6,10],"tip":"Ноги надёжно зафиксированы, штанга идёт к низу груди.","kind":"w","inc":1},"db_bench":{"name":"Жим гантелей лёжа","group":"chest","m":["chest"],"m2":["triceps","delts"],"step":2,"reps":[8,12],"tip":"Опускай гантели до растяжения груди, вверху своди, но не стучи ими.","kind":"w","inc":1},"incline_db":{"name":"Жим гантелей на наклонной","group":"chest","m":["chest","delts"],"m2":["triceps"],"step":2,"reps":[8,12],"tip":"Скамья 30°, локти под ~45° к корпусу, в нижней точке растяжение груди.","kind":"w","inc":1},"chest_machine":{"name":"Жим от груди в тренажёре","group":"chest","m":["chest"],"m2":["triceps","delts"],"step":5,"reps":[10,12],"tip":"Лопатки прижаты к спинке, вверху не выпрямляй локти до упора.","kind":"w","inc":1},"smith_bench":{"name":"Жим в тренажёре Смита","group":"chest","m":["chest"],"m2":["triceps","delts"],"step":2.5,"reps":[8,10],"tip":"Скамья так, чтобы гриф опускался к низу груди. Лопатки сведены.","kind":"w","inc":1},"pec_deck":{"name":"Баттерфляй","group":"chest","m":["chest"],"m2":["delts"],"step":5,"reps":[10,15],"tip":"Руки слегка согнуты, своди за счёт груди, в конце пауза на секунду.","kind":"w","inc":1},"cable_cross":{"name":"Кроссовер в блоках","group":"chest","m":["chest"],"m2":["delts"],"step":2.5,"reps":[12,15],"tip":"Корпус чуть вперёд, своди руки по дуге перед собой, не сгибай локти сильнее.","kind":"w","inc":1},"db_fly":{"name":"Разведение гантелей лёжа","group":"chest","m":["chest"],"m2":[],"step":1,"reps":[10,15],"tip":"Опускай по дуге до растяжения, локти слегка согнуты и не меняют угол.","kind":"w","inc":1},"dips":{"name":"Отжимания на брусьях","group":"chest","m":["chest","triceps"],"m2":["delts"],"step":0,"reps":[6,12],"tip":"Наклон корпуса вперёд — больше грудь, вертикально — больше трицепс.","kind":"w","inc":1},"pushups":{"name":"Отжимания от пола","group":"chest","m":["chest"],"m2":["triceps","delts","abs"],"step":0,"reps":[10,20],"tip":"Тело прямое, как доска. Грудь почти касается пола.","kind":"w","inc":1},"pullups":{"name":"Подтягивания широким хватом","group":"back","m":["lats"],"m2":["biceps","midback"],"step":0,"reps":[5,10],"tip":"Тянись грудью к перекладине, своди лопатки, без раскачки.","kind":"w","inc":1},"chinups":{"name":"Подтягивания обратным хватом","group":"back","m":["lats","biceps"],"m2":["midback"],"step":0,"reps":[5,10],"tip":"Ладони к себе, подбородок над перекладиной, опускайся полностью.","kind":"w","inc":1},"neutral_pullups":{"name":"Подтягивания нейтральным хватом","group":"back","m":["lats"],"m2":["biceps","midback"],"step":0,"reps":[5,10],"tip":"Ладони друг к другу, локти ведёшь вниз вдоль корпуса.","kind":"w","inc":1},"lat_pulldown":{"name":"Тяга верхнего блока к груди","group":"back","m":["lats"],"m2":["biceps","midback"],"step":5,"reps":[8,12],"tip":"Тяни локтями вниз к рёбрам, грудь вперёд, не раскачивайся корпусом.","kind":"w","inc":1},"close_pulldown":{"name":"Тяга верхнего блока узким хватом","group":"back","m":["lats"],"m2":["biceps"],"step":5,"reps":[10,12],"tip":"Рукоять к верху живота, в нижней точке своди лопатки.","kind":"w","inc":1},"bb_row":{"name":"Тяга штанги в наклоне","group":"back","m":["lats","midback"],"m2":["biceps","lowerback"],"step":2.5,"reps":[6,10],"tip":"Спина прямая, наклон ~45°, тяни штангу к низу живота.","kind":"w","inc":1},"db_row":{"name":"Тяга гантели одной рукой","group":"back","m":["lats","midback"],"m2":["biceps"],"step":2,"reps":[8,12],"tip":"Веди локоть назад вдоль корпуса, в верхней точке задержка на секунду.","kind":"w","inc":1},"tbar_row":{"name":"Тяга Т-грифа","group":"back","m":["midback","lats"],"m2":["biceps","lowerback"],"step":2.5,"reps":[8,10],"tip":"Грудь вперёд, спина нейтральная, тяни к животу, лопатки своди.","kind":"w","inc":1},"cable_row":{"name":"Тяга горизонтального блока","group":"back","m":["midback","lats"],"m2":["biceps"],"step":5,"reps":[10,12],"tip":"Своди лопатки в конце движения, корпус не заваливай назад.","kind":"w","inc":1},"machine_row":{"name":"Тяга в рычажном тренажёре","group":"back","m":["midback","lats"],"m2":["biceps"],"step":5,"reps":[10,12],"tip":"Грудь прижата к упору, тяни локтями назад, пауза в конце.","kind":"w","inc":1},"single_cable_row":{"name":"Тяга одной рукой в блоке","group":"back","m":["lats"],"m2":["biceps"],"step":2.5,"reps":[10,12],"tip":"Корпус не разворачивай, локоть идёт к бедру.","kind":"w","inc":1},"deadlift":{"name":"Становая тяга","group":"back","m":["lowerback","glutes","hamstrings"],"m2":["traps","quads","forearms"],"step":5,"reps":[4,8],"tip":"Гриф над серединой стопы, спина прямая, толкай пол ногами.","kind":"w","inc":1},"hyperext":{"name":"Гиперэкстензия","group":"back","m":["lowerback"],"m2":["glutes","hamstrings"],"step":0,"reps":[12,15],"tip":"Не переразгибайся вверху — корпус в одну линию с ногами.","kind":"w","inc":1},"db_shrug":{"name":"Шраги с гантелями","group":"back","m":["traps"],"m2":["forearms"],"step":2,"reps":[10,15],"tip":"Плечи строго вверх к ушам, без вращений, пауза вверху.","kind":"w","inc":1},"bb_shrug":{"name":"Шраги со штангой","group":"back","m":["traps"],"m2":["forearms"],"step":2.5,"reps":[10,15],"tip":"Руки прямые, поднимай плечи вверх, медленно опускай.","kind":"w","inc":1},"bb_curl":{"name":"Подъём штанги на бицепс","group":"arms","m":["biceps"],"m2":["forearms"],"step":2.5,"reps":[8,12],"tip":"Локти прижаты к корпусу, опускай медленно, без рывков спиной.","kind":"w","inc":1},"ez_curl":{"name":"Подъём EZ-штанги на бицепс","group":"arms","m":["biceps"],"m2":["forearms"],"step":2.5,"reps":[8,12],"tip":"Хват по изгибам грифа, локти неподвижны.","kind":"w","inc":1},"db_curl":{"name":"Подъём гантелей на бицепс стоя","group":"arms","m":["biceps"],"m2":["forearms"],"step":1,"reps":[8,12],"tip":"Поворачивай ладонь вверх в подъёме, без раскачки.","kind":"w","inc":1},"hammer":{"name":"Молотки с гантелями","group":"arms","m":["biceps","forearms"],"m2":[],"step":1,"reps":[10,12],"tip":"Ладони смотрят друг на друга, плечо не двигается.","kind":"w","inc":1},"incline_curl":{"name":"Подъём гантелей на наклонной скамье","group":"arms","m":["biceps"],"m2":[],"step":1,"reps":[10,12],"tip":"Руки свисают вниз, бицепс растянут — поднимай без движения плеча.","kind":"w","inc":1},"preacher":{"name":"Сгибания на скамье Скотта","group":"arms","m":["biceps"],"m2":["forearms"],"step":2.5,"reps":[8,12],"tip":"Не разгибай руку до конца внизу, поднимай подконтрольно.","kind":"w","inc":1},"cable_curl":{"name":"Сгибания на бицепс в кроссовере","group":"arms","m":["biceps"],"m2":[],"step":2.5,"reps":[10,15],"tip":"Локти неподвижны, вверху сожми бицепс на секунду.","kind":"w","inc":1},"conc_curl":{"name":"Концентрированный подъём гантели","group":"arms","m":["biceps"],"m2":[],"step":1,"reps":[10,12],"tip":"Локоть упирается в бедро, медленно вниз.","kind":"w","inc":1},"pushdown":{"name":"Разгибания на блоке","group":"arms","m":["triceps"],"m2":[],"step":2.5,"reps":[10,12],"tip":"Локти зафиксированы у корпуса, внизу полностью разгибай руки.","kind":"w","inc":1},"rope_pushdown":{"name":"Разгибания с канатом","group":"arms","m":["triceps"],"m2":[],"step":2.5,"reps":[10,15],"tip":"Внизу разводи концы каната в стороны, локти не гуляют.","kind":"w","inc":1},"skullcrusher":{"name":"Французский жим лёжа","group":"arms","m":["triceps"],"m2":[],"step":2.5,"reps":[8,12],"tip":"Опускай гриф ко лбу, локти смотрят в потолок и не расходятся.","kind":"w","inc":1},"oh_db_ext":{"name":"Разгибание гантели из-за головы","group":"arms","m":["triceps"],"m2":[],"step":1,"reps":[10,12],"tip":"Локти направлены вверх, опускай гантель за голову до растяжения.","kind":"w","inc":1},"close_bench":{"name":"Жим узким хватом","group":"arms","m":["triceps"],"m2":["chest","delts"],"step":2.5,"reps":[6,10],"tip":"Хват на ширине плеч, локти идут вдоль корпуса.","kind":"w","inc":1},"bench_dips":{"name":"Обратные отжимания от скамьи","group":"arms","m":["triceps"],"m2":["chest","delts"],"step":0,"reps":[10,15],"tip":"Спина близко к скамье, опускайся до угла 90° в локтях.","kind":"w","inc":1},"kickback":{"name":"Разгибание руки в наклоне","group":"arms","m":["triceps"],"m2":[],"step":1,"reps":[10,15],"tip":"Плечо параллельно полу и неподвижно, разгибай до прямой руки.","kind":"w","inc":1},"squat":{"name":"Присед со штангой","group":"legs","m":["quads","glutes"],"m2":["hamstrings","lowerback","adductors"],"step":2.5,"reps":[6,10],"tip":"Колени идут по линии носков, спина нейтральная, садись минимум до параллели.","kind":"w","inc":1},"front_squat":{"name":"Фронтальный присед","group":"legs","m":["quads"],"m2":["glutes","abs"],"step":2.5,"reps":[6,8],"tip":"Локти высоко, корпус вертикальный, гриф лежит на дельтах.","kind":"w","inc":1},"smith_squat":{"name":"Присед в Смите","group":"legs","m":["quads","glutes"],"m2":["hamstrings"],"step":2.5,"reps":[8,12],"tip":"Стопы чуть впереди грифа, колени по линии носков.","kind":"w","inc":1},"goblet":{"name":"Гоблет-присед","group":"legs","m":["quads","glutes"],"m2":["abs","adductors"],"step":2,"reps":[10,12],"tip":"Гантель у груди, локти между коленей, корпус прямо.","kind":"w","inc":1},"leg_press":{"name":"Жим ногами","group":"legs","m":["quads","glutes"],"m2":["hamstrings","adductors"],"step":10,"reps":[10,12],"tip":"Поясница прижата к спинке, колени не выпрямляй до щелчка.","kind":"w","inc":1},"leg_ext":{"name":"Разгибание ног в тренажёре","group":"legs","m":["quads"],"m2":[],"step":5,"reps":[12,15],"tip":"Вверху пауза и напряжение, опускай медленно.","kind":"w","inc":1},"rdl":{"name":"Румынская тяга","group":"legs","m":["hamstrings","glutes"],"m2":["lowerback"],"step":2.5,"reps":[8,10],"tip":"Таз уводи назад, гриф скользит по ногам, спина прямая, колени чуть согнуты.","kind":"w","inc":1},"sldl":{"name":"Становая на прямых ногах","group":"legs","m":["hamstrings"],"m2":["glutes","lowerback"],"step":2.5,"reps":[8,10],"tip":"Ноги почти прямые, наклон до растяжения задней поверхности, спина ровная.","kind":"w","inc":1},"leg_curl":{"name":"Сгибание ног лёжа","group":"legs","m":["hamstrings"],"m2":["calves"],"step":2.5,"reps":[10,12],"tip":"Подъём быстро, опускание медленно на 2–3 счёта.","kind":"w","inc":1},"seated_leg_curl":{"name":"Сгибание ног сидя","group":"legs","m":["hamstrings"],"m2":[],"step":2.5,"reps":[10,12],"tip":"Бёдра плотно прижаты, в нижней точке пауза.","kind":"w","inc":1},"lunges":{"name":"Выпады с гантелями","group":"legs","m":["quads","glutes"],"m2":["hamstrings","adductors"],"step":2,"reps":[8,10],"tip":"Шаг широкий, колено задней ноги почти касается пола, корпус ровно.","kind":"w","inc":1},"bulgarian":{"name":"Болгарские выпады","group":"legs","m":["quads","glutes"],"m2":["adductors"],"step":2,"reps":[8,10],"tip":"Задняя нога на скамье, опускайся вертикально, колено над стопой.","kind":"w","inc":1},"walking_lunge":{"name":"Ходьба выпадами","group":"legs","m":["quads","glutes"],"m2":["hamstrings"],"step":2,"reps":[10,12],"tip":"Контролируй каждый шаг, корпус не заваливай вперёд.","kind":"w","inc":1},"hip_thrust":{"name":"Ягодичный мост со штангой","group":"glutes","m":["glutes"],"m2":["hamstrings"],"step":5,"reps":[8,12],"tip":"Подбородок к груди, вверху сожми ягодицы, не прогибай поясницу.","kind":"w","inc":1},"abductor":{"name":"Отведение ног в тренажёре","group":"glutes","m":["glutes"],"m2":[],"step":5,"reps":[12,15],"tip":"Разводи ноги за счёт ягодиц, медленно своди обратно.","kind":"w","inc":1},"adductor":{"name":"Сведение ног в тренажёре","group":"legs","m":["adductors"],"m2":[],"step":5,"reps":[12,15],"tip":"Своди подконтрольно, не бросай вес.","kind":"w","inc":1},"cable_kickback":{"name":"Кик-бэк в кроссовере","group":"glutes","m":["glutes"],"m2":["hamstrings"],"step":2.5,"reps":[12,15],"tip":"Корпус неподвижен, отводи ногу назад за счёт ягодицы.","kind":"w","inc":1},"calf":{"name":"Подъёмы на носки стоя","group":"legs","m":["calves"],"m2":[],"step":5,"reps":[12,15],"tip":"Полная амплитуда: растяжение внизу, пауза наверху.","kind":"w","inc":1},"seated_calf":{"name":"Подъёмы на носки сидя","group":"legs","m":["calves"],"m2":[],"step":5,"reps":[12,15],"tip":"Медленно вниз до растяжения, вверху пауза.","kind":"w","inc":1},"ohp":{"name":"Жим штанги стоя","group":"shoulders","m":["delts"],"m2":["triceps","traps"],"step":2.5,"reps":[6,10],"tip":"Пресс и ягодицы напряжены, не отклоняйся назад.","kind":"w","inc":1},"db_press":{"name":"Жим гантелей сидя","group":"shoulders","m":["delts"],"m2":["triceps"],"step":2,"reps":[8,12],"tip":"Не прогибайся в пояснице, выжимай вверх, гантели не стучат.","kind":"w","inc":1},"arnold":{"name":"Жим Арнольда","group":"shoulders","m":["delts"],"m2":["triceps"],"step":2,"reps":[8,12],"tip":"Разворачивай ладони плавно по ходу подъёма.","kind":"w","inc":1},"machine_shoulder":{"name":"Жим в тренажёре сидя","group":"shoulders","m":["delts"],"m2":["triceps"],"step":5,"reps":[10,12],"tip":"Спина прижата, вверху не выпрямляй локти до упора.","kind":"w","inc":1},"lat_raise":{"name":"Махи гантелями в стороны","group":"shoulders","m":["delts"],"m2":["traps"],"step":1,"reps":[12,15],"tip":"Локоть чуть согнут, поднимай до уровня плеч, без раскачки.","kind":"w","inc":1},"cable_lat_raise":{"name":"Махи одной рукой в кроссовере","group":"shoulders","m":["delts"],"m2":[],"step":2.5,"reps":[12,15],"tip":"Тяни рукой в сторону до уровня плеча, плечо не поднимай к уху.","kind":"w","inc":1},"rear_delt":{"name":"Махи на заднюю дельту","group":"shoulders","m":["delts"],"m2":["midback"],"step":1,"reps":[12,15],"tip":"В наклоне разводи руки в стороны, лопатки не своди сильно.","kind":"w","inc":1},"reverse_pec":{"name":"Обратная бабочка","group":"shoulders","m":["delts"],"m2":["midback"],"step":5,"reps":[12,15],"tip":"Разводи руки за счёт задней дельты, пауза в конце.","kind":"w","inc":1},"front_raise":{"name":"Подъём гантелей перед собой","group":"shoulders","m":["delts"],"m2":[],"step":1,"reps":[10,12],"tip":"До уровня глаз, без раскачки корпусом.","kind":"w","inc":1},"upright_row":{"name":"Тяга штанги к подбородку","group":"shoulders","m":["delts","traps"],"m2":[],"step":2.5,"reps":[10,12],"tip":"Хват шире плеч, локти выше кистей, тяни до низа груди.","kind":"w","inc":1},"face_pull":{"name":"Тяга каната к лицу","group":"shoulders","m":["delts"],"m2":["midback","traps"],"step":2.5,"reps":[12,15],"tip":"Тяни к переносице, локти высоко, в конце разводи руки.","kind":"w","inc":1},"shrug_bb":{"name":"Шраги со штангой","group":"other","m":["traps"],"m2":["forearms"],"step":5,"reps":[10,15],"tip":"Поднимай плечи строго вверх к ушам, без вращения, наверху пауза 1 секунду.","kind":"w","inc":1},"shrug_db":{"name":"Шраги с гантелями","group":"other","m":["traps"],"m2":["forearms"],"step":2,"reps":[10,15],"tip":"Руки прямые, плечи вверх к ушам, опускай медленно.","kind":"w","inc":1},"shrug_machine":{"name":"Шраги в тренажёре","group":"other","m":["traps"],"m2":[],"step":5,"reps":[10,15],"tip":"Только плечи вверх-вниз, руки не сгибай.","kind":"w","inc":1},"farmer_walk":{"name":"Прогулка фермера","group":"other","m":["forearms","traps"],"m2":["abs"],"step":0,"reps":[30,60],"tip":"Тяжёлые гантели в руках, спина прямая, иди короткими шагами.","kind":"t","inc":5},"wrist_curl":{"name":"Сгибание запястий со штангой","group":"other","m":["forearms"],"m2":[],"step":1,"reps":[12,20],"tip":"Предплечья на скамье, работают только кисти.","kind":"w","inc":1},"dead_hang":{"name":"Вис на турнике","group":"other","m":["forearms"],"m2":["lats"],"step":0,"reps":[20,60],"tip":"Плечи не проваливай, держи корпус спокойно.","kind":"t","inc":5},"cable_crunch":{"name":"Скручивания на блоке","group":"abs","m":["abs"],"m2":["obliques"],"step":5,"reps":[12,15],"tip":"Скручивайся за счёт пресса, а не тяни руками.","kind":"w","inc":1},"crunch":{"name":"Скручивания на полу","group":"abs","m":["abs"],"m2":[],"step":0,"reps":[15,25],"tip":"Поясница прижата, поднимай лопатки, подбородок не прижимай.","kind":"w","inc":1},"incline_crunch":{"name":"Скручивания на наклонной скамье","group":"abs","m":["abs"],"m2":[],"step":0,"reps":[12,20],"tip":"Скручивай корпус, а не сгибайся в тазу.","kind":"w","inc":1},"oblique_crunch":{"name":"Косые скручивания","group":"abs","m":["obliques"],"m2":["abs"],"step":0,"reps":[15,20],"tip":"Тянись локтем к противоположному колену.","kind":"w","inc":1},"hanging_raise":{"name":"Подъёмы ног в висе","group":"abs","m":["abs"],"m2":["obliques"],"step":0,"reps":[8,15],"tip":"Без раскачки, подкручивай таз вверх в конце.","kind":"w","inc":1},"captain_raise":{"name":"Подъёмы ног в упоре на брусьях","group":"abs","m":["abs"],"m2":[],"step":0,"reps":[10,15],"tip":"Спина прижата к спинке, поднимай колени к груди.","kind":"w","inc":1},"v_ups":{"name":"V-подъёмы","group":"abs","m":["abs"],"m2":[],"step":0,"reps":[10,15],"tip":"Одновременно поднимай руки и ноги, касайся носков.","kind":"w","inc":1},"bicycle":{"name":"Велосипед лёжа","group":"abs","m":["obliques","abs"],"m2":[],"step":0,"reps":[20,30],"tip":"Медленно, локоть к противоположному колену.","kind":"w","inc":1},"glute_bridge_machine":{"name":"Ягодичный мост в тренажёре","group":"glutes","m":["glutes"],"m2":["hamstrings"],"step":5,"reps":[10,15],"tip":"Подбородок к груди, вверху пауза и сильное сжатие ягодиц.","kind":"w","inc":1},"glute_bridge":{"name":"Ягодичный мост лёжа","group":"glutes","m":["glutes"],"m2":["hamstrings"],"step":0,"reps":[15,25],"tip":"Пятки ближе к тазу, толкайся пятками, поясницу не прогибай.","kind":"w","inc":1},"sumo_squat":{"name":"Сумо-присед с гантелью","group":"glutes","m":["glutes","adductors"],"m2":["quads"],"step":2,"reps":[10,15],"tip":"Стопы широко, носки наружу, колени по линии носков, спина ровная.","kind":"w","inc":1},"step_up":{"name":"Зашагивания на платформу","group":"glutes","m":["glutes","quads"],"m2":["hamstrings"],"step":1,"reps":[10,12],"tip":"Толкайся пяткой ноги на платформе, вторую ногу не используй для толчка.","kind":"w","inc":1},"pull_through":{"name":"Протяжка каната между ног","group":"glutes","m":["glutes","hamstrings"],"m2":["lowerback"],"step":2.5,"reps":[12,15],"tip":"Таз назад, спина прямая, вперёд выходи за счёт ягодиц, а не рук.","kind":"w","inc":1},"glute_hyper":{"name":"Гиперэкстензия на ягодицы","group":"glutes","m":["glutes"],"m2":["hamstrings","lowerback"],"step":0,"reps":[12,20],"tip":"Спина слегка округлена, носки врозь, поднимайся за счёт ягодиц.","kind":"w","inc":1},"reverse_hyper":{"name":"Обратная гиперэкстензия","group":"glutes","m":["glutes","hamstrings"],"m2":["lowerback"],"step":0,"reps":[12,20],"tip":"Поднимай ноги до линии корпуса, без рывков и переразгибания.","kind":"w","inc":1},"cable_abduction":{"name":"Отведение ноги в сторону в кроссовере","group":"glutes","m":["glutes"],"m2":[],"step":2.5,"reps":[12,15],"tip":"Корпус ровно, отводи ногу в сторону без наклона туловища.","kind":"w","inc":1},"curtsy_lunge":{"name":"Реверанс-выпады","group":"glutes","m":["glutes","quads"],"m2":["adductors"],"step":1,"reps":[10,12],"tip":"Шаг назад по диагонали, колено передней ноги над стопой.","kind":"w","inc":1},"band_walk":{"name":"Шаги в сторону с резинкой","group":"glutes","m":["glutes"],"m2":[],"step":0,"reps":[12,20],"tip":"Полуприсед, колени в стороны, шаги короткие, резинка всё время натянута.","kind":"w","inc":1},"donkey_kick":{"name":"Отведение ноги назад на четвереньках","group":"glutes","m":["glutes"],"m2":["hamstrings"],"step":0,"reps":[15,20],"tip":"Спина неподвижна, поднимай ногу пяткой к потолку, без прогиба в пояснице.","kind":"w","inc":1},"fire_hydrant":{"name":"Отведение ноги в сторону на четвереньках","group":"glutes","m":["glutes"],"m2":[],"step":0,"reps":[15,20],"tip":"Таз не разворачивай, колено поднимай в сторону до уровня бедра.","kind":"w","inc":1},"plank":{"name":"Планка","group":"abs","m":["abs"],"m2":["obliques","delts"],"step":0,"reps":[30,90],"tip":"Тело прямой линией, пресс и ягодицы напряжены, таз не проваливается.","kind":"t","inc":5},"side_plank":{"name":"Боковая планка","group":"abs","m":["obliques"],"m2":["abs","glutes"],"step":0,"reps":[20,60],"tip":"Таз высоко, корпус в одну линию, локоть под плечом.","kind":"t","inc":5},"hollow_hold":{"name":"Лодочка","group":"abs","m":["abs"],"m2":[],"step":0,"reps":[20,45],"tip":"Поясница прижата к полу, руки и ноги вытянуты, держи напряжение.","kind":"t","inc":5},"dead_bug":{"name":"Мёртвый жук","group":"abs","m":["abs"],"m2":["obliques"],"step":0,"reps":[10,16],"tip":"Поясница прижата, опускай противоположные руку и ногу медленно.","kind":"w","inc":1},"bird_dog":{"name":"Птица-собака","group":"abs","m":["abs","lowerback"],"m2":["glutes"],"step":0,"reps":[10,16],"tip":"Вытягивай противоположные руку и ногу, корпус неподвижен.","kind":"w","inc":1},"pallof":{"name":"Паллоф-пресс","group":"abs","m":["obliques","abs"],"m2":[],"step":2.5,"reps":[10,12],"tip":"Не давай корпусу развернуться к блоку, выжимай рукоять от груди.","kind":"w","inc":1},"pil_hundred":{"name":"Сотня (Hundred)","group":"pilates","m":["abs"],"m2":[],"step":0,"reps":[45,100],"tip":"Лопатки над полом, ноги на 45°, быстрые хлопки руками в ритме дыхания.","kind":"t","inc":5},"pil_rollup":{"name":"Скручивание с перекатом (Roll Up)","group":"pilates","m":["abs"],"m2":[],"step":0,"reps":[6,10],"tip":"Поднимайся позвонок за позвонком, без рывка руками.","kind":"w","inc":1},"pil_single_leg":{"name":"Растяжка одной ноги (Single Leg Stretch)","group":"pilates","m":["abs"],"m2":["obliques"],"step":0,"reps":[10,20],"tip":"Голова и лопатки подняты, ноги меняй плавно, поясница прижата.","kind":"w","inc":1},"pil_scissors":{"name":"Ножницы","group":"pilates","m":["abs"],"m2":["hamstrings"],"step":0,"reps":[10,20],"tip":"Прямые ноги меняются у лица, корпус неподвижен.","kind":"w","inc":1},"pil_swimming":{"name":"Плавание (Swimming)","group":"pilates","m":["lowerback","glutes"],"m2":["delts"],"step":0,"reps":[20,45],"tip":"Лёжа на животе, попеременно поднимай руки и ноги, шея длинная.","kind":"t","inc":5},"pil_teaser":{"name":"Тизер","group":"pilates","m":["abs"],"m2":[],"step":0,"reps":[5,10],"tip":"Поднимайся в V-позицию плавно, держи баланс на копчике.","kind":"w","inc":1},"pil_bridge":{"name":"Мостик с перекатом","group":"pilates","m":["glutes","hamstrings"],"m2":["lowerback"],"step":0,"reps":[8,12],"tip":"Поднимай и опускай таз, разворачивая позвоночник по одному позвонку.","kind":"w","inc":1},"pil_side_kick":{"name":"Махи ногой лёжа на боку","group":"pilates","m":["glutes","adductors"],"m2":["obliques"],"step":0,"reps":[10,15],"tip":"Корпус неподвижен, нога движется вперёд-назад от бедра.","kind":"w","inc":1},"pil_saw":{"name":"Пила (Saw)","group":"pilates","m":["obliques"],"m2":["hamstrings"],"step":0,"reps":[6,10],"tip":"Скручивайся и тянись рукой к противоположной стопе, таз на полу.","kind":"w","inc":1},"st_pigeon":{"name":"Голубь","group":"stretch","m":["glutes"],"m2":[],"step":0,"reps":[30,60],"tip":"Передняя голень поперёк, таз ровно, дыши и расслабляйся.","kind":"t","inc":5},"st_butterfly":{"name":"Бабочка","group":"stretch","m":["adductors"],"m2":[],"step":0,"reps":[30,60],"tip":"Стопы вместе, спина прямая, колени мягко опускай вниз.","kind":"t","inc":5},"st_forward_fold":{"name":"Наклон к ногам сидя","group":"stretch","m":["hamstrings"],"m2":["lowerback"],"step":0,"reps":[30,60],"tip":"Тянись грудью к коленям, а не головой, колени можно чуть согнуть.","kind":"t","inc":5},"st_hip_flexor":{"name":"Растяжка сгибателей бедра в выпаде","group":"stretch","m":["quads"],"m2":[],"step":0,"reps":[30,60],"tip":"Подкрути таз и подай его вперёд, корпус вертикально.","kind":"t","inc":5},"st_quad":{"name":"Растяжка квадрицепса стоя","group":"stretch","m":["quads"],"m2":[],"step":0,"reps":[30,45],"tip":"Пятка к ягодице, колени вместе, таз подкручен.","kind":"t","inc":5},"st_chest":{"name":"Растяжка груди в дверном проёме","group":"stretch","m":["chest"],"m2":["delts"],"step":0,"reps":[30,45],"tip":"Предплечье на косяке, мягко шагни вперёд.","kind":"t","inc":5},"st_lat":{"name":"Растяжка широчайших у опоры","group":"stretch","m":["lats"],"m2":[],"step":0,"reps":[30,45],"tip":"Руки на опоре, таз назад, грудь вниз.","kind":"t","inc":5},"st_child":{"name":"Поза ребёнка","group":"stretch","m":["lowerback","lats"],"m2":[],"step":0,"reps":[30,90],"tip":"Таз на пятки, руки вперёд, дыши в спину.","kind":"t","inc":5},"st_cat_cow":{"name":"Кошка-корова","group":"stretch","m":["lowerback","midback"],"m2":[],"step":0,"reps":[30,60],"tip":"Медленно прогибай и округляй спину в такт дыханию.","kind":"t","inc":5},"st_thoracic":{"name":"Скручивание лёжа на боку","group":"stretch","m":["midback","obliques"],"m2":[],"step":0,"reps":[30,45],"tip":"Колени вместе, раскрывай верхнюю руку в сторону.","kind":"t","inc":5},"cd_incline_walk":{"name":"Ходьба в горку на дорожке","group":"cardio","m":["glutes","calves"],"m2":["hamstrings"],"step":0,"reps":[15,40],"tip":"Наклон 8–12%, не держись за поручни, шаг широкий.","kind":"c","inc":1},"cd_run":{"name":"Бег на дорожке","group":"cardio","m":["quads","calves"],"m2":["glutes"],"step":0,"reps":[10,30],"tip":"Темп, при котором можешь говорить короткими фразами.","kind":"c","inc":1},"cd_stairmaster":{"name":"Степпер-лестница","group":"cardio","m":["glutes","quads"],"m2":["calves"],"step":0,"reps":[10,25],"tip":"Не опирайся на поручни, ставь стопу целиком.","kind":"c","inc":1},"cd_elliptical":{"name":"Эллипс","group":"cardio","m":["quads","glutes"],"m2":[],"step":0,"reps":[15,40],"tip":"Ровный темп, давление через пятки.","kind":"c","inc":1},"cd_bike":{"name":"Велотренажёр","group":"cardio","m":["quads"],"m2":["calves"],"step":0,"reps":[15,40],"tip":"Седло на уровне бедра, колено не выпрямляй до конца.","kind":"c","inc":1},"cd_rower":{"name":"Гребной тренажёр","group":"cardio","m":["lats","quads"],"m2":["midback"],"step":0,"reps":[10,25],"tip":"Сначала толчок ногами, потом корпус и руки.","kind":"c","inc":1},"cd_jump_rope":{"name":"Скакалка","group":"cardio","m":["calves"],"m2":[],"step":0,"reps":[5,15],"tip":"Прыжки на носках, локти у корпуса.","kind":"c","inc":1},"cd_hiit":{"name":"Интервалы (HIIT)","group":"cardio","m":["quads","glutes"],"m2":[],"step":0,"reps":[10,20],"tip":"30 сек работа / 30 сек отдых, работай на максимум.","kind":"c","inc":1}},"plan":{"A":{"title":"Спина и бицепс","items":[["lat_pulldown",3],["bb_row",3],["db_row",3],["bb_curl",3],["hammer",3]]},"B":{"title":"Грудь, плечи, трицепс","items":[["bench",4],["incline_db",3],["db_press",3],["lat_raise",3],["pushdown",3]]},"C":{"title":"Ноги","items":[["squat",4],["rdl",3],["leg_press",3],["leg_curl",3],["calf",3]]},"D":{"title":"Всё тело","items":[["ohp",3],["lunges",3],["cable_row",3],["chest_machine",3],["cable_crunch",3]]},"W1":{"title":"Ягодицы и ноги","items":[["hip_thrust",4],["sumo_squat",3],["rdl",3],["abductor",3],["cable_kickback",3],["cd_incline_walk",1]]},"W2":{"title":"Верх тела и кор","items":[["lat_pulldown",3],["db_press",3],["cable_row",3],["lat_raise",3],["plank",3],["dead_bug",3]]},"W3":{"title":"Акцент на ягодицы","items":[["glute_bridge_machine",4],["bulgarian",3],["step_up",3],["pull_through",3],["cable_abduction",3],["glute_hyper",3]]},"W4":{"title":"Пилатес и растяжка","items":[["pil_hundred",1],["pil_rollup",2],["pil_single_leg",2],["pil_bridge",2],["pil_side_kick",2],["st_pigeon",2],["st_hip_flexor",2],["st_child",1]]}},"days":["A","B","C","D"],"days_w":["W1","W2","W3","W4"],"groups":{"chest":"Грудь","back":"Спина","arms":"Руки","legs":"Ноги","glutes":"Ягодицы","shoulders":"Плечи","abs":"Пресс","cardio":"Кардио","pilates":"Пилатес","stretch":"Растяжка","other":"Другое"},"muscles":{"chest":"Грудь","delts":"Плечи","biceps":"Бицепс","triceps":"Трицепс","forearms":"Предплечья","abs":"Пресс","obliques":"Косые","traps":"Трапеции","lats":"Широчайшие","midback":"Середина спины","lowerback":"Поясница","glutes":"Ягодицы","quads":"Квадрицепс","hamstrings":"Бицепс бедра","adductors":"Приводящие","calves":"Икры"}};
 const CAT = D.catalog, PLAN = D.plan, GROUPS = D.groups, MUSCLES = D.muscles;
 let DAYS = D.days;
 const dlabel = (d) => d && d[0] === "W" ? d.slice(1) : d;
@@ -915,6 +992,7 @@ function back() {
   $("v-" + cur).classList.add("off-right");
   $("v-" + stack[stack.length - 1]).classList.remove("off-left");
   if (cur === "work") { stopTimer(); clearInterval(clockId); W = null; }
+  if (cur === "chat") $("c-bar").classList.remove("show");
   if (stack.length === 1) renderHome();
   syncChrome();
 }
@@ -956,7 +1034,7 @@ function closeOnb() {
   document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.v === current));
   renderHome(); if (current === "prof") renderProfile(); HN("success");
   syncProfile();
-  if (onb.edit) toast("Сохранено");
+  if (onb.edit) toast("Сохранено"); else maybeTour();
 }
 function renderOnb() {
   const st = ONB[onb.k];
@@ -1048,44 +1126,133 @@ applyTheme();
 /* ---------- спросить тренера ---------- */
 const QUICK = ["Тренировка на спину", "Грудь и трицепс", "Ноги, но полегче", "Всё тело за 45 минут", "Не чувствую грудь в жиме"];
 $("ask-chips").innerHTML = QUICK.map(q => `<button>${q}</button>`).join("");
-$("ask-chips").querySelectorAll("button").forEach(b => b.onclick = () => { H(); $("ask-q").value = b.textContent; $("ask-q").focus(); autoGrow(); });
+$("ask-chips").querySelectorAll("button").forEach(b => b.onclick = () => { H(); openChat(b.textContent); });
 function autoGrow() { const t = $("ask-q"); t.style.height = "auto"; t.style.height = Math.min(120, t.scrollHeight) + "px"; }
 $("ask-q").oninput = autoGrow;
 $("ask-send").onclick = () => {
   const q = $("ask-q").value.trim();
-  if (q.length < 3) { toast("Напиши, что хочешь потренировать"); HN("error"); $("ask-q").focus(); return; }
-  HN("success");
-  if (hasAPI()) return askServer(q);
+  if (q.length < 3) { toast("Напиши, что хочешь спросить"); HN("error"); $("ask-q").focus(); return; }
+  if (hasAPI()) { $("ask-q").value = ""; autoGrow(); return openChat(q); }
   if (inTG) sendToBot(JSON.stringify({ type: "ai", q, p: PROFILE }));
   else toast("Откройте приложение из Telegram");
 };
+$("ask-open").onclick = () => { H(); openChat(); };
 const THINK = (t) => `<div class="ans"><span class="thinking"><span><i></i> <i></i> <i></i></span>${t}</span></div>`;
-let asking = false;
-async function askServer(q) {
+
+/* ---------- обложка блока тренера: каждый раз новая подсказка ---------- */
+const COVERS = [
+  "Попроси собрать тренировку под настроение — «спина, 45 минут, без становой»",
+  "Спроси, как правильно делать упражнение, если не чувствуешь мышцу",
+  "Расскажи про травму или боль — тренер запомнит и будет обходить",
+  "Не знаешь, что делать сегодня? Тренер соберёт тренировку с твоими весами",
+  "Перенеси старые тренировки со скриншотов — тренер подхватит твои веса",
+  "Устал или мало времени? Попроси «лёгкую тренировку на 30 минут»",
+  "Спроси, почему встал вес и как пробить плато",
+];
+function showCover() {
+  const c = $("ask-cover"); if (!c) return;
+  $("cover-t").textContent = COVERS[Math.floor(Math.random() * COVERS.length)];
+  c.classList.remove("gone"); c.style.display = "";
+}
+$("ask-cover").onclick = () => { H("medium"); const c = $("ask-cover"); c.classList.add("gone"); setTimeout(() => { c.style.display = "none"; }, 460); };
+showCover();
+
+/* ---------- обучение: показываем, что где ---------- */
+const TOUR = [
+  { sel: ".cal", t: "Календарь", d: "Точки — дни тренировок. Нажми на день, чтобы посмотреть, что делал и с какими весами, или удалить лишнее." },
+  { sel: "#ask-card", t: "Твой ИИ-тренер", d: "Попроси собрать тренировку под настроение или спроси про технику. Стрелки в углу открывают чат на весь экран." },
+  { sel: "#add-workout", t: "Новая тренировка", d: "Выбери мышцы — и я соберу упражнения с твоими рабочими весами. Подходы добавляешь по ходу тренировки." },
+  { sel: '.nav [data-v="prof"]', t: "Профиль", d: "Твоя цель, веса по каждому упражнению, перенос старых тренировок со скриншотов и настройки." },
+];
+let tourK = 0;
+function startTour() {
+  if (current !== "home") showTab("home");
+  tourK = 0; $("tour").classList.add("show"); setTimeout(tourStep, 60);
+}
+function endTour() { $("tour").classList.remove("show"); try { localStorage.setItem("tour_done", "1"); } catch (e) {} }
+function tourStep() {
+  const st = TOUR[tourK], el = document.querySelector(st.sel);
+  if (!el) { tourK++; return tourK < TOUR.length ? tourStep() : endTour(); }
+  el.scrollIntoView({ block: "center", behavior: "instant" });
+  setTimeout(() => {
+    const r = el.getBoundingClientRect(), pad = 6, sp = $("tspot");
+    sp.style.left = (r.left - pad) + "px"; sp.style.top = (r.top - pad) + "px"; sp.style.width = (r.width + pad * 2) + "px"; sp.style.height = (r.height + pad * 2) + "px";
+    const c = $("tcard");
+    c.innerHTML = `<small>${tourK + 1} из ${TOUR.length}</small><b>${st.t}</b><p>${st.d}</p><div class="tbtns"><button class="tskip">Пропустить</button><button class="tnext">${tourK === TOUR.length - 1 ? "Понятно" : "Далее"}</button></div>`;
+    const below = r.bottom + 190 < innerHeight;
+    c.style.top = below ? (r.bottom + 16) + "px" : Math.max(16, r.top - 16 - c.offsetHeight) + "px";
+    c.querySelector(".tskip").onclick = () => { H(); endTour(); };
+    c.querySelector(".tnext").onclick = () => { H(); tourK++; if (tourK < TOUR.length) tourStep(); else endTour(); };
+  }, 120);
+}
+function maybeTour() { try { if (localStorage.getItem("tour_done")) return; } catch (e) { return; } setTimeout(() => { if (!$("v-onb").classList.contains("hidden")) return; startTour(); }, 700); }
+
+/* ---------- чат с тренером на весь экран ---------- */
+let asking = false, chatLoaded = false;
+const SPK = `<svg width="14" height="14" viewBox="0 0 24 24" style="fill:var(--lime)"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg>`;
+const CHAT_HELLO = `<div class="chello"><b>Привет! Я твой тренер 💪</b>Собираю тренировки под твою цель и веса, отвечаю на вопросы про технику, восстановление и прогресс. Расскажи о себе — я запомню.</div>
+  <div class="cchips">${["Собери тренировку на сегодня", "Не чувствую грудь в жиме", "Как пробить плато?", "Что ты помнишь обо мне?"].map(t => `<button>${t}</button>`).join("")}</div>`;
+function chatScroll() { const v = $("v-chat"); setTimeout(() => v.scrollTo({ top: v.scrollHeight, behavior: "smooth" }), 30); }
+function planBubble(pl) {
+  const items = (pl.i || []).filter(([id]) => CAT[id]);
+  const el = document.createElement("div"); el.className = "bub ai plan";
+  el.innerHTML = `<h4>${esc(pl.t || "Тренировка")}</h4>${pl.n ? `<p>${esc(pl.n)}</p>` : ""}<ol>${items.map(([id, n]) => `<li>${esc(CAT[id].name)} <span>· ${n} подх.</span></li>`).join("")}</ol><button class="cta">Начать тренировку</button>`;
+  el.querySelector(".cta").onclick = () => startPlan(pl);
+  return el;
+}
+function addBubble(role, text, extra) {
+  const el = document.createElement("div"); el.className = "bub " + (role === "user" ? "me" : "ai");
+  el.textContent = text || "";
+  if (extra) el.insertAdjacentHTML("beforeend", extra);
+  $("c-msgs").appendChild(el); chatScroll(); return el;
+}
+function thinkingBubble(t) { const el = document.createElement("div"); el.className = "bub ai"; el.innerHTML = `<span class="thinking"><span><i></i> <i></i> <i></i></span>${t || "Тренер думает…"}</span>`; $("c-msgs").appendChild(el); chatScroll(); return el; }
+function bindHello() { $("c-msgs").querySelectorAll(".cchips button").forEach(b => b.onclick = () => { H(); sendChat(b.textContent); }); }
+async function loadChat() {
+  if (chatLoaded || !hasAPI()) { if (!$("c-msgs").children.length) { $("c-msgs").innerHTML = CHAT_HELLO; bindHello(); } return; }
+  $("c-msgs").innerHTML = ""; const t = thinkingBubble("Загружаю переписку…");
+  try {
+    const d = await api("chat/history", {}, 15000); t.remove(); chatLoaded = true;
+    const ms = d.msgs || [];
+    if (!ms.length) { $("c-msgs").innerHTML = CHAT_HELLO; bindHello(); return; }
+    ms.forEach(m => m.r === "plan" ? $("c-msgs").appendChild(planBubble(m.plan)) : addBubble(m.r, m.t));
+    chatScroll();
+  } catch (e) { t.remove(); $("c-msgs").innerHTML = CHAT_HELLO; bindHello(); }
+}
+async function openChat(q) {
+  if (!hasAPI()) { toast("Чат работает, когда приложение подключено к серверу"); return; }
+  if (stack[stack.length - 1] !== "chat") go("chat");
+  $("c-bar").classList.add("show");
+  await loadChat();
+  if (q) sendChat(q);
+}
+function cGrow() { const t = $("c-q"); t.style.height = "auto"; t.style.height = Math.min(130, t.scrollHeight) + "px"; }
+$("c-q").oninput = cGrow;
+$("c-send").onclick = () => { const q = $("c-q").value.trim(); if (q.length < 2) return; $("c-q").value = ""; cGrow(); sendChat(q); };
+$("c-clip").onclick = () => { H(); $("ask-file").click(); };
+async function sendChat(q) {
   if (asking) return;
-  asking = true; $("ask-send").disabled = true; $("ask-q").blur();
-  const box = $("ask-ans");
-  box.innerHTML = `<div class="ans q">Ты: ${esc(q)}</div>` + THINK("Тренер думает…");
+  const hello = $("c-msgs").querySelector(".chello"); if (hello) { hello.remove(); const ch = $("c-msgs").querySelector(".cchips"); if (ch) ch.remove(); }
+  asking = true; $("c-send").disabled = true; HN("success");
+  addBubble("user", q); const t = thinkingBubble();
   try {
     const d = await api("ask", { q, p: PROFILE }, 90000);
-    $("ask-q").value = ""; autoGrow();
+    t.remove();
     if (d.nt) S.nt = d.nt;
     if (d.type === "plan" && d.plan) {
-      S.a = d.plan; store.del(aiKey());
-      box.innerHTML = "";
-      renderAI(findDraft());
-      HN("success");
-      setTimeout(() => { const el = $("aiplan"); if (el.firstChild) el.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
-    } else {
-      box.innerHTML = `<div class="ans q">Ты: ${esc(q)}</div><div class="ans">${esc(d.text || "")}${d.note ? `<span class="note">📌 Запомнил: ${esc(d.note)}</span>` : ""}</div>`;
-      HN("success");
-    }
-  } catch (e) {
-    box.innerHTML = "";
-    toast("Тренер не ответил — проверь интернет и попробуй ещё раз"); HN("error");
-  } finally {
-    asking = false; $("ask-send").disabled = false;
-  }
+      S.a = d.plan; store.del(aiKey()); renderAI(findDraft());
+      $("c-msgs").appendChild(planBubble(d.plan)); chatScroll();
+    } else addBubble("assistant", d.text || "", d.note ? `<span class="note">📌 Запомнил: ${esc(d.note)}</span>` : "");
+    HN("success");
+  } catch (e) { t.remove(); addBubble("assistant", "Не получилось связаться 😕 Проверь интернет и попробуй ещё раз."); HN("error"); }
+  finally { asking = false; $("c-send").disabled = false; }
+}
+function startPlan(pl) {
+  const items = (pl.i || []).filter(([id]) => CAT[id]);
+  if (!items.length) return;
+  S.a = pl; store.set(aiKey(), 1);
+  if (stack[stack.length - 1] === "chat") back();
+  startWorkout({ day: "X", title: pl.t, ai: 1, start: Date.now(), items: items.map(([id, n]) => freshItem(id, id, n)) });
 }
 
 /* ---------- перенос старых тренировок со скриншотов ---------- */
@@ -1093,6 +1260,7 @@ $("ask-clip").onclick = () => {
   if (!hasAPI()) { toast("Перенос работает, когда приложение подключено к серверу"); return; }
   H(); $("ask-file").click();
 };
+
 $("ask-file").onchange = () => { const f = [...$("ask-file").files]; $("ask-file").value = ""; if (f.length) importShots(f); };
 function shrink(file, max) {
   return new Promise((ok) => {
@@ -1111,27 +1279,30 @@ let IMP = [];
 async function importShots(files) {
   if (asking) return;
   files = files.slice(0, 10);
-  asking = true; $("ask-send").disabled = true;
-  const box = $("ask-ans"), text = $("ask-q").value.trim();
-  box.innerHTML = `<div class="ans q">Ты: ${files.length} ${plural(files.length, "скриншот", "скриншота", "скриншотов")}${text ? " · " + esc(text) : ""}</div>` +
-    THINK(`Читаю тренировки… это займёт до ${Math.max(1, Math.round(files.length * 0.3))} мин`);
-  box.scrollIntoView({ behavior: "smooth", block: "center" });
+  if (stack[stack.length - 1] !== "chat") await openChat();
+  const hello = $("c-msgs").querySelector(".chello"); if (hello) { hello.remove(); const ch = $("c-msgs").querySelector(".cchips"); if (ch) ch.remove(); }
+  asking = true; $("c-send").disabled = true;
+  const text = $("c-q").value.trim();
+  addBubble("user", `📎 ${files.length} ${plural(files.length, "скриншот", "скриншота", "скриншотов")}${text ? " · " + text : ""}`);
+  const t = thinkingBubble(`Читаю тренировки… до ${Math.max(1, Math.round(files.length * 0.3))} мин`);
   try {
     const fd = new FormData(), a = AUTH();
     fd.append("init", a.init); fd.append("id", a.id || ""); fd.append("k", a.k || ""); fd.append("text", text);
     for (const f of files) fd.append("img", await shrink(f, 2000), "shot.jpg");
-    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 300000);
+    const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 300000);
     const r = await fetch(API + "/api/import", { method: "POST", body: fd, signal: ctl.signal });
-    clearTimeout(t);
+    clearTimeout(tm);
     const d = await r.json();
     if (!r.ok) throw new Error(d.error);
-    box.innerHTML = ""; $("ask-q").value = ""; autoGrow();
+    t.remove(); $("c-q").value = ""; cGrow();
     IMP = d.workouts || [];
-    if (!IMP.length) { box.innerHTML = `<div class="ans">Не нашёл тренировок на скриншотах 😕 Нужны экраны, где видны упражнения, веса и повторы.${d.err ? `<span class="note" style="color:var(--inactive);font-weight:500">Техническая причина: ${esc(d.err)}</span>` : ""}</div>`; HN("error"); return; }
+    if (!IMP.length) { addBubble("assistant", "Не нашёл тренировок на скриншотах 😕 Нужны экраны, где видны упражнения, веса и повторы.", d.err ? `<span class="note" style="color:var(--inactive);font-weight:500">Причина: ${esc(d.err)}</span>` : ""); HN("error"); return; }
+    const b = addBubble("assistant", `Нашёл ${IMP.length} ${plural(IMP.length, "тренировку", "тренировки", "тренировок")}. Проверь и сохрани в историю — веса подтянутся в приложение.`, `<button class="act">Посмотреть и сохранить</button>`);
+    b.querySelector(".act").onclick = showImport;
     showImport(); HN("success");
   } catch (e) {
-    box.innerHTML = ""; toast("Не получилось прочитать — попробуй ещё раз"); HN("error");
-  } finally { asking = false; $("ask-send").disabled = false; }
+    t.remove(); addBubble("assistant", "Не получилось прочитать скриншоты — попробуй ещё раз."); HN("error");
+  } finally { asking = false; $("c-send").disabled = false; }
 }
 function showImport() {
   const fmtD = (d) => d ? new Date(d + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" }) : "";
@@ -1188,8 +1359,9 @@ function renderAI(dr) {
   $("aiplan").innerHTML = `<div class="ai"><small><svg width="14" height="14" viewBox="0 0 24 24" style="fill:var(--lime)"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg>Тренер собрал тренировку</small>
     <h3>${esc(a.t)}</h3>${a.n ? `<p>${esc(a.n)}</p>` : ""}
     <ol>${items.map(([id, n]) => `<li>${esc(CAT[id].name)} <span>· ${n} подх.</span></li>`).join("")}</ol>
-    <button class="cta" id="ai-start">Начать<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>`;
-  $("ai-start").onclick = () => {
+    <button class="cta" id="ai-start">Начать тренировку<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>`;
+  $("ai-start").onclick = () => { startPlan(a); };
+  if (false) $("ai-start").onclick = () => {
     store.set(aiKey(), 1);
     startWorkout({ day: "X", title: a.t, ai: 1, start: Date.now(), items: items.map(([id, n]) => freshItem(id, id, n)) });
   };
@@ -1264,7 +1436,7 @@ $("pk-start").onclick = () => {
   const groups = pg().order.filter(g => pk.sel.has(g));
   const all = pg().core.every(g => pk.sel.has(g));
   const title = all && groups.length === pg().core.length ? "Всё тело" : groups.map(gLabel).join(" + ");
-  const w = { day: "X", title, groups, start: Date.now(), items: pickPlan(groups).map(([id, n]) => freshItem(id, id, n)) };
+  const w = { day: "X", title, groups, start: Date.now(), items: pickPlan(groups).map(([id, n]) => freshItem(id, id, 0)) };
   startWorkout(w, true);
 };
 function hasUsual(groups) {
@@ -1373,7 +1545,7 @@ function exCard(it, i) {
         ${!it.slot || !PLAN[W.day] ? `<button data-act="remove" aria-label="Убрать">${IC.trash}</button>` : ""}
       </div>
     </div>
-    <div class="target"><span>${e.kind === "k" ? "Запиши время и калории" : `Цель: ${e.kind === "c" ? "" : it.sets.length + " × "}${e.reps[0]}–${e.reps[1]} ${e.kind === "w" ? "" : unitOf(e)}`}</span><span>${tgt}</span></div>
+    <div class="target"><span>${e.kind === "k" ? "Запиши время и калории" : `Цель: ${e.kind === "c" || !it.sets.length ? "" : it.sets.length + " × "}${e.reps[0]}–${e.reps[1]} ${e.kind === "w" ? "" : unitOf(e)}`}</span><span>${tgt}</span></div>
     <div class="tip ${it.tip ? "open" : ""}">${esc(e.tip || "")}</div>
     ${it.sets.map((x, k) => setRow(e, x, k)).join("")}
     <button class="addset" data-act="addset">+ Подход</button>
@@ -1401,7 +1573,7 @@ function bindCards() {
       if (a === "swap") openPicker("swap", i);
       if (a === "remove") { if (W.items.length <= 1) { toast("В тренировке должно остаться упражнение"); return; } H("medium"); W.items.splice(i, 1); save(); renderWorkout(); updateMain(); }
       if (a === "addset") {
-        H(); const last = it.sets[it.sets.length - 1] || { w: "", r: CAT[it.id].reps[0] };
+        H(); const last = it.sets[it.sets.length - 1] || freshItem(it.id, null, 1).sets[0];
         it.sets.push({ w: last.w, r: last.r, rt: null }); save(); renderWorkout();
       }
       if (a === "delset") {
@@ -1533,6 +1705,7 @@ function tick() {
 function stopTimer() { clearInterval(tId); $("timer").classList.remove("show"); }
 $("t-plus").onclick = () => { H(); tEnd += 30000; tTotal += 30; if (!$("timer").classList.contains("show") || Date.now() > tEnd - 30000) { $("timer").classList.add("show"); clearInterval(tId); tId = setInterval(tick, 200); } tick(); };
 $("t-stop").onclick = () => { H(); stopTimer(); };
+$("t-minus").onclick = () => { H(); const left = tEnd - Date.now(); if (left <= 31000) { stopTimer(); return; } tEnd -= 30000; tTotal = Math.max(5, tTotal - 30); tick(); };
 document.addEventListener("visibilitychange", () => { if (!document.hidden && $("timer").classList.contains("show")) tick(); });
 
 /* ---------- каталог ---------- */
@@ -1547,7 +1720,7 @@ function catRows(filter, mark) {
     const [p, s] = musclesOf([id]);
     return `<button class="crow ${mark === id ? "cur" : ""}" data-id="${id}">
       <div class="mini">${bodySVG(BACK_ONLY.has(e.m[0]) ? "back" : "front", p, s, { mini: 1, crop: e.group === "legs" ? "legs" : "upper" })}</div>
-      <div class="t"><b>${esc(e.name)}</b><span>${e.m.concat(e.m2).slice(0, 3).map(m => MUSCLES[m]).join(" · ")}${e.kind === "t" ? " · на время" : e.kind === "c" ? " · кардио" : e.kind === "k" ? " · время и ккал" : e.step ? "" : " · свой вес"}${e.custom ? " · своё" : ""}</span></div>
+      <div class="t"><b>${esc(e.name)}</b><span>${e.m.concat(e.m2).slice(0, 3).map(m => MUSCLES[m]).join(" · ")}${e.kind === "t" ? " · на время" : e.kind === "c" ? " · кардио" : e.kind === "k" ? " · время и ккал" : e.step ? "" : " · свой вес"}${e.custom ? " · своё" : ""}</span></div>${e.custom ? `<span class="cedit" data-edit="${id}" aria-label="Изменить"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>` : ""}
       <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
   }).join("");
 }
@@ -1603,13 +1776,48 @@ function openPicker(mode, i) {
     $("ex-tabs").innerHTML = tabsHTML(pick.g);
     $("ex-tabs").querySelectorAll("button").forEach(b => b.onclick = () => { H(); pick.g = b.dataset.g; draw(); });
     $("ex-list").innerHTML = catRows({ g: pick.g, q: pick.q }, it ? it.id : null);
-    $("ex-list").querySelectorAll(".crow").forEach(b => b.onclick = () => choose(b.dataset.id));
+    $("ex-list").querySelectorAll(".crow").forEach(b => b.onclick = (ev) => {
+      const ce = ev.target.closest(".cedit");
+      if (ce) { ev.stopPropagation(); const keep = pick; openCreateEx("", null, ce.dataset.edit); return; }
+      choose(b.dataset.id);
+    });
   };
   $("ex-q").oninput = (e) => { pick.q = e.target.value; draw(); };
   if ($("pk-perm")) $("pk-perm").onclick = () => { H(); pick.perm = !pick.perm; $("pk-perm").classList.toggle("on", pick.perm); };
   $("pk-new").onclick = () => { const keep = pick; openCreateEx(pick.g !== "all" ? pick.g : "", (id) => { pick = keep; choose(id); }); };
   draw();
 }
+/* ---------- порядок упражнений: перетаскивание ---------- */
+$("w-order").onclick = () => {
+  if (!W || W.items.length < 2) { toast("Нужно хотя бы два упражнения"); return; }
+  H();
+  let order = W.items.map((_, i) => i);
+  const GRIP = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>`;
+  openSheet(`<h2 style="margin:6px 0 4px">Порядок упражнений</h2><p style="color:var(--inactive);font-size:14px;margin:0">Зажми ⠿ и перетащи</p>`,
+    `<div class="ord" id="ord"></div><button class="cta" id="ord-ok" style="margin-top:16px">Готово</button>`);
+  const draw = () => {
+    $("ord").innerHTML = order.map((i, k) => `<div class="orow" data-k="${k}"><div class="n">${k + 1}</div><b>${esc(CAT[W.items[i].id].name)}</b><div class="hd">${GRIP}</div></div>`).join("");
+    $("ord").querySelectorAll(".hd").forEach(h => h.onpointerdown = (ev) => startDrag(ev, h.closest(".orow")));
+  };
+  const startDrag = (ev, row) => {
+    ev.preventDefault(); H();
+    const rows = [...$("ord").children], from = rows.indexOf(row), y0 = ev.clientY, hgt = row.offsetHeight + 8;
+    let to = from; row.classList.add("drag");
+    const move = (e) => {
+      const dy = e.clientY - y0; row.style.transform = `translateY(${dy}px)`;
+      to = Math.max(0, Math.min(rows.length - 1, from + Math.round(dy / hgt)));
+      rows.forEach((r, k) => { if (r === row) return; let sh = 0; if (from < to && k > from && k <= to) sh = -hgt; if (from > to && k < from && k >= to) sh = hgt; r.style.transform = sh ? `translateY(${sh}px)` : ""; });
+    };
+    const up = () => {
+      document.removeEventListener("pointermove", move); document.removeEventListener("pointerup", up); document.removeEventListener("pointercancel", up);
+      if (to !== from) { const [x] = order.splice(from, 1); order.splice(to, 0, x); H("medium"); }
+      draw();
+    };
+    document.addEventListener("pointermove", move); document.addEventListener("pointerup", up); document.addEventListener("pointercancel", up);
+  };
+  draw();
+  $("ord-ok").onclick = () => { W.items = order.map(i => W.items[i]); save(); closeSheet(); renderWorkout(); updateMain(); HN("success"); };
+};
 function choose(id) {
   HN("success");
   if (pick.mode === "swap") {
@@ -1619,7 +1827,7 @@ function choose(id) {
     W.items[pick.i] = n;
     toast(pick.perm ? "Заменено навсегда" : "Заменено на сегодня");
   } else {
-    W.items.push(freshItem(id, null, 3));
+    W.items.push(freshItem(id, null, 0));
     toast("Упражнение добавлено");
   }
   save(); closeSheet(); renderWorkout();
@@ -1635,6 +1843,7 @@ const IC2 = {
   clip: '<path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l8.6-8.6a3.7 3.7 0 0 1 5.2 5.2l-8.6 8.6a1.8 1.8 0 0 1-2.6-2.6l7.9-7.9"/>',
   gift: '<rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-2-4-6-4-6-1s6 1 6 1zM12 8c2-4 6-4 6-1s-6 1-6 1z"/>',
   gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
   doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
   trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/>',
 };
@@ -1666,6 +1875,7 @@ function renderProfile() {
     <div class="plist2">
       ${hasAPI() ? row("gift", "gift", "Premium и подарки", prem ? "до " + new Date(S.pu + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" }) : "промокод, пригласить друга") : ""}
       ${row("set", "gear", "Настройки приложения", (themeIsLight() ? "светлая тема" : "тёмная тема") + " · " + UW())}
+      ${row("help", "info", "Как пользоваться", "короткая экскурсия по приложению")}
       ${row("docs", "doc", "Документы", "оферта и конфиденциальность")}
     </div>
     ${hasAPI() ? `<div class="plist2">${row("wipe", "trash", "Удалить мои данные", "", "danger")}</div>` : ""}`;
@@ -1680,6 +1890,7 @@ const PGO = {
   set: openSettings,
   docs: () => openSheet(`<h2 style="margin:6px 0 4px">Документы</h2>`, `<p style="color:var(--inactive);font-size:15px;line-height:1.5">Публичная оферта и политика конфиденциальности появятся здесь перед запуском платной версии.</p>`),
   wipe: openWipe,
+  help: startTour,
 };
 function openMyEx() {
   const W0 = S.w || {};
@@ -1762,33 +1973,45 @@ function editWeight(id) {
 
 /* ---------- своё упражнение ---------- */
 const METRICS = [["w", "Вес и повторы", "кг × повт"], ["r", "Повторы", "свой вес"], ["t", "Время", "секунды"], ["c", "Время", "минуты"], ["k", "Время и калории", "мин · ккал"]];
-function openCreateEx(group, onDone) {
+function openCreateEx(group, onDone, editId) {
   H();
   if (!hasAPI()) { toast("Добавлять упражнения можно, когда приложение подключено к серверу"); return; }
-  const nx = { m: "w", g: group || "" };
-  openSheet(`<h2 style="margin:6px 0 4px">Добавить упражнение</h2><p style="color:var(--inactive);font-size:14px;margin:0">Появится в каталоге и в тренировках</p>`,
-    `<input class="cx-in" id="cx-name" maxlength="60" placeholder="Название, например «Падел» или «Жим в хаммере»" autocomplete="off">
-     <div class="sec">Что записываем</div><div class="cx-opts" id="cx-m"></div>
+  const ed = editId ? CAT[editId] : null;
+  const nx = ed ? { m: null, g: ed.group, ms: new Set(ed.m || []) } : { m: "w", g: group || "", ms: new Set() };
+  openSheet(`<h2 style="margin:6px 0 4px">${ed ? "Изменить упражнение" : "Добавить упражнение"}</h2><p style="color:var(--inactive);font-size:14px;margin:0">${ed ? "Название, раздел и мышцы" : "Появится в каталоге и в тренировках"}</p>`,
+    `<input class="cx-in" id="cx-name" maxlength="60" placeholder="Название, например «Падел» или «Шраги»" autocomplete="off" value="${ed ? esc(ed.name) : ""}">
+     ${ed ? "" : `<div class="sec">Что записываем</div><div class="cx-opts" id="cx-m"></div>`}
      <div class="sec">Раздел</div><div class="cx-opts" id="cx-g"></div>
-     <button class="cta" id="cx-save" style="margin-top:20px">Добавить упражнение</button>`);
+     <div class="sec">Какие мышцы работают <span style="text-transform:none;font-weight:500;letter-spacing:0">— можно не выбирать</span></div><div class="cx-opts" id="cx-ms"></div>
+     <button class="cta" id="cx-save" style="margin-top:20px">${ed ? "Сохранить" : "Добавить упражнение"}</button>`, true);
   const draw = () => {
-    $("cx-m").innerHTML = METRICS.map(([k, t, sub]) => `<button data-k="${k}" class="${nx.m === k ? "on" : ""}">${t} <small>${sub}</small></button>`).join("");
+    if ($("cx-m")) {
+      $("cx-m").innerHTML = METRICS.map(([k, t, sub]) => `<button data-k="${k}" class="${nx.m === k ? "on" : ""}">${t} <small>${sub}</small></button>`).join("");
+      $("cx-m").querySelectorAll("button").forEach(b => b.onclick = () => { H(); nx.m = b.dataset.k; draw(); });
+    }
     $("cx-g").innerHTML = Object.entries(GROUPS).map(([k, t]) => `<button data-g="${k}" class="${nx.g === k ? "on" : ""}">${t}</button>`).join("");
-    $("cx-m").querySelectorAll("button").forEach(b => b.onclick = () => { H(); nx.m = b.dataset.k; draw(); });
     $("cx-g").querySelectorAll("button").forEach(b => b.onclick = () => { H(); nx.g = b.dataset.g; draw(); });
+    $("cx-ms").innerHTML = Object.entries(MUSCLES).map(([k, t]) => `<button data-m="${k}" class="${nx.ms.has(k) ? "on" : ""}">${t}</button>`).join("");
+    $("cx-ms").querySelectorAll("button").forEach(b => b.onclick = () => {
+      H(); const k = b.dataset.m;
+      if (nx.ms.has(k)) nx.ms.delete(k); else if (nx.ms.size < 4) nx.ms.add(k); else toast("Не больше четырёх мышц");
+      draw();
+    });
   };
   draw();
   $("cx-save").onclick = async () => {
     const name = $("cx-name").value.trim();
     if (name.length < 2) { toast("Напиши название"); $("cx-name").focus(); HN("error"); return; }
     if (!nx.g) { toast("Выбери раздел"); HN("error"); return; }
-    $("cx-save").disabled = true; $("cx-save").textContent = "Добавляю…";
+    $("cx-save").disabled = true; $("cx-save").textContent = ed ? "Сохраняю…" : "Добавляю…";
     try {
-      const d = await api("custom/add", { name, group: nx.g, metric: nx.m });
+      const body = { name, group: nx.g, muscles: [...nx.ms] };
+      const d = ed ? await api("custom/edit", Object.assign({ id: editId }, body)) : await api("custom/add", Object.assign({ metric: nx.m }, body));
       closeSheet(); applyState(d.state);
-      HN("success"); toast(`Добавлено в «${GROUPS[nx.g]}»`);
+      HN("success"); toast(ed ? "Сохранено" : `Добавлено в «${GROUPS[nx.g]}»`);
+      if (W) renderWorkout();
       if (onDone && d.id) onDone(d.id);
-    } catch (e) { $("cx-save").disabled = false; $("cx-save").textContent = "Добавить упражнение"; toast("Не получилось — проверь интернет"); HN("error"); }
+    } catch (e) { $("cx-save").disabled = false; $("cx-save").textContent = ed ? "Сохранить" : "Добавить упражнение"; toast("Не получилось — проверь интернет"); HN("error"); }
   };
 }
 
@@ -1832,6 +2055,7 @@ async function noteOp(body) {
 renderWeek(); renderHome(); updateMain();
 if (!hasProfile()) openOnb(false);
 else if (!PROFILE.g) openOnb(false, "g");
+else maybeTour();
 if (hasAPI()) api("state", {}, 15000).then(applyState).catch(() => {});
 </script>
 </body>
