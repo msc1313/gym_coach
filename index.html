@@ -1179,8 +1179,11 @@ function tourStep() {
     sp.style.left = (r.left - pad) + "px"; sp.style.top = (r.top - pad) + "px"; sp.style.width = (r.width + pad * 2) + "px"; sp.style.height = (r.height + pad * 2) + "px";
     const c = $("tcard");
     c.innerHTML = `<small>${tourK + 1} из ${TOUR.length}</small><b>${st.t}</b><p>${st.d}</p><div class="tbtns"><button class="tskip">Пропустить</button><button class="tnext">${tourK === TOUR.length - 1 ? "Понятно" : "Далее"}</button></div>`;
-    const below = r.bottom + 190 < innerHeight;
-    c.style.top = below ? (r.bottom + 16) + "px" : Math.max(16, r.top - 16 - c.offsetHeight) + "px";
+    const ch = c.offsetHeight, topSafe = 70, botSafe = 60;
+    const below = r.bottom + 16 + ch + botSafe <= innerHeight && r.top > innerHeight * 0.45 === false;
+    let y = below ? r.bottom + 16 : r.top - 16 - ch;
+    y = Math.max(topSafe, Math.min(y, innerHeight - botSafe - ch));
+    c.style.top = y + "px";
     c.querySelector(".tskip").onclick = () => { H(); endTour(); };
     c.querySelector(".tnext").onclick = () => { H(); tourK++; if (tourK < TOUR.length) tourStep(); else endTour(); };
   }, 120);
@@ -1603,8 +1606,7 @@ function bindCards() {
         card.classList.toggle("done", it.sets.some(s => s.rt));
         if (x.rt) { b.classList.add("pop"); setTimeout(() => b.classList.remove("pop"), 300); H("medium"); }
         if (x.rt && !was) {
-          const left = W.items.some(t => t.sets.some(s => !s.rt));
-          if (left) startTimer(x.rt === "w" ? REST_WARM : restFor(it.id));
+          startTimer(x.rt === "w" ? REST_WARM : restFor(it.id));
         }
         save(); updateProgress(); updateMain();
       });
