@@ -53,6 +53,7 @@ html.neon,html.neon.fem{
   color-scheme:dark;
 }
 html.neon body{background:transparent}
+html.neon{--cvbase:#212327}
 html.neon body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
     radial-gradient(60% 38% at 8% 4%,rgba(208,245,104,.30),transparent 70%),
@@ -285,13 +286,22 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 .cychk i svg{opacity:0}.cychk.on i svg{opacity:1}
 .cyoff{width:100%;margin-top:22px;height:48px;border-radius:15px;color:#E5484D;font-weight:700;background:var(--card)}
 .askopen{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:var(--inactive);background:var(--card2)}
-.askcover{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px 22px;text-align:center;
-  background:linear-gradient(135deg,rgba(var(--acc-rgb),.22),rgba(var(--acc-rgb),.06) 60%),var(--card);border-radius:22px;
+.askcover{position:absolute;inset:0;z-index:2;display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:left;width:100%;
+  background:radial-gradient(90% 120% at 0% 0%,rgba(var(--acc-rgb),.42),transparent 62%),radial-gradient(80% 110% at 100% 100%,rgba(var(--acc-rgb),.22),transparent 60%),var(--cvbase,var(--card));border-radius:22px;
+  background-size:160% 160%;animation:cvglow 7s ease-in-out infinite alternate;
   transition:opacity .45s var(--ease),transform .45s var(--ease),filter .45s}
 .askcover .cv-ic{width:48px;height:48px;border-radius:16px;background:rgba(var(--acc-rgb),.18);display:grid;place-items:center;animation:twinkle 2.4s ease-in-out infinite}
-.askcover b{font-size:16.5px;line-height:1.35;font-weight:700;max-width:300px}
-.askcover span{font-size:12.5px;color:var(--lime);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
-.askcover.gone{opacity:0;transform:scale(1.06);filter:blur(6px);pointer-events:none}
+.askcover .cv-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.askcover .cv-t>span{font-size:12px;color:var(--lime);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.askcover .cv-t>span i{font-style:normal;color:var(--text2);font-weight:600;text-transform:none;letter-spacing:0}
+.askcover .cv-p{position:relative;height:42px;overflow:hidden}
+.askcover .cv-p em{position:absolute;inset:0;font-style:normal;font-size:15.5px;line-height:21px;font-weight:500;color:var(--text);
+  transition:opacity .55s var(--ease),transform .55s var(--ease)}
+.askcover .cv-p em:not(.out){transition-delay:.25s}
+.askcover .cv-p em.out{opacity:0;transform:translateY(-10px);transition-duration:.3s}
+.askcover .cv-p em.in{opacity:0;transform:translateY(10px)}
+@keyframes cvglow{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+.askcover.gone{opacity:0;transform:scale(1.05);filter:blur(8px);pointer-events:none}
 @keyframes twinkle{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.12) rotate(12deg)}}
 /* ---------- обучение при первом входе ---------- */
 .tour{position:fixed;inset:0;z-index:70;display:none}
@@ -646,6 +656,8 @@ html.light .askbar{background:rgba(255,255,255,.6)}
     <button class="asktap" id="ask-tap">
       <span class="askbar"><span class="askhint" id="ask-hint"><em>Написать тренеру…</em></span><i><svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></span>
     </button>
+    <button class="askcover" id="ask-cover"><div class="cv-ic"><svg width="26" height="26" viewBox="0 0 24 24" style="fill:var(--lime)"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg></div>
+      <div class="cv-t"><span>Твой ИИ-тренер<i id="cv-cy"></i></span><div class="cv-p" id="cv-p"></div></div></button>
     <input type="file" id="ask-file" accept="image/*" multiple hidden>
   </div>
   <div id="resume"></div>
@@ -1084,7 +1096,7 @@ function back() {
   $("v-" + cur).classList.add("off-right");
   $("v-" + stack[stack.length - 1]).classList.remove("off-left");
   if (cur === "work") { stopTimer(); clearInterval(clockId); W = null; }
-  if (cur === "chat") $("c-bar").classList.remove("show");
+  if (cur === "chat") { $("c-bar").classList.remove("show"); setTimeout(resetCover, 380); }
   if (stack.length === 1) renderHome();
   syncChrome();
 }
@@ -1256,6 +1268,7 @@ function renderCyChip() {
   const i = cyOn() && !S.cy.hc ? cyInfo(S.cy.days) : null;
   const t = !cyOn() || S.cy.hc ? "" : !i || i.ph === "x" ? "Отметь месячные" : `${i.d}-й день цикла`;
   c.classList.toggle("show", !!t);
+  const cv = $("cv-cy"); if (cv) cv.textContent = t ? "  ·  🌙 " + t : "";
   c.innerHTML = t ? `<svg width="13" height="13" viewBox="0 0 24 24" style="fill:var(--lime)"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>${t}` : "";
   c.onclick = (e) => { e.stopPropagation(); H(); openCycle(); };
 }
@@ -1381,6 +1394,34 @@ function showCover() {
   if (old) { old.classList.add("out"); setTimeout(() => old.remove(), 600); }
 }
 setInterval(showCover, 3200);
+// заставка поверх блока тренера: красивый фон с фразами; нажал — растворяется, под ней поле чата
+const CV_PH = [
+  "Соберу тренировку под настроение и твои веса",
+  "Спроси, как делать упражнение, если не чувствуешь мышцу",
+  "Расскажи про травму — запомню и буду обходить",
+  "Не знаешь, что делать сегодня? Спроси меня",
+  "Мало времени? Попроси «тренировку на 30 минут»",
+  "Спроси, почему встал вес и как пробить плато",
+];
+let cvK = Math.floor(Math.random() * CV_PH.length);
+function cvPhrase(first) {
+  const box = $("cv-p"); if (!box) return;
+  if (!first && (document.hidden || current !== "home" || $("ask-cover").classList.contains("gone"))) return;
+  cvK = (cvK + 1) % CV_PH.length;
+  const old = box.querySelector("em:not(.out)"), em = document.createElement("em");
+  em.textContent = CV_PH[cvK];
+  if (first) { box.innerHTML = ""; box.appendChild(em); return; }
+  em.className = "in"; box.appendChild(em);
+  requestAnimationFrame(() => requestAnimationFrame(() => em.classList.remove("in")));
+  if (old) { old.classList.add("out"); setTimeout(() => old.remove(), 650); }
+}
+function resetCover() { const c = $("ask-cover"); c.style.display = ""; c.classList.remove("gone"); cvPhrase(true); }
+$("ask-cover").onclick = (e) => {
+  e.stopPropagation(); H("medium");
+  const c = $("ask-cover"); c.classList.add("gone"); setTimeout(() => { if (c.classList.contains("gone")) c.style.display = "none"; }, 480);
+};
+setInterval(() => cvPhrase(false), 4000);
+resetCover();
 $("ask-tap").onclick = () => {
   H("medium");
   if (!hasAPI()) { toast(inTG ? "Тренер скоро будет на связи" : "Откройте приложение из Telegram"); return; }
