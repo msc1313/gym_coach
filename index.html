@@ -984,7 +984,7 @@ function bodySVG(view, prim, sec, opt) {
   const n = ++svgN, mini = opt && opt.mini, crop = opt && opt.crop;
   const F = document.documentElement.classList.contains("fem");
   const ax = view === "back" ? 738 : 284;
-  const vb = F ? (crop === "legs" ? `${ax - 232} 640 464 800` : crop === "upper" ? `${ax - 220} 255 440 440` : "30 40 965 1450")
+  const vb = F ? (crop === "legs" ? `${ax - 232} 640 464 800` : crop === "upper" ? `${ax - 220} 255 440 440` : `${ax - 352} 40 705 1450`)
                : (crop === "legs" ? "300 640 440 760" : crop === "upper" ? "190 170 640 640" : "150 20 720 1480");
   const blur = mini ? 4 : 7;
   const layer = (set, id, m) => set.size ? `
@@ -997,11 +997,12 @@ function bodySVG(view, prim, sec, opt) {
   const BASE = F && document.documentElement.classList.contains("light") ? ".17 .17 .17 0 .42  .15 .15 .15 0 .37  .15 .15 .15 0 .36  0 0 0 1 0" : null;
   const img = (attrs) => F ? `<image href="${WOMAN_SRC}" x="0" y="0" width="1024" height="1536" preserveAspectRatio="none" ${attrs}/>`
                             : `<image href="${MAN_SRC}" x="120" y="0" width="780" height="1536" preserveAspectRatio="none" ${attrs}/>`;
-  return `<svg viewBox="${vb}" role="img" aria-label="Мышцы"><defs>${layer(sec, n + "s", O)}${layer(prim, n + "p", G)}</defs>
+  const cx = view === "back" ? 521 : 0;
+  return `<svg viewBox="${vb}" role="img" aria-label="Мышцы"><defs>${F ? `<clipPath id="c${n}"><rect x="${cx}" y="0" width="515" height="1536"/></clipPath>` : ""}${layer(sec, n + "s", O)}${layer(prim, n + "p", G)}</defs><g${F ? ` clip-path="url(#c${n})"` : ""}>
     ${BASE ? `<filter id="t${n}b" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="${BASE}"/></filter>` : ""}
     ${img(BASE ? `filter="url(#t${n}b)"` : "")}
     ${sec.size ? img(`filter="url(#t${n}s)" mask="url(#m${n}s)"`) : ""}
-    ${prim.size ? img(`filter="url(#t${n}p)" mask="url(#m${n}p)"`) : ""}</svg>`;
+    ${prim.size ? img(`filter="url(#t${n}p)" mask="url(#m${n}p)"`) : ""}</g></svg>`;
 }
 function bodies(prim, sec) { return `<div class="fig">${bodySVG("front", prim, sec)}</div>`; }
 function muscleChips(prim, sec) {
@@ -1161,7 +1162,7 @@ function renderOnb() {
   $("onb-step").innerHTML = body;
   $("onb-step").style.animation = "none"; void $("onb-step").offsetWidth; $("onb-step").style.animation = "";
   if (st.key === "s") $("onb-step").querySelectorAll("[data-s]").forEach(b => b.onclick = () => {
-    H("medium"); PROFILE.s = b.dataset.s; $("onb-step").querySelectorAll("[data-s]").forEach(x => x.classList.toggle("on", x === b)); applyTheme();
+    H("medium"); PROFILE.s = b.dataset.s; SET.theme = "auto"; saveSet(); $("onb-step").querySelectorAll("[data-s]").forEach(x => x.classList.toggle("on", x === b)); applyTheme();
   });
   if (st.opts) $("onb-step").querySelectorAll("[data-o]").forEach(b => b.onclick = () => {
     H("medium"); PROFILE[st.key] = b.dataset.o; $("onb-step").querySelectorAll("[data-o]").forEach(x => x.classList.toggle("on", x === b));
@@ -1775,7 +1776,8 @@ function renderPick() {
     renderPick();
   });
   const prim = new Set(); pk.sel.forEach(g => (GMUS[g] || []).forEach(m => prim.add(m)));
-  $("pk-fig").innerHTML = bodySVG("front", prim, new Set());
+  const onlyBack = fem() && prim.size && [...prim].every(m => BACK_ONLY.has(m));
+  $("pk-fig").innerHTML = bodySVG(onlyBack ? "back" : "front", prim, new Set());
   const canUsual = hasUsual([...pk.sel]);
   $("pk-mode").innerHTML = canUsual ? `<div class="mode"><button data-m="usual" class="${pk.mode === "usual" ? "on" : ""}">Как обычно</button><button data-m="new" class="${pk.mode === "new" ? "on" : ""}">Новая подборка</button></div>` : "";
   $("pk-mode").querySelectorAll("button").forEach(b => b.onclick = () => { H(); pk.mode = b.dataset.m; renderPick(); });
