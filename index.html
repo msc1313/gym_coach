@@ -285,6 +285,7 @@ button.prow{width:100%;text-align:left;font:inherit;color:inherit}
 .cychk.on i{background:var(--lime);border-color:var(--lime)}
 .cychk i svg{opacity:0}.cychk.on i svg{opacity:1}
 .cyoff{width:100%;margin-top:22px;height:48px;border-radius:15px;color:#E5484D;font-weight:700;background:var(--card)}
+.aihint{margin:8px 0 0!important;font-size:12.5px!important;color:var(--inactive)!important;line-height:1.4}
 .askopen{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:var(--inactive);background:var(--card2)}
 .askcover{position:absolute;inset:0;z-index:2;display:flex;align-items:center;gap:14px;padding:16px 18px;text-align:left;width:100%;
   background:radial-gradient(90% 120% at 0% 0%,rgba(var(--acc-rgb),.42),transparent 62%),radial-gradient(80% 110% at 100% 100%,rgba(var(--acc-rgb),.22),transparent 60%),var(--cvbase,var(--card));border-radius:22px;
@@ -1470,7 +1471,7 @@ function chatScroll() { const v = $("v-chat"); setTimeout(() => v.scrollTo({ top
 function planBubble(pl) {
   const items = (pl.i || []).filter(([id]) => CAT[id]);
   const el = document.createElement("div"); el.className = "bub ai plan";
-  el.innerHTML = `<h4>${esc(pl.t || "Тренировка")}</h4>${pl.n ? `<p>${esc(pl.n)}</p>` : ""}<ol>${items.map(([id, n]) => `<li>${esc(CAT[id].name)} <span>· ${n} подх.</span></li>`).join("")}</ol><button class="cta">Начать тренировку</button>`;
+  el.innerHTML = `<h4>${esc(pl.t || "Тренировка")}</h4>${pl.n ? `<p>${esc(pl.n)}</p>` : ""}<ol>${items.map(([id, n, w, r, est]) => `<li>${esc(CAT[id].name)} <span>· ${aiTarget(id, n, w, r, est)}</span></li>`).join("")}</ol>${items.some(x => x[4]) ? `<p class="aihint">≈ — вес оценил тренер по твоим данным, поправь, если будет легко или тяжело.</p>` : ""}<button class="cta">Начать тренировку</button>`;
   el.querySelector(".cta").onclick = () => startPlan(pl);
   return el;
 }
@@ -1594,7 +1595,20 @@ function startPlan(pl) {
   if (!items.length) return;
   S.a = pl; store.set(aiKey(), 1);
   if (stack[stack.length - 1] === "chat") back();
-  startWorkout({ day: "X", title: pl.t, ai: 1, start: Date.now(), items: items.map(([id, n]) => freshItem(id, id, n)) });
+  startWorkout({ day: "X", title: pl.t, ai: 1, start: Date.now(), items: items.map(([id, n, w, r]) => aiItem(id, n, w, r)) });
+}
+// упражнение из тренировки тренера: подходы сразу заполнены его рабочим весом и повторами
+function aiItem(id, n, w, r) {
+  const it = freshItem(id, id, n), e = CAT[id]; it.ai = 1;
+  if (w != null && e.step) it.sets.forEach(s => { s.w = w; });
+  if (r) it.sets.forEach(s => { s.r = r; });
+  return it;
+}
+// «40 кг × 10» / «≈40 кг × 10» (≈ — тренер оценил сам) / «12 повт.»
+function aiTarget(id, n, w, r, est) {
+  const e = CAT[id]; if (!e || !r) return `${n} подх.`;
+  if (e.step && w != null) return `${n}×${r} по ${est ? "≈" : ""}${fmt(wShow(w))} ${UW()}`;
+  return `${n}×${e.kind === "t" ? r + " сек" : e.kind === "c" ? r + " мин" : e.kind === "k" ? n + " подх." : e.step ? r + " повт." : r + " повт."}`;
 }
 
 /* ---------- перенос старых тренировок со скриншотов ---------- */
@@ -1697,7 +1711,8 @@ function renderAI(dr) {
   const items = a.i.filter(([id]) => CAT[id]);
   $("aiplan").innerHTML = `<div class="ai"><small><svg width="14" height="14" viewBox="0 0 24 24" style="fill:var(--lime)"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg>Тренер собрал тренировку</small>
     <h3>${esc(a.t)}</h3>${a.n ? `<p>${esc(a.n)}</p>` : ""}
-    <ol>${items.map(([id, n]) => `<li>${esc(CAT[id].name)} <span>· ${n} подх.</span></li>`).join("")}</ol>
+    <ol>${items.map(([id, n, w, r, est]) => `<li>${esc(CAT[id].name)} <span>· ${aiTarget(id, n, w, r, est)}</span></li>`).join("")}</ol>
+    ${items.some(x => x[4]) ? `<p class="aihint">≈ — вес оценил тренер по твоим данным, поправь, если будет легко или тяжело.</p>` : ""}
     <button class="cta" id="ai-start">Начать тренировку<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>`;
   $("ai-start").onclick = () => { startPlan(a); };
   if (false) $("ai-start").onclick = () => {
@@ -1871,7 +1886,8 @@ function renderWorkout() {
 function exCard(it, i) {
   const e = CAT[it.id], st = (S.w || {})[it.id];
   const done = it.sets.some(x => x.rt);
-  const tgt = st && st[0] != null ? tgtText(e, st[0], st[1]) : (e.step ? "вес подбирается" : "по самочувствию");
+  const s0 = it.sets[0], aiW = it.ai && s0 && s0.w !== "" && s0.w != null && e.step ? tgtText(e, s0.w, s0.r) : "";
+  const tgt = st && st[0] != null ? tgtText(e, st[0], st[1]) : aiW ? "≈ " + aiW : (e.step ? "вес подбирается" : "по самочувствию");
   const swapped = it.slot && it.slot !== it.id;
   return `<div class="ex ${done ? "done" : ""}" data-i="${i}">
     <div class="exhead">
