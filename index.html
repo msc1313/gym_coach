@@ -72,6 +72,71 @@ html.neon .donecard,html.neon .dsess,html.neon .resume,html.neon .bub.ai,html.ne
 html.neon .cbar{background:rgba(19,20,21,.7);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
 html.neon .ctop{background:rgba(19,20,21,.55);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
 html.neon .cdrawer aside,html.neon .tcard{background:rgba(26,28,31,.88);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+/* ===== градиентные темы для женского профиля: «Рассвет» (светлая) и «Сумерки» (тёмная) ===== */
+html.dawn.light,html.dawn.light.fem{
+  --lime:#D6478F; --green:#E86AA6; --olive:#B574E0; --on:#FFFFFF; --acc-rgb:214,71,143;
+  --bg:#F3E9FA; --graphite:#B9A8CC; --dark:rgba(150,110,190,.15); --mid:#9E8FB0;
+  --inactive:#7D6E92; --text:#2A2236; --text2:#4B3F5C; --outline:rgba(150,110,190,.30);
+  --card:rgba(255,255,255,.58); --card2:rgba(255,255,255,.68); --line:rgba(150,110,190,.15); --done:rgba(242,138,185,.20);
+  --sheet:#FBF6FD; --navbg:rgba(255,255,255,.72);
+  --easy:#5FB892; --norm:#E8A94F; --hard:#E5566B; --warm:#9E8FB0;
+  --cvbase:#F2E4F8; --accg:linear-gradient(135deg,#B98AE8 0%,#EE6FA8 55%,#F58A74 100%);
+  --hair:linear-gradient(135deg,rgba(185,138,232,.85),rgba(238,111,168,.5) 55%,rgba(245,138,116,.7));
+  --aibg:linear-gradient(135deg,rgba(201,157,235,.55),rgba(246,181,211,.6) 55%,rgba(248,165,146,.55));
+  --gsh:inset 0 1px 0 rgba(255,255,255,.8),0 8px 28px rgba(150,100,190,.14);
+  color-scheme:light;
+}
+html.dusk,html.dusk.fem{
+  --lime:#F28AB9; --green:#F7A8CB; --olive:#C99DEB; --on:#2A1733; --acc-rgb:242,138,185;
+  --bg:#16111E; --graphite:#3A3048; --dark:rgba(255,255,255,.09); --mid:#8B7F9C;
+  --inactive:#A59BB5; --text:#F6F1FA; --text2:#DDD4E6; --outline:rgba(255,255,255,.17);
+  --card:rgba(255,255,255,.065); --card2:rgba(255,255,255,.11); --line:rgba(255,255,255,.08); --done:rgba(242,138,185,.13);
+  --sheet:#1E1727; --navbg:rgba(30,23,39,.72);
+  --easy:#7FD1A8; --norm:#EDBB66; --hard:#F0687A; --warm:#8B7F9C;
+  --cvbase:#2A2036; --accg:linear-gradient(135deg,#C99DEB 0%,#F28AB9 55%,#F5A08A 100%);
+  --hair:linear-gradient(135deg,rgba(201,157,235,.7),rgba(242,138,185,.38) 55%,rgba(245,160,138,.55));
+  --aibg:linear-gradient(135deg,rgba(185,135,232,.50),rgba(238,111,168,.38) 60%,rgba(245,138,116,.32));
+  --gsh:inset 0 1px 0 rgba(255,255,255,.08),0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+html.grad body{background:transparent}
+html.grad body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
+html.dawn body::before{background:
+  radial-gradient(75% 45% at 0% 0%,rgba(201,157,235,.80),transparent 70%),
+  radial-gradient(60% 45% at 100% 28%,rgba(246,185,215,.85),transparent 70%),
+  radial-gradient(70% 45% at 8% 76%,rgba(250,200,188,.75),transparent 72%),
+  radial-gradient(60% 40% at 100% 100%,rgba(201,157,235,.55),transparent 70%),
+  linear-gradient(180deg,#F1E6FA,#FADCEA 60%,#FBE0D6)}
+html.dusk body::before{background:
+  radial-gradient(75% 42% at 0% 0%,rgba(185,135,232,.52),transparent 70%),
+  radial-gradient(60% 40% at 100% 30%,rgba(238,111,168,.28),transparent 72%),
+  radial-gradient(70% 40% at 0% 80%,rgba(245,138,116,.20),transparent 72%),
+  radial-gradient(55% 30% at 100% 100%,rgba(185,135,232,.26),transparent 70%),#16111E}
+html.grad .cal,html.grad .ask,html.grad .ex,html.grad .hero,html.grad .stat,html.grad .plist,html.grad .plist2,html.grad .gift,
+html.grad .donecard,html.grad .dsess,html.grad .resume,html.grad .bub.ai,html.grad .notes,html.grad .dayrow,html.grad .ai,html.grad .mode,html.grad .nav{
+  -webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);box-shadow:var(--gsh)}
+html.grad .cal,html.grad .ask,html.grad .ex,html.grad .hero,html.grad .stat,html.grad .plist,html.grad .plist2,html.grad .gift,
+html.grad .donecard,html.grad .dsess,html.grad .resume,html.grad .bub.ai,html.grad .notes,html.grad .dayrow,html.grad .ai{position:relative}
+html.grad .ai{border-color:transparent}
+html.grad .cal::before,html.grad .ask::before,html.grad .ex::before,html.grad .hero::before,html.grad .stat::before,html.grad .plist::before,html.grad .plist2::before,
+html.grad .gift::before,html.grad .donecard::before,html.grad .dsess::before,html.grad .resume::before,html.grad .bub.ai::before,html.grad .notes::before,html.grad .dayrow::before,html.grad .ai::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:var(--hair);pointer-events:none;z-index:3;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+html.grad .ask.hasbg{background:var(--aibg),var(--card)}
+html.grad .askcover{background:radial-gradient(90% 120% at 0% 0%,rgba(185,138,232,.55),transparent 62%),radial-gradient(80% 110% at 100% 100%,rgba(245,138,116,.40),transparent 60%),var(--aibg),var(--cvbase);background-size:160% 160%}
+html.dawn .askbar{background:rgba(255,255,255,.7)}
+html.grad .cta,html.grad .cta:active,html.grad .bub.me,html.grad .cbar .send,html.grad .ask .send,html.grad .askbar i,html.grad .tcard .tnext,html.grad .wd.sel .n,
+html.grad .gbtn.on i,html.grad .cygrid button.pd,html.grad .promo button,html.grad .cychk.on i,html.grad .hero .tag,html.grad .badge,html.grad .dots i.on,html.grad .progress div,
+html.grad .gtabs button.on,html.grad .stat.acc,html.grad .resume .dot,html.grad .cdnew,html.grad .bub .act,html.grad .notes .nadd button,html.grad .dayrow.next .L,html.grad .ex.done .exnum,html.grad .chip i{
+  background:var(--accg);border-color:transparent}
+html.grad .cta:active{filter:brightness(.94)}
+html.grad .cta{box-shadow:0 8px 22px rgba(var(--acc-rgb),.28)}
+html.dawn .cbar{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+html.dusk .cbar{background:rgba(22,17,30,.72);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+html.dawn .ctop{background:rgba(250,236,246,.7);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+html.dusk .ctop{background:rgba(22,17,30,.6);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+html.dawn .cdrawer aside,html.dawn .tcard{background:rgba(252,246,254,.92);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+html.dusk .cdrawer aside,html.dusk .tcard{background:rgba(30,23,39,.92);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0}
 html,body{background:var(--bg);color:var(--text);height:100%;overflow:hidden;
   font:15px/1.4 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -1214,7 +1279,8 @@ const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValu
 function themeIsLight() {
   const t = SET.theme || "auto";
   if (t === "light") return true;
-  if (t === "dark" || t === "neon") return false;
+  if (t === "dark" || t === "neon" || t === "dusk") return false;
+  if (t === "dawn") return PROFILE.s === "f";
   if (t === "system") return !!(tg && tg.colorScheme === "light");
   return PROFILE.s === "f";   // по умолчанию: девушкам светлая, парням тёмная
 }
@@ -1222,6 +1288,10 @@ function applyTheme() {
   const f = PROFILE.s === "f";
   document.documentElement.classList.toggle("fem", f);
   document.documentElement.classList.toggle("neon", SET.theme === "neon");
+  const gt = f && (SET.theme === "dawn" || SET.theme === "dusk") ? SET.theme : "";
+  document.documentElement.classList.toggle("dawn", gt === "dawn");
+  document.documentElement.classList.toggle("dusk", gt === "dusk");
+  document.documentElement.classList.toggle("grad", !!gt);
   document.documentElement.classList.toggle("light", themeIsLight());
   DAYS = f && D.days_w ? D.days_w : D.days;
   if (!DAYS.includes(S.n)) S.n = DAYS[0];
@@ -2281,7 +2351,7 @@ function openGift() {
 function openSettings() {
   const seg = (name, val, opts) => `<div class="seg" data-set="${name}">${opts.map(([v, t]) => `<button data-v="${v}" class="${val === v ? "on" : ""}">${t}</button>`).join("")}</div>`;
   openSheet(`<h2 style="margin:6px 0 4px">Настройки приложения</h2>`,
-    `<div class="sec">Тема</div>${seg("theme", SET.theme || "auto", [["auto", "Авто"], ["dark", "Тёмная"], ["light", "Светлая"], ["neon", "Неон ✨"], ["system", "Как в Telegram"]])}
+    `<div class="sec">Тема</div>${seg("theme", SET.theme || "auto", [["auto", "Авто"], ["dark", "Тёмная"], ["light", "Светлая"], ["neon", "Неон ✨"], ...(PROFILE.s === "f" ? [["dawn", "Рассвет 🌸"], ["dusk", "Сумерки 🌙"]] : []), ["system", "Как в Telegram"]])}
      <div class="sec">Единицы веса</div>${seg("unit", SET.unit || "kg", [["kg", "Килограммы"], ["lb", "Фунты"]])}
      <p style="color:var(--mid);font-size:12.5px;margin-top:14px;line-height:1.45">«Авто» — светлая тема для женского профиля, тёмная для мужского. Отдых между подходами приложение подбирает само: по упражнению и твоей цели.</p>`);
   document.querySelectorAll("#sh-body .seg button").forEach(b => b.onclick = () => {
