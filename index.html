@@ -727,6 +727,7 @@ html.light .askbar{background:rgba(255,255,255,.6)}
     <input type="file" id="ask-file" accept="image/*" multiple hidden>
   </div>
   <div id="resume"></div>
+  <div id="day-workouts"></div>
   <div id="aiplan"></div>
   <div class="empty-hero">
     <h2>Добавьте новую тренировку</h2>
@@ -761,11 +762,6 @@ html.light .askbar{background:rgba(255,255,255,.6)}
   <div class="pksum" id="pk-sum"></div>
   <div class="pklist" id="pk-list"></div>
   <button class="cta" id="pk-start">Старт<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-</section>
-
-<section class="view off-right" id="v-day">
-  <div class="wtop"><button class="iconbtn" data-back aria-label="Назад">‹</button><div class="t"><b id="day-title"></b><span>Дневник тренировок</span></div></div>
-  <div id="day-list"></div>
 </section>
 
 <!-- ============ ТРЕНИРОВКА ============ -->
@@ -1127,8 +1123,7 @@ function renderWeek() {
   $("week").innerHTML = html;
   $("week").querySelectorAll(".wd").forEach(b => b.onclick = () => {
     H(); const d = b.dataset.d;
-    if (hasAPI()) { selDay = d; renderWeek(); openDay(d); return; }
-    selDay = selDay === d ? null : d; renderWeek();
+    selDay = d; renderWeek(); renderHome();
   });
   const total = histEntries().length;
   let note = "";
@@ -1772,19 +1767,18 @@ function findDraft() {
 function wTitle(w) { return w.day === "X" ? (w.title || "Своя тренировка") : PLAN[w.day].title; }
 function renderHome() {
   renderCyChip();
-  const dr = findDraft();
+  const selectedDate = selDay || iso(today);
+  const date = new Date(selectedDate + "T12:00");
+  $("today-lbl").textContent = date.toLocaleDateString("ru-RU", {day:"numeric", month:"long", weekday:"long"});
+  const dr = selectedDate === iso(today) ? findDraft() : null;
   if (dr) {
     const all = dr.items.reduce((a, it) => a + it.sets.length, 0), done = dr.items.reduce((a, it) => a + it.sets.filter(s => s.rt).length, 0);
     $("resume").innerHTML = `<button class="resume" id="resume-btn"><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" style="fill:var(--on)"><path d="M8 5v14l11-7z"/></svg></div>
       <div class="t"><small>Незаконченная тренировка</small><b>${esc(wTitle(dr))}</b><span>${done} из ${all} подходов</span></div>
       <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
     $("resume-btn").onclick = () => startWorkout(dr);
-  } else if (hist[iso(today)] && hasAPI()) {
-    const n = histEntries().filter(([k]) => k === iso(today)).length;
-    $("resume").innerHTML = `<button class="donecard" id="done-btn"><div class="dot">✓</div><div class="t"><small>Сегодня</small><b>${n > 1 ? "Сделано " + n + " " + plural(n, "тренировка", "тренировки", "тренировок") : "Тренировка сделана"}</b></div>
-      <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
-    $("done-btn").onclick = () => { H(); openDay(iso(today)); };
   } else $("resume").innerHTML = "";
+  renderDayCards(selectedDate);
   renderAI(dr);
   $("plan-link").innerHTML = `или по программе тренера: <b>День ${dlabel(S.n)} · ${esc(PLAN[S.n].title)}</b>`;
 }
@@ -2458,26 +2452,28 @@ function openCreateEx(group, onDone, editId) {
 
 /* ---------- тренировки за день: просмотр и удаление ---------- */
 let dayRequest = 0;
-async function openDay(d) {
-  selDay = d; renderWeek();
-  if (stack[stack.length - 1] !== "day") go("day");
-  $("day-title").textContent = new Date(d + "T12:00").toLocaleDateString("ru-RU", {day:"numeric", month:"long", year:"numeric"});
-  $("day-list").innerHTML = THINK("Загружаю…");
+async function renderDayCards(d) {
   const request = ++dayRequest;
+  const container = $("day-workouts");
+  container.innerHTML = "";
+  if (!hasAPI()) return;
+  container.innerHTML = `<p style="color:var(--inactive)">Загружаю тренировки…</p>`;
   try {
     const res = await api("day", { d });
     if (request !== dayRequest) return;
     const sessions = res.sessions || [];
-    $("day-list").innerHTML = sessions.length ? sessions.map((x, i) => `<button class="donecard" data-session="${i}" style="width:100%;text-align:left;margin-top:14px"><div class="dot">✓</div><div class="t"><small>Тренировка сделана</small><b>${esc(x.t)}</b><span>${x.i.length} упражнений · посмотреть и изменить</span></div><span>›</span></button>`).join("") : `<p style="color:var(--inactive)">В этот день тренировок нет</p>`;
-    $("day-list").querySelectorAll("[data-session]").forEach(b => b.onclick = () => {
+    const label = d === iso(today) ? "Сегодня" : new Date(d + "T12:00").toLocaleDateString("ru-RU", {day:"numeric", month:"long"});
+    container.innerHTML = sessions.length ? sessions.map((x, i) => `<button class="donecard" data-session="${i}" style="width:100%;text-align:left;margin-top:14px"><div class="dot">✓</div><div class="t"><small>${esc(label)}${sessions.length > 1 ? " · " + (i + 1) : ""}</small><b style="display:block">Тренировка сделана</b>${sessions.length > 1 ? `<span style="display:block;margin-top:4px;color:var(--inactive)">${esc(x.t)}</span>` : ""}</div><span>›</span></button>`).join("") : (d === iso(today) ? "" : `<p style="color:var(--inactive)">В этот день тренировок нет</p>`);
+    container.querySelectorAll("[data-session]").forEach(b => b.onclick = () => {
+      if ((selDay || iso(today)) !== d || stack[stack.length - 1] !== "home") return;
       const x = sessions[+b.dataset.session];
       if (x.i.some(([id]) => !CAT[id])) { toast("Обнови приложение: часть упражнений не загружена"); return; }
       startWorkout({day: "X", sid: x.sid, date: d, title: x.t, items: x.i.map(([id, sets]) => ({id, slot: null, perm: false, sets: sets.map(([w,r,rt]) => ({w,r,rt: ["w","e","n","h"].includes(rt) ? rt : "n"}))}))});
     });
   } catch (e) {
     if (request !== dayRequest) return;
-    $("day-list").innerHTML = `<p>Не загрузилось — проверь интернет</p><button class="cta" id="day-retry">Повторить</button>`;
-    $("day-retry").onclick = () => openDay(d);
+    container.innerHTML = `<p>Не загрузилось — проверь интернет</p><button class="addex" id="day-retry">Повторить</button>`;
+    $("day-retry").onclick = () => renderDayCards(d);
   }
 }
 async function saveHistoryWorkout() {
@@ -2491,7 +2487,7 @@ async function saveHistoryWorkout() {
   try {
     const res = await api("session/edit", {sid: workout.sid, items});
     applyState(res.state);
-    if (W === workout) { W.dirty = false; back(); openDay(workout.date); }
+    if (W === workout) { W.dirty = false; back(); }
     toast("Изменения сохранены"); HN("success");
   } catch (e) { toast("Не сохранилось — проверь интернет и попробуй ещё раз"); }
   finally { finishing = false; }
@@ -2513,7 +2509,6 @@ $("w-delete").onclick = () => {
       } else store.del(dkey(workout.day));
       closeSheet();
       if (W === workout) back(true);
-      if (workout.sid && stack[stack.length - 1] === "day") openDay(workout.date);
       renderHome(); renderWeek(); toast("Тренировка удалена");
     } catch (e) { button.disabled = false; toast("Не получилось удалить — проверь интернет"); }
     finally { finishing = false; }
