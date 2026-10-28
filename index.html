@@ -1820,8 +1820,8 @@ function openCopy() {
 const PG = {
   m: { groups: [["chest","Грудь"],["back","Спина"],["shoulders","Плечи"],["arms","Руки"],["legs","Ноги"],["abs","Пресс"],["all","Всё тело"]],
        core: ["chest","back","shoulders","arms","legs","abs"], order: ["legs","glutes","back","chest","shoulders","arms","abs","pilates","cardio","stretch"] },
-  f: { groups: [["glutes","Ягодицы"],["legs","Ноги"],["abs","Кор и пресс"],["upper","Верх тела"],["cardio","Кардио"],["pilates","Пилатес"],["stretch","Растяжка"],["all","Всё тело"]],
-       core: ["glutes","legs","abs","upper"], order: ["glutes","legs","upper","abs","pilates","cardio","stretch"] },
+  f: { groups: [["glutes","Ягодицы"],["legs","Ноги"],["back","Спина"],["abs","Кор и пресс"],["upper","Верх тела"],["cardio","Кардио"],["pilates","Пилатес"],["stretch","Растяжка"],["all","Всё тело"]],
+       core: ["glutes","legs","back","abs","upper"], order: ["glutes","legs","back","upper","abs","pilates","cardio","stretch"] },
 };
 const GMUS = { chest: ["chest"], back: ["traps","lats","midback","lowerback"], shoulders: ["delts"],
   arms: ["biceps","triceps","forearms"], legs: ["quads","hamstrings","glutes","calves","adductors"], abs: ["abs","obliques"],
@@ -1848,21 +1848,16 @@ function renderPick() {
   const prim = new Set(); pk.sel.forEach(g => (GMUS[g] || []).forEach(m => prim.add(m)));
   const onlyBack = fem() && prim.size && [...prim].every(m => BACK_ONLY.has(m));
   $("pk-fig").innerHTML = bodySVG(onlyBack ? "back" : "front", prim, new Set());
-  const canUsual = hasUsual([...pk.sel]);
-  $("pk-mode").innerHTML = canUsual ? `<div class="mode"><button data-m="usual" class="${pk.mode === "usual" ? "on" : ""}">Как обычно</button><button data-m="new" class="${pk.mode === "new" ? "on" : ""}">Новая подборка</button></div>` : "";
-  $("pk-mode").querySelectorAll("button").forEach(b => b.onclick = () => { H(); pk.mode = b.dataset.m; renderPick(); });
-  const plan = pickPlan([...pk.sel]);
-  const sets = plan.reduce((a, x) => a + x[1], 0);
-  const mins = Math.round(plan.reduce((a, [id, n]) => a + (CAT[id].kind === "c" ? (((S.w || {})[id] || [0, CAT[id].reps[0]])[1]) : n * 2.6), 0));
-  $("pk-sum").innerHTML = plan.length ? `<b>${plan.length} ${plural(plan.length,"упражнение","упражнения","упражнений")}</b> · ${sets} ${plural(sets,"подход","подхода","подходов")} · ~${mins} мин` : "Нажми на группу слева";
-  $("pk-list").textContent = plan.map(([id]) => CAT[id].name).join(" · ");
+  $("pk-mode").innerHTML = "";
+  $("pk-sum").textContent = pk.sel.size ? "Упражнения добавляются вручную на следующем шаге" : "Нажми на группу слева";
+  $("pk-list").textContent = pg().order.filter(g => pk.sel.has(g)).map(gLabel).join(" · ");
 }
 $("pk-start").onclick = () => {
   if (!pk.sel.size) { toast("Выбери хотя бы одну группу"); HN("error"); return; }
   const groups = pg().order.filter(g => pk.sel.has(g));
   const all = pg().core.every(g => pk.sel.has(g));
   const title = all && groups.length === pg().core.length ? "Всё тело" : groups.map(gLabel).join(" + ");
-  const w = { day: "X", title, groups, start: Date.now(), items: pickPlan(groups).map(([id, n]) => freshItem(id, id, 0)) };
+  const w = { day: "X", title, groups, start: Date.now(), items: [] };
   startWorkout(w, true);
 };
 function hasUsual(groups) {
@@ -1948,6 +1943,7 @@ const IC = {
 function renderWorkout() {
   const ids = W.items.map(it => it.id);
   const [p, s] = musclesOf(ids);
+  (W.groups || []).forEach(g => (GMUS[g] || []).forEach(m => p.add(m)));
   $("w-title").textContent = wTitle(W);
   $("w-bodies").innerHTML = bodies(p, s);
   $("w-chips").innerHTML = muscleChips(p, new Set());
