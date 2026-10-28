@@ -730,7 +730,7 @@ html.light .askbar{background:rgba(255,255,255,.6)}
   <div id="aiplan"></div>
   <div class="empty-hero">
     <h2>Добавьте новую тренировку</h2>
-    <p>Выберите мышцы — и я соберу упражнения с твоими рабочими весами</p>
+    <p>Выберите группы мышц и добавьте упражнения вручную</p>
     <button class="cta" id="add-workout"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Добавить тренировку</button>
     <button class="plan-link" id="plan-link"></button>
   </div>
@@ -763,12 +763,18 @@ html.light .askbar{background:rgba(255,255,255,.6)}
   <button class="cta" id="pk-start">Старт<svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
 </section>
 
+<section class="view off-right" id="v-day">
+  <div class="wtop"><button class="iconbtn" data-back aria-label="Назад">‹</button><div class="t"><b id="day-title"></b><span>Дневник тренировок</span></div></div>
+  <div id="day-list"></div>
+</section>
+
 <!-- ============ ТРЕНИРОВКА ============ -->
 <section class="view off-right" id="v-work">
   <div class="wtop">
     <button class="iconbtn" data-back aria-label="Назад"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
     <div class="t"><b id="w-title"></b><span id="w-sub"></span></div>
     <div class="clock" id="w-clock">0:00</div>
+    <button class="iconbtn" id="w-delete" aria-label="Удалить тренировку" style="color:var(--inactive)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
   </div>
   <div class="bodies sm" id="w-bodies"></div>
   <div class="chips" id="w-chips" style="justify-content:center"></div>
@@ -1121,7 +1127,7 @@ function renderWeek() {
   $("week").innerHTML = html;
   $("week").querySelectorAll(".wd").forEach(b => b.onclick = () => {
     H(); const d = b.dataset.d;
-    if (hist[d] && hasAPI()) { selDay = d; renderWeek(); openDay(d); return; }
+    if (hasAPI()) { selDay = d; renderWeek(); openDay(d); return; }
     selDay = selDay === d ? null : d; renderWeek();
   });
   const total = histEntries().length;
@@ -1154,10 +1160,17 @@ function go(v, replace) {
   $("v-" + v).scrollTop = 0;
   stack.push(v); syncChrome();
 }
-function back() {
+function back(discard = false) {
   if ($("sheet").classList.contains("show")) { closeSheet(); return; }
   if ($("c-drawer").classList.contains("show")) { closeDrawer(); return; }
   if (stack.length < 2) return;
+  if (W && W.sid && W.dirty && discard !== true) {
+    openSheet(`<h2>Сохранить изменения?</h2>`, `<button class="cta" id="history-save">Сохранить</button><button class="addex" id="history-discard">Выйти без сохранения</button><button class="addex" id="history-stay">Продолжить редактирование</button>`);
+    $("history-save").onclick = () => { closeSheet(); saveHistoryWorkout(); };
+    $("history-discard").onclick = () => { closeSheet(); back(true); };
+    $("history-stay").onclick = closeSheet;
+    return;
+  }
   H();
   const cur = stack.pop();
   $("v-" + cur).classList.add("off-right");
@@ -1504,7 +1517,7 @@ $("ask-tap").onclick = () => {
 const TOUR = [
   { sel: ".cal", t: "Календарь", d: "Точки — дни тренировок. Нажми на день, чтобы посмотреть, что делал и с какими весами, или удалить лишнее." },
   { sel: "#ask-card", t: "Твой ИИ-тренер", d: "Нажми сюда — откроется чат. Попроси собрать тренировку под настроение или спроси про технику. Прошлые разговоры — в меню ☰ вверху чата." },
-  { sel: "#add-workout", t: "Новая тренировка", d: "Выбери мышцы — и я соберу упражнения с твоими рабочими весами. Подходы добавляешь по ходу тренировки." },
+  { sel: "#add-workout", t: "Новая тренировка", d: "Выбери группы мышц и добавь упражнения вручную. Подходы добавляешь по ходу тренировки." },
   { sel: '.nav [data-v="prof"]', t: "Профиль", d: "Твоя цель, веса по каждому упражнению, перенос старых тренировок со скриншотов и настройки." },
 ];
 let tourK = 0;
@@ -1753,7 +1766,7 @@ async function saveImport() {
 
 /* ---------- главная ---------- */
 function findDraft() {
-  for (const d of [...DAYS, "X"]) { const w = store.get(dkey(d)); if (w && w.items && w.items.length) return w; }
+  for (const d of [...DAYS, "X"]) { const w = store.get(dkey(d)); if (w && Array.isArray(w.items)) return w; }
   return null;
 }
 function wTitle(w) { return w.day === "X" ? (w.title || "Своя тренировка") : PLAN[w.day].title; }
@@ -1914,12 +1927,13 @@ function newPlanWorkout(day) {
 function startWorkout(w, replace) {
   H("medium");
   W = w; if (!W.start) W.start = Date.now();
-  save(); renderWorkout();
+  if (!W.sid) save();
+  renderWorkout();
   closeSheet();
   go("work", replace);
-  startClock();
+  if (W.sid) { clearInterval(clockId); $("w-clock").textContent = "Сделана"; } else startClock();
 }
-function save() { if (W) store.set(dkey(W.day), W); }
+function save() { if (!W) return; if (W.sid) W.dirty = true; else store.set(dkey(W.day), W); }
 
 let clockId = null;
 function startClock() {
@@ -1965,7 +1979,7 @@ function exCard(it, i) {
         <button data-act="fav" aria-label="Любимое">${HEART(FAV.has(it.id))}</button>
         ${e.tip ? `<button data-act="tip" aria-label="Техника">${IC.info}</button>` : ""}
         <button data-act="swap" aria-label="Заменить">${IC.swap}</button>
-        ${!it.slot || !PLAN[W.day] ? `<button data-act="remove" aria-label="Убрать">${IC.trash}</button>` : ""}
+        ${W.sid || !it.slot || !PLAN[W.day] ? `<button data-act="remove" aria-label="Убрать">${IC.trash}</button>` : ""}
       </div>
     </div>
     <div class="target"><span>${e.kind === "k" ? "Запиши время и калории" : `Цель: ${e.kind === "c" || !it.sets.length ? "" : it.sets.length + " × "}${e.reps[0]}–${e.reps[1]} ${e.kind === "w" ? "" : unitOf(e)}`}</span><span>${tgt}</span></div>
@@ -2025,7 +2039,7 @@ function bindCards() {
         row.classList.toggle("rated", !!x.rt);
         card.classList.toggle("done", it.sets.some(s => s.rt));
         if (x.rt) { b.classList.add("pop"); setTimeout(() => b.classList.remove("pop"), 300); H("medium"); }
-        if (x.rt && !was) {
+        if (x.rt && !was && !W.sid) {
           startTimer(x.rt === "w" ? REST_WARM : restFor(it.id));
         }
         save(); updateProgress(); updateMain();
@@ -2047,7 +2061,7 @@ function updateMain() {
   let text = null;
   if (W) {
     const n = W.items.filter(it => it.sets.some(s => s.rt)).length;
-    text = n ? `Завершить · ${n}/${W.items.length}` : null;
+    text = W.sid ? "Сохранить изменения" : n ? `Завершить · ${n}/${W.items.length}` : null;
   } else if (current === "home") text = null;
   if (inTG && tg.MainButton) {
     try {
@@ -2062,6 +2076,7 @@ function updateMain() {
 }
 function finish() {
   if (!W) return;
+  if (W.sid) return saveHistoryWorkout();
   const items = W.items.map(it => ({ id: it.id, slot: it.slot || null, perm: it.perm ? 1 : 0,
     sets: it.sets.filter(s => s.rt).map(s => [Number(s.w) || 0, Number(s.r) || 0, s.rt]) })).filter(it => it.sets.length);
   if (!items.length) return;
@@ -2192,7 +2207,7 @@ function openPicker(mode, i) {
   const title = mode === "swap" ? `Замена: ${esc(CAT[it.id].name)}` : "Добавить упражнение";
   openSheet(`<h2 style="margin:6px 0 12px">${title}</h2>
     <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input id="ex-q" placeholder="Поиск" autocomplete="off"></div>
-    ${mode === "swap" && PLAN[W.day] && it.slot ? `<button class="toggle" id="pk-perm"><div><span>Заменить навсегда</span><small>В Дне ${W.day} всегда будет новое упражнение</small></div><div class="sw"></div></button>` : ""}
+    ${mode === "swap" && !W.sid && PLAN[W.day] && it.slot ? `<button class="toggle" id="pk-perm"><div><span>Заменить навсегда</span><small>В Дне ${W.day} всегда будет новое упражнение</small></div><div class="sw"></div></button>` : ""}
     <div class="gtabs" id="ex-tabs"></div>`, `<button class="mkown" id="pk-new"><div class="ic">+</div><div><b>Создать своё упражнение</b><span>если нужного нет в списке</span></div></button><div class="clist" id="ex-list"></div>`, true);
   const draw = () => {
     $("ex-tabs").innerHTML = tabsHTML(pick.g);
@@ -2241,6 +2256,7 @@ $("w-order").onclick = () => {
   $("ord-ok").onclick = () => { W.items = order.map(i => W.items[i]); save(); closeSheet(); renderWorkout(); updateMain(); HN("success"); };
 };
 function choose(id) {
+  if (W.items.some((it, i) => it.id === id && (pick.mode !== "swap" || i !== pick.i))) { toast("Упражнение уже добавлено"); return; }
   HN("success");
   if (pick.mode === "swap") {
     const old = W.items[pick.i];
@@ -2441,34 +2457,68 @@ function openCreateEx(group, onDone, editId) {
 }
 
 /* ---------- тренировки за день: просмотр и удаление ---------- */
+let dayRequest = 0;
 async function openDay(d) {
-  const [y, m, dd] = d.split("-").map(Number);
-  const wd = ["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"][new Date(y, m - 1, dd).getDay()];
-  openSheet(`<h2 style="margin:6px 0 2px">${dd} ${MONTHS_G[m - 1]}</h2><p style="color:var(--inactive);font-size:14px;margin:0">${wd}</p>`, THINK("Загружаю…"));
-  let res;
-  try { res = await api("day", { d }); } catch (e) { $("sh-body").innerHTML = `<p style="color:var(--inactive)">Не загрузилось — проверь интернет</p>`; return; }
-  const ss = res.sessions || [];
-  if (!ss.length) { $("sh-body").innerHTML = `<p style="color:var(--inactive)">В этот день тренировок нет</p>`; return; }
-  const one = (id, w, r) => { const e = CAT[id]; return e.kind === "k" ? `${fmt(w)} мин · ${r} ккал` : e.kind === "w" && w ? `${fmt(wShow(w))} × ${r}` : r + (e.kind === "t" ? " сек" : e.kind === "c" ? " мин" : " повт"); };
-  const TRASH = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>`;
-  $("sh-body").innerHTML = ss.map(x => `<div class="dsess" data-sid="${x.sid}">
-    <div class="dhead"><h3>${esc(x.day === "X" || !PLAN[x.day] ? x.t : "День " + dlabel(x.day) + " · " + x.t)}${x.imp ? "<span>перенесена</span>" : ""}</h3>
-      <button class="dtrash" aria-label="Удалить тренировку">${TRASH}</button></div>
-    <div class="dconfirm"><span>Удалить тренировку?</span><button class="dno">Отмена</button><button class="dyes">Удалить</button></div>
-    ${x.i.filter(([id]) => CAT[id]).map(([id, xs]) => `<div class="dex"><b>${esc(CAT[id].name)}</b><div class="dsets">${xs.map(([w, r]) => `<span>${one(id, w, r)}</span>`).join("")}</div></div>`).join("")}
-  </div>`).join("");
-  document.querySelectorAll(".dsess").forEach(card => {
-    card.querySelector(".dtrash").onclick = () => { H("medium"); card.classList.add("ask"); };
-    card.querySelector(".dno").onclick = () => { H(); card.classList.remove("ask"); };
-    card.querySelector(".dyes").onclick = async (ev) => {
-      const b = ev.currentTarget; b.disabled = true; b.textContent = "Удаляю…";
-      try {
-        const r = await api("session/del", { sid: +card.dataset.sid });
-        closeSheet(); selDay = null; applyState(r.state); HN("success"); toast("Тренировка удалена");
-      } catch (e) { b.disabled = false; b.textContent = "Удалить"; toast("Не получилось — проверь интернет"); HN("error"); }
-    };
-  });
+  selDay = d; renderWeek();
+  if (stack[stack.length - 1] !== "day") go("day");
+  $("day-title").textContent = new Date(d + "T12:00").toLocaleDateString("ru-RU", {day:"numeric", month:"long", year:"numeric"});
+  $("day-list").innerHTML = THINK("Загружаю…");
+  const request = ++dayRequest;
+  try {
+    const res = await api("day", { d });
+    if (request !== dayRequest) return;
+    const sessions = res.sessions || [];
+    $("day-list").innerHTML = sessions.length ? sessions.map((x, i) => `<button class="donecard" data-session="${i}" style="width:100%;text-align:left;margin-top:14px"><div class="dot">✓</div><div class="t"><small>Тренировка сделана</small><b>${esc(x.t)}</b><span>${x.i.length} упражнений · посмотреть и изменить</span></div><span>›</span></button>`).join("") : `<p style="color:var(--inactive)">В этот день тренировок нет</p>`;
+    $("day-list").querySelectorAll("[data-session]").forEach(b => b.onclick = () => {
+      const x = sessions[+b.dataset.session];
+      if (x.i.some(([id]) => !CAT[id])) { toast("Обнови приложение: часть упражнений не загружена"); return; }
+      startWorkout({day: "X", sid: x.sid, date: d, title: x.t, items: x.i.map(([id, sets]) => ({id, slot: null, perm: false, sets: sets.map(([w,r,rt]) => ({w,r,rt: ["w","e","n","h"].includes(rt) ? rt : "n"}))}))});
+    });
+  } catch (e) {
+    if (request !== dayRequest) return;
+    $("day-list").innerHTML = `<p>Не загрузилось — проверь интернет</p><button class="cta" id="day-retry">Повторить</button>`;
+    $("day-retry").onclick = () => openDay(d);
+  }
 }
+async function saveHistoryWorkout() {
+  if (finishing || !W || !W.sid) return;
+  const items = W.items.map(it => ({id: it.id, sets: it.sets.map(s => [Number(s.w) || 0, Number(s.r), s.rt || "n"])}));
+  if (!items.length || items.some(it => !it.sets.length || it.sets.some(([w,r]) => !Number.isFinite(w) || w < 0 || !Number.isFinite(r) || r <= 0))) {
+    toast("Заполни подходы: вес не меньше нуля, повторы больше нуля"); return;
+  }
+  finishing = true;
+  const workout = W;
+  try {
+    const res = await api("session/edit", {sid: workout.sid, items});
+    applyState(res.state);
+    if (W === workout) { W.dirty = false; back(); openDay(workout.date); }
+    toast("Изменения сохранены"); HN("success");
+  } catch (e) { toast("Не сохранилось — проверь интернет и попробуй ещё раз"); }
+  finally { finishing = false; }
+}
+$("w-delete").onclick = () => {
+  if (!W || finishing) return;
+  const workout = W;
+  openSheet(`<h2>Удалить тренировку?</h2>`, `<p>Тренировка «${esc(wTitle(workout))}» будет удалена целиком.</p><button class="cta" id="work-delete-yes">Удалить тренировку</button><button class="addex" id="work-delete-no">Отмена</button>`);
+  $("work-delete-no").onclick = closeSheet;
+  $("work-delete-yes").onclick = async () => {
+    const button = $("work-delete-yes"); button.disabled = true;
+    finishing = true;
+    try {
+      if (workout.sid) {
+        const draft = findDraft(), draftKey = draft ? dkey(draft.day) : null;
+        const res = await api("session/del", {sid: workout.sid});
+        applyState(res.state);
+        if (draft) { store.del(draftKey); store.set(dkey(draft.day), draft); }
+      } else store.del(dkey(workout.day));
+      closeSheet();
+      if (W === workout) back(true);
+      if (workout.sid && stack[stack.length - 1] === "day") openDay(workout.date);
+      renderHome(); renderWeek(); toast("Тренировка удалена");
+    } catch (e) { button.disabled = false; toast("Не получилось удалить — проверь интернет"); }
+    finally { finishing = false; }
+  };
+};
 
 async function noteOp(body) {
   H();
