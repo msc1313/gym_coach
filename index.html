@@ -490,6 +490,12 @@ html.light .askbar{background:rgba(255,255,255,.6)}
 
 /* ---------- пустой дневник ---------- */
 .empty-hero{text-align:center;padding:10px 6px 0}
+.daycard .t{flex:1;min-width:0}
+.daycard .t b{display:block;font-size:17px}
+.daycard .grp{display:block;margin-top:3px;color:var(--inactive);font-size:13.5px;line-height:1.35}
+.okmark{width:32px;height:32px;border-radius:50%;background:var(--easy);display:grid;place-items:center;flex:none}
+.okmark svg{width:16px;height:16px}
+.copysec{font-size:12px;font-weight:700;color:var(--inactive);letter-spacing:.06em;text-transform:uppercase;margin:18px 2px 8px}
 .illus{display:flex;justify-content:center;margin:18px 0 6px}
 .illus svg{width:230px;height:auto}
 .empty-hero h2{font-size:22px;margin-top:6px}
@@ -731,8 +737,8 @@ html.light .askbar{background:rgba(255,255,255,.6)}
   <div id="day-workouts"></div>
   <div id="aiplan"></div>
   <div class="empty-hero">
-    <h2>Добавьте новую тренировку</h2>
-    <p>Выберите группы мышц и добавьте упражнения вручную</p>
+    <h2 id="eh-t">Добавьте новую тренировку</h2>
+    <p id="eh-p">Выберите группы мышц и добавьте упражнения вручную</p>
     <button class="cta" id="add-workout"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Добавить тренировку</button>
     <button class="plan-link" id="plan-link"></button>
   </div>
@@ -1144,7 +1150,7 @@ function renderWeek() {
   if (selDay) {
     const [y, m, dd] = selDay.split("-").map(Number);
     const day = hist[selDay];
-    note = day ? `${dd} ${MONTHS_G[m-1]}: <b>${PLAN[day] ? "День " + dlabel(day) + " · " + esc(PLAN[day].title) : "Своя тренировка"}</b>` : `${dd} ${MONTHS_G[m-1]}: тренировки не было`;
+    note = day ? `${dd} ${MONTHS_G[m-1]}: <b>${PLAN[day] ? "День " + dlabel(day) + " · " + esc(PLAN[day].title) : "Своя тренировка"}</b>` : (selDay > iso(today) ? `${dd} ${MONTHS_G[m-1]}: ещё впереди` : `${dd} ${MONTHS_G[m-1]}: тренировки не было`);
   } else {
     note = total ? `За 2 месяца: <b>${total} ${plural(total,"тренировка","тренировки","тренировок")}</b>` : "Отмеченные тренировки появятся здесь";
   }
@@ -1785,16 +1791,24 @@ function renderHome() {
   const selectedDate = selDay || iso(today);
   const date = new Date(selectedDate + "T12:00");
   $("today-lbl").textContent = date.toLocaleDateString("ru-RU", {day:"numeric", month:"long", weekday:"long"});
-  const dr = selectedDate === iso(today) ? findDraft() : null;
+  const isToday = selectedDate === iso(today), isFuture = selectedDate > iso(today);
+  const dr = isToday ? findDraft() : isFuture ? null : store.get(dkey("X") + "@" + selectedDate);
+  const dlab = date.toLocaleDateString("ru-RU", {day:"numeric", month:"long"});
+  $("eh-t").textContent = isToday ? "Добавьте новую тренировку" : isFuture ? "Этот день ещё не наступил" : "Тренировка за " + dlab;
+  $("eh-p").textContent = isToday ? "Выберите группы мышц и добавьте упражнения вручную" : isFuture ? "Тренировку можно будет записать в этот день" : "Запиши, что делал в этот день — веса попадут в прогресс";
+  const pastDone = !isToday && !isFuture && !!hist[selectedDate];   // в прошлом дне уже есть тренировка — только кнопка
+  $("eh-t").style.display = $("eh-p").style.display = pastDone ? "none" : "";
+  $("add-workout").style.display = isFuture ? "none" : "";
+  $("plan-link").style.display = isToday ? "" : "none";
   if (dr) {
     const all = dr.items.reduce((a, it) => a + it.sets.length, 0), done = dr.items.reduce((a, it) => a + it.sets.filter(s => s.rt).length, 0);
     $("resume").innerHTML = `<button class="resume" id="resume-btn"><div class="dot"><svg width="20" height="20" viewBox="0 0 24 24" style="fill:var(--on)"><path d="M8 5v14l11-7z"/></svg></div>
-      <div class="t"><small>Незаконченная тренировка</small><b>${esc(wTitle(dr))}</b><span>${done} из ${all} подходов</span></div>
+      <div class="t"><small>${isToday ? "Незаконченная тренировка" : "Незаконченная запись"}</small><b>${esc(wTitle(dr))}</b><span>${done} из ${all} подходов</span></div>
       <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
     $("resume-btn").onclick = () => startWorkout(dr);
   } else $("resume").innerHTML = "";
   renderDayCards(selectedDate);
-  renderAI(dr);
+  if (isToday) renderAI(dr); else $("aiplan").innerHTML = "";
   $("plan-link").innerHTML = `или по программе тренера: <b>День ${dlabel(S.n)} · ${esc(PLAN[S.n].title)}</b>`;
 }
 function aiKey() { return S.a ? "ai_done_" + JSON.stringify(S.a.i) : ""; }
@@ -1820,7 +1834,7 @@ $("add-workout").onclick = () => {
     `<button class="opt" id="opt-new"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div>
        <div><b>Новая тренировка</b><span>Выбрать мышцы на силуэте</span></div></button>
      <button class="opt" id="opt-copy"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></div>
-       <div><b>Копировать тренировку</b><span>Из программы тренера</span></div></button>`);
+       <div><b>Копировать тренировку</b><span>Из прошлых тренировок или программы тренера</span></div></button>`);
   $("opt-new").onclick = () => { closeSheet(); openPick(); };
   $("opt-copy").onclick = openCopy;
 };
@@ -1832,10 +1846,43 @@ function openCopy() {
       return `<button class="dayrow ${d === S.n ? "next" : ""}" data-d="${d}"><div class="L">${dlabel(d)}</div>
         <div class="t"><b>${esc(PLAN[d].title)}${d === S.n ? '<span class="badge">ПО ПЛАНУ</span>' : ""}</b><span>${pl.map(x => CAT[x.id].name).join(" · ")}</span></div>
         <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`;
-    }).join("") + `</div>`);
+    }).join("") + `</div><div id="copy-past"></div>`);
   $("sh-body").querySelectorAll(".dayrow").forEach(b => b.onclick = () => {
-    const d = b.dataset.d; closeSheet(); startWorkout(newPlanWorkout(d));
+    const d = b.dataset.d; closeSheet(); const w = newPlanWorkout(d); if (pastSel()) w.date = pastSel(); startWorkout(w);
   });
+  loadPastForCopy();
+}
+// прошлые тренировки в «Копировать»: те же упражнения и подходы, веса — с прогрессией по прошлым оценкам
+async function loadPastForCopy() {
+  const box = $("copy-past"); if (!box || !hasAPI()) return;
+  const dates = [...new Set(histEntries().map(x => x[0]))].sort().reverse().slice(0, 10);
+  if (!dates.length) { box.innerHTML = ""; return; }
+  box.innerHTML = `<div class="copysec">Твои прошлые тренировки</div><p style="color:var(--inactive);font-size:14px">Загружаю…</p>`;
+  try {
+    const res = await Promise.all(dates.map(d => api("day", { d }).then(r => (r.sessions || []).map(x => [d, x])).catch(() => [])));
+    if (!$("copy-past")) return;
+    const list = res.flat().filter(([, x]) => x.i && x.i.some(([id]) => CAT[id]));
+    box.innerHTML = list.length ? `<div class="copysec">Твои прошлые тренировки</div><div class="daylist">` + list.map(([d, x], k) =>
+      `<button class="dayrow" data-k="${k}"><div class="L" style="font-size:13px;line-height:1.05;text-align:center">${+d.slice(8,10)}<br>${MONTHS_G[+d.slice(5,7)-1].slice(0,3)}</div>
+        <div class="t"><b>${esc(grpOf(x.i.map(([id]) => id)) || "Тренировка")}</b><span>${x.i.filter(([id]) => CAT[id]).map(([id]) => CAT[id].name).join(" · ")}</span></div>
+        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`).join("") + `</div>` : "";
+    box.querySelectorAll(".dayrow").forEach(b => b.onclick = () => { const [, x] = list[+b.dataset.k]; closeSheet(); startWorkout(copyWorkout(x)); });
+  } catch (e) { box.innerHTML = ""; }
+}
+function copyWorkout(x) {
+  const items = x.i.filter(([id]) => CAT[id]).map(([id, sets]) => {
+    const work = (sets || []).filter(s => s[2] !== "w");
+    const it = freshItem(id, id, Math.max(1, Math.min(6, work.length || (sets || []).length || 3)));
+    const st = (S.w || {})[id];
+    if (!st || st[0] == null) {   // прогрессии ещё нет — берём последний рабочий подход из той тренировки
+      const top = work[work.length - 1] || (sets || [])[sets.length - 1];
+      if (top) it.sets.forEach(s => { s.w = top[0]; s.r = top[1]; });
+    }
+    return it;
+  });
+  const w = { day: "X", title: grpOf(items.map(it => it.id)) || "Тренировка", start: Date.now(), items };
+  if (pastSel()) w.date = pastSel();
+  return w;
 }
 
 /* ---------- выбор мышц (свои группы для мужского и женского профиля) ---------- */
@@ -1880,6 +1927,7 @@ $("pk-start").onclick = () => {
   const all = pg().core.every(g => pk.sel.has(g));
   const title = all && groups.length === pg().core.length ? "Всё тело" : groups.map(gLabel).join(" + ");
   const w = { day: "X", title, groups, start: Date.now(), items: [] };
+  if (pastSel()) w.date = pastSel();
   startWorkout(w, true);
 };
 function hasUsual(groups) {
@@ -1923,6 +1971,17 @@ function buildCustom(groups) {
 /* ---------- тренировка: состояние ---------- */
 let W = null;
 const dkey = (day) => "draft_" + day;
+const wkey = (w) => dkey(w.day) + (w.date ? "@" + w.date : "");          // черновик за прошлый день хранится отдельно
+const pastSel = () => (selDay && selDay < iso(today) ? selDay : null);   // выбран прошлый день → тренировка пойдёт в архив
+function weekOf(d) {   // сколько недель назад от текущей (для календаря)
+  const mon = (x) => { const t = new Date(x); t.setHours(0,0,0,0); t.setDate(t.getDate() - ((t.getDay() + 6) % 7)); return t; };
+  return Math.round((mon(new Date(d + "T12:00")) - mon(today)) / 6048e5);
+}
+function grpOf(ids) {  // «Грудь · Плечи · Трицепс»
+  const out = [];
+  ids.forEach(id => { const e = CAT[id]; const g = e && (GROUPS[e.group] || e.group); if (g && !out.includes(g)) out.push(g); });
+  return out.join(" · ");
+}
 function freshItem(id, slot, sets) {
   const e = CAT[id], st = (S.w || {})[id];
   const w = st && st[0] != null ? st[0] : (e.step || e.kind === "k" ? "" : 0);
@@ -1943,7 +2002,7 @@ function startWorkout(w, replace) {
   go("work", replace);
   if (W.sid) { clearInterval(clockId); $("w-clock").textContent = "Сделана"; } else startClock();
 }
-function save() { if (!W) return; if (W.sid) W.dirty = true; else return store.set(dkey(W.day), W); }
+function save() { if (!W) return; if (W.sid) W.dirty = true; else return store.set(wkey(W), W); }
 
 let clockId = null;
 function startClock() {
@@ -2024,8 +2083,8 @@ function bindCards() {
       if (a === "swap") openPicker("swap", i);
       if (a === "remove") { if (W.items.length <= 1) { toast("В тренировке должно остаться упражнение"); return; } H("medium"); W.items.splice(i, 1); save(); renderWorkout(); updateMain(); }
       if (a === "addset") {
-        H(); const last = it.sets[it.sets.length - 1] || freshItem(it.id, null, 1).sets[0];
-        it.sets.push({ w: last.w, r: last.r, rt: null }); save(); renderWorkout();
+        H(); const last = it.sets[it.sets.length - 1];   // новое упражнение — подходы пустые, дальше копируем предыдущий
+        it.sets.push(last ? { w: last.w, r: last.r, rt: null } : { w: "", r: "", rt: null }); save(); renderWorkout();
       }
       if (a === "delset") {
         if (it.sets.length <= 1) { toast("Нужен хотя бы один подход"); return; }
@@ -2096,10 +2155,11 @@ function finish() {
   if (!items.length) return;
   const send = () => {
     const w = { day: W.day, items, fav: [...FAV].slice(0, 40), ai: W.ai ? 1 : 0 };
+    if (W.date && W.date < iso(today)) w.date = W.date;   // тренировка за прошлый день
     if (hasAPI()) return finishServer(w);
     const payload = JSON.stringify(Object.assign({ p: PROFILE }, w));
     if (!inTG) { toast("Открой приложение из Telegram"); return; }
-    const key = dkey(W.day), saved = store.get(key);
+    const key = wkey(W), saved = store.get(key);
     store.del(key);
     if (sendToBot(payload)) HN("success"); else store.set(key, saved);
   };
@@ -2117,15 +2177,16 @@ async function finishServer(w) {
     if (!W.pendingFinish) { W.pendingFinish = w; }
     if (save() === false) throw new Error("local_storage");
     const d = await api("finish", { w: W.pendingFinish, request_id: W.requestId, p: PROFILE }, 90000);
-    if (W) store.del(dkey(W.day));
+    const past = W.pendingFinish && W.pendingFinish.date;
+    if (W) store.del(wkey(W));
     if (W && W.ai) store.set(aiKey(), 1);
     closeSheet();
     finishing = false;
     while (stack.length > 1) back();
-    weekOff = 0; selDay = null;
+    if (past) { selDay = past; weekOff = weekOf(past); } else { weekOff = 0; selDay = null; }
     applyState(d.state);
     HN("success");
-    openSheet(`<h2 style="margin:6px 0 4px">Тренировка сохранена 🔥</h2>`, `<div class="fbtext">${esc(d.text || "")}</div><button class="cta" id="fb-ok">Отлично</button>`);
+    openSheet(`<h2 style="margin:6px 0 4px">${past ? "Тренировка добавлена ✅" : "Тренировка сохранена 🔥"}</h2>`, `<div class="fbtext">${esc(d.text || "")}</div><button class="cta" id="fb-ok">Отлично</button>`);
     $("fb-ok").onclick = closeSheet;
   } catch (e) {
     closeSheet(); renderWorkout(); toast("Не удалось подтвердить сохранение. Повторное нажатие безопасно"); HN("error");
@@ -2486,7 +2547,8 @@ async function renderDayCards(d) {
     if (request !== dayRequest) return;
     const sessions = res.sessions || [];
     const label = d === iso(today) ? "Сегодня" : new Date(d + "T12:00").toLocaleDateString("ru-RU", {day:"numeric", month:"long"});
-    container.innerHTML = sessions.length ? sessions.map((x, i) => `<button class="donecard" data-session="${i}" style="width:100%;text-align:left;margin-top:14px"><div class="dot">✓</div><div class="t"><small>${esc(label)}${sessions.length > 1 ? " · " + (i + 1) : ""}</small><b style="display:block">Тренировка сделана</b>${sessions.length > 1 ? `<span style="display:block;margin-top:4px;color:var(--inactive)">${esc(x.t)}</span>` : ""}</div><span>›</span></button>`).join("") : (d === iso(today) ? "" : `<p style="color:var(--inactive)">В этот день тренировок нет</p>`);
+    const OK = `<div class="okmark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>`;
+    container.innerHTML = sessions.length ? sessions.map((x, i) => `<button class="donecard daycard" data-session="${i}"><div class="t"><small>${esc(label)}${sessions.length > 1 ? " · " + (i + 1) : ""}</small><b>Тренировка</b><span class="grp">${esc(grpOf(x.i.map(([id]) => id)) || x.t || "")}</span></div>${OK}</button>`).join("") : "";
     container.querySelectorAll("[data-session]").forEach(b => b.onclick = () => {
       if ((selDay || iso(today)) !== d || stack[stack.length - 1] !== "home") return;
       const x = sessions[+b.dataset.session];
@@ -2529,7 +2591,7 @@ $("w-delete").onclick = () => {
         const res = await api("session/del", {sid: workout.sid});
         applyState(res.state);
         if (draft) { store.del(draftKey); store.set(dkey(draft.day), draft); }
-      } else store.del(dkey(workout.day));
+      } else store.del(wkey(workout));
       closeSheet();
       if (W === workout) back(true);
       renderHome(); renderWeek(); toast("Тренировка удалена");
