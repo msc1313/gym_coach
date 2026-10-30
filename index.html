@@ -491,10 +491,38 @@ html.light .askbar{background:rgba(255,255,255,.6)}
 /* ---------- пустой дневник ---------- */
 .empty-hero{text-align:center;padding:10px 6px 0}
 .daycard .t{flex:1;min-width:0}
-.daycard .t b{display:block;font-size:17px}
-.daycard .grp{display:block;margin-top:3px;color:var(--inactive);font-size:13.5px;line-height:1.35}
-.okmark{width:32px;height:32px;border-radius:50%;background:var(--easy);display:grid;place-items:center;flex:none}
-.okmark svg{width:16px;height:16px}
+.daycard{padding:16px 16px 16px 18px}
+.daycard .t{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.daycard .t b{font-size:16px;font-weight:600;color:var(--text2);flex:none}
+.daycard .grp{flex:1;min-width:0;text-align:right;color:var(--text);font-size:13px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;line-height:1.35}
+.okmark{width:38px;height:38px;border-radius:50%;background:color-mix(in srgb,var(--easy) 18%,transparent);border:1px solid color-mix(in srgb,var(--easy) 35%,transparent);display:grid;place-items:center;flex:none}
+.okmark svg{width:18px;height:18px}
+.bub.choose{width:100%;max-width:100%}
+.bub.choose p{margin:0 0 6px}
+.chrow{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:11px 2px;border-top:1px solid var(--line)}
+.chrow i{width:22px;height:22px;border-radius:50%;border:2px solid var(--outline);flex:none;display:grid;place-items:center;margin-top:1px;transition:all .2s}
+.chrow i svg{width:12px;height:12px;opacity:0}
+.chrow.on i{background:var(--lime);border-color:var(--lime)}
+.chrow.on i svg{opacity:1}
+.chrow b{display:block;font-size:15px}
+.chrow b em{font-style:normal;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);margin-left:6px}
+.chrow span{display:block;color:var(--inactive);font-size:12.5px;line-height:1.35;margin-top:2px}
+.bub.choose .cta{margin-top:10px;height:46px;font-size:15px}
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.bgrid div{background:var(--card2);border-radius:16px;padding:12px 14px}
+.bgrid small{display:block;font-size:12px;color:var(--inactive);font-weight:600}
+.bgrid b{display:block;font-size:22px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+.bgrid b u{text-decoration:none;font-size:13px;font-weight:600;color:var(--inactive);margin-left:3px}
+.bgrid em{display:block;font-style:normal;font-size:12.5px;font-weight:700;margin-top:2px}
+.bsum{white-space:pre-line;color:var(--text2);font-size:14.5px;line-height:1.5;margin:14px 2px 0}
+.brow{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:13px 2px;border-bottom:1px solid var(--line)}
+.brow .t{flex:1;min-width:0}.brow b{display:block;font-size:15.5px}.brow span{display:block;color:var(--inactive);font-size:13px;margin-top:2px}
+.btag{font-size:11px;font-weight:700;color:var(--on);background:var(--norm);border-radius:99px;padding:2px 8px;margin-left:6px;vertical-align:1px}
+.bform label{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.bform label span{flex:1;font-size:14.5px;color:var(--text2)}
+.bform input{width:110px;background:var(--card2);border:1.5px solid transparent;border-radius:12px;padding:10px 12px;color:var(--text);font:inherit;font-size:16px;text-align:right;outline:none}
+.bform input:focus{border-color:var(--lime)}
+.bform small{width:34px;color:var(--inactive);font-size:12.5px}
 .copysec{font-size:12px;font-weight:700;color:var(--inactive);letter-spacing:.06em;text-transform:uppercase;margin:18px 2px 8px}
 .illus{display:flex;justify-content:center;margin:18px 0 6px}
 .illus svg{width:230px;height:auto}
@@ -732,6 +760,7 @@ html.light .askbar{background:rgba(255,255,255,.6)}
     <button class="askcover" id="ask-cover"><div class="cv-ic"><svg width="26" height="26" viewBox="0 0 24 24" style="fill:var(--lime)"><path d="M12 2l2.2 6.6L21 11l-6.8 2.4L12 20l-2.2-6.6L3 11l6.8-2.4z"/></svg></div>
       <div class="cv-t"><span>Твой ИИ-тренер<i id="cv-cy"></i></span><div class="cv-p" id="cv-p"></div></div></button>
     <input type="file" id="ask-file" accept="image/*" multiple hidden>
+    <input type="file" id="body-file" accept="image/*" hidden>
   </div>
   <div id="resume"></div>
   <div id="day-workouts"></div>
@@ -1575,6 +1604,21 @@ function planBubble(pl) {
   el.querySelector(".cta").onclick = () => startPlan(pl);
   return el;
 }
+// выбор прошлой тренировки, которую продолжаем (тренер нашёл несколько дат)
+function chooseBubble(text, opts) {
+  opts = (opts || []).filter(o => o.i && o.i.some(([id]) => CAT[id]));
+  const el = document.createElement("div"); el.className = "bub ai choose";
+  const ck = `<svg viewBox="0 0 12 12" fill="none" style="stroke:var(--on)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg>`;
+  const fd = (d) => new Date(d + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" });
+  el.innerHTML = `<p>${esc(text || "Выбери тренировку")}</p>` + opts.map((o, k) =>
+    `<button class="chrow ${k ? "" : "on"}" data-k="${k}"><i>${ck}</i><div><b>${fd(o.d)}<em>${esc(o.g || "")}</em></b><span>${o.i.filter(([id]) => CAT[id]).map(([id]) => esc(CAT[id].name)).join(" · ")}</span></div></button>`).join("") +
+    (opts.length ? `<button class="cta">Продолжить<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>` : "");
+  let sel = 0;
+  el.querySelectorAll(".chrow").forEach(b => b.onclick = () => { H(); sel = +b.dataset.k; el.querySelectorAll(".chrow").forEach(x => x.classList.toggle("on", x === b)); });
+  const go = el.querySelector(".cta");
+  if (go) go.onclick = () => { const w = copyWorkout(opts[sel], null); if (stack[stack.length - 1] === "chat") back(); startWorkout(w); };
+  return el;
+}
 function addBubble(role, text, extra) {
   const el = document.createElement("div"); el.className = "bub " + (role === "user" ? "me" : "ai");
   el.textContent = text || "";
@@ -1595,7 +1639,7 @@ async function loadChat(force) {
     TH = d.th || 0; setChatTitle(d.tt);
     const ms = d.msgs || [];
     if (!ms.length) { helloChat(); return; }
-    ms.forEach(m => m.r === "plan" ? $("c-msgs").appendChild(planBubble(m.plan)) : addBubble(m.r, m.t));
+    ms.forEach(m => m.r === "plan" ? $("c-msgs").appendChild(planBubble(m.plan)) : m.r === "choose" ? $("c-msgs").appendChild(chooseBubble(m.t, m.opts)) : addBubble(m.r, m.t));
     chatScroll();
   } catch (e) { t.remove(); helloChat(); }
 }
@@ -1685,6 +1729,8 @@ async function sendChat(q) {
     if (d.type === "plan" && d.plan) {
       S.a = d.plan; store.del(aiKey()); renderAI(findDraft());
       $("c-msgs").appendChild(planBubble(d.plan)); chatScroll();
+    } else if (d.type === "choose" && d.opts) {
+      $("c-msgs").appendChild(chooseBubble(d.text, d.opts)); chatScroll();
     } else addBubble("assistant", d.text || "", d.note ? `<span class="note">📌 Запомнил: ${esc(d.note)}</span>` : "");
     HN("success");
   } catch (e) { t.remove(); addBubble("assistant", "Не получилось связаться 😕 Проверь интернет и попробуй ещё раз."); HN("error"); }
@@ -1730,30 +1776,35 @@ function shrink(file, max) {
 let IMP = [];
 async function importShots(files) {
   if (asking) return;
-  files = files.slice(0, 10);
+  files = files.slice(0, 3);
   if (stack[stack.length - 1] !== "chat") await openChat();
   const hello = $("c-msgs").querySelector(".chello"); if (hello) { hello.remove(); const ch = $("c-msgs").querySelector(".cchips"); if (ch) ch.remove(); }
   asking = true; $("c-send").disabled = true;
   const text = $("c-q").value.trim();
-  addBubble("user", `📎 ${files.length} ${plural(files.length, "скриншот", "скриншота", "скриншотов")}${text ? " · " + text : ""}`);
-  const t = thinkingBubble(`Читаю тренировки… до ${Math.max(1, Math.round(files.length * 0.3))} мин`);
+  addBubble("user", `📎 ${files.length} ${plural(files.length, "изображение", "изображения", "изображений")}${text ? " · " + text : ""}`);
+  const t = thinkingBubble(files.length > 1 ? "Смотрю изображения… до минуты" : "Смотрю изображение…");
   try {
     const fd = new FormData(), a = AUTH();
-    fd.append("init", a.init); fd.append("id", a.id || ""); fd.append("k", a.k || ""); fd.append("text", text);
+    fd.append("init", a.init); fd.append("id", a.id || ""); fd.append("k", a.k || ""); fd.append("text", text); fd.append("th", String(TH || 0));
     for (const f of files) fd.append("img", await shrink(f, 2000), "shot.jpg");
-    const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 300000);
-    const r = await fetch(API + "/api/import", { method: "POST", body: fd, signal: ctl.signal });
+    const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 200000);
+    const r = await fetch(API + "/api/ask_image", { method: "POST", body: fd, signal: ctl.signal });
     clearTimeout(tm);
     const d = await r.json();
     if (!r.ok) throw new Error(d.error);
     t.remove(); $("c-q").value = ""; cGrow();
+    if (d.th) { TH = d.th; setChatTitle(d.tt); }
+    if (d.nt) S.nt = d.nt;
+    if (d.type === "plan" && d.plan) { S.a = d.plan; store.del(aiKey()); renderAI(findDraft()); $("c-msgs").appendChild(planBubble(d.plan)); }
+    else addBubble("assistant", d.text || "", d.note ? `<span class="note">📌 Запомнил: ${esc(d.note)}</span>` : "");
     IMP = d.workouts || [];
-    if (!IMP.length) { addBubble("assistant", "Не нашёл тренировок на скриншотах 😕 Нужны экраны, где видны упражнения, веса и повторы.", d.err ? `<span class="note" style="color:var(--inactive);font-weight:500">Причина: ${esc(d.err)}</span>` : ""); HN("error"); return; }
-    const b = addBubble("assistant", `Нашёл ${IMP.length} ${plural(IMP.length, "тренировку", "тренировки", "тренировок")}. Проверь и сохрани в историю — веса подтянутся в приложение.`, `<button class="act">Посмотреть и сохранить</button>`);
-    b.querySelector(".act").onclick = showImport;
-    showImport(); HN("success");
+    if (IMP.length) {
+      const b = addBubble("assistant", `На изображении ${IMP.length > 1 ? IMP.length + " " + plural(IMP.length, "тренировка", "тренировки", "тренировок") : "есть тренировка"} — можно перенести в дневник, веса подтянутся в прогресс.`, `<button class="act">Посмотреть и сохранить</button>`);
+      b.querySelector(".act").onclick = showImport;
+    }
+    chatScroll(); HN("success");
   } catch (e) {
-    t.remove(); addBubble("assistant", "Не получилось прочитать скриншоты — попробуй ещё раз."); HN("error");
+    t.remove(); addBubble("assistant", e && e.message === "busy" ? "Я ещё разбираю прошлый запрос — подожди минуту и пришли снова." : "Не получилось посмотреть изображение — проверь интернет и попробуй ещё раз."); HN("error");
   } finally { asking = false; $("c-send").disabled = false; }
 }
 function showImport() {
@@ -1869,7 +1920,7 @@ async function loadPastForCopy() {
     box.querySelectorAll(".dayrow").forEach(b => b.onclick = () => { const [, x] = list[+b.dataset.k]; closeSheet(); startWorkout(copyWorkout(x)); });
   } catch (e) { box.innerHTML = ""; }
 }
-function copyWorkout(x) {
+function copyWorkout(x, date = pastSel()) {
   const items = x.i.filter(([id]) => CAT[id]).map(([id, sets]) => {
     const work = (sets || []).filter(s => s[2] !== "w");
     const it = freshItem(id, id, Math.max(1, Math.min(6, work.length || (sets || []).length || 3)));
@@ -1881,7 +1932,7 @@ function copyWorkout(x) {
     return it;
   });
   const w = { day: "X", title: grpOf(items.map(it => it.id)) || "Тренировка", start: Date.now(), items };
-  if (pastSel()) w.date = pastSel();
+  if (date) w.date = date;
   return w;
 }
 
@@ -2350,6 +2401,131 @@ function choose(id) {
   if (pick.mode === "add") setTimeout(() => $("v-work").scrollTo({ top: $("v-work").scrollHeight, behavior: "smooth" }), 80);
 }
 
+/* ---------- сведения о теле: InBody и документы ---------- */
+const IBK = [["w","Вес","кг"],["smm","Мышечная масса","кг"],["fat","Масса жира","кг"],["pbf","Процент жира","%"],["vfl","Висцеральный жир","ур."],
+  ["bmi","ИМТ",""],["bmr","Базовый обмен","ккал"],["tbw","Общая вода","л"],["score","Баллы InBody",""]];
+const BKIND = { inbody: "Анализ состава тела", med: "Справка или анализы", note: "Рукописная запись", other: "Другое" };
+let BODY = null;
+const bDate = (d) => d ? new Date(d + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" }) : "";
+const bNum = (v) => v == null ? "—" : String(v).replace(".", ",");
+async function openBody() {
+  if (!hasAPI()) { toast("Открой приложение из Telegram"); return; }
+  openSheet(`<h2 style="margin:6px 0 4px">Сведения о теле</h2>`, THINK("Загружаю…"), true);
+  try { BODY = await api("body", { act: "list" }); BODY.consent ? renderBody() : bodyIntro(); }
+  catch (e) { $("sh-body").innerHTML = `<p style="color:var(--inactive)">Не загрузилось — проверь интернет</p>`; }
+}
+function bodyIntro() {
+  let ok = false;
+  $("sh-body").innerHTML = `<p style="color:var(--text2);font-size:15px;line-height:1.5;margin:0">Загружай сюда анализы состава тела (InBody и похожие). Тренер прочитает цифры, объяснит их простым языком, покажет, что изменилось с прошлого раза, и будет учитывать их в тренировках.</p>
+     <p class="cynote">Фото хранится у нас, удалить его можно в любой момент. Тренер — не врач: он не ставит диагнозов.</p>
+     <button class="cychk" id="b-ok"><i><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></i>
+       <span>Согласен(на) на обработку данных о составе тела и здоровье, чтобы тренер учитывал их в советах и тренировках. Отозвать согласие и удалить всё можно одной кнопкой.</span></button>
+     <button class="cta" id="b-go" style="margin-top:18px;opacity:.4">Продолжить</button>`;
+  $("b-ok").onclick = () => { H(); ok = !ok; $("b-ok").classList.toggle("on", ok); $("b-go").style.opacity = ok ? 1 : .4; };
+  $("b-go").onclick = async () => {
+    if (!ok) { HN("error"); toast("Нужно согласие на обработку данных"); return; }
+    $("b-go").disabled = true;
+    try { BODY = await api("body", { act: "consent", yes: 1 }); HN("success"); renderBody(); }
+    catch (e) { toast("Не получилось — проверь интернет"); const b = $("b-go"); if (b) b.disabled = false; }
+  };
+}
+function renderBody() {
+  const docs = BODY.docs || [], ib = docs.filter(d => d.kind === "inbody" && d.ok && Object.keys(d.m || {}).length);
+  const last = ib[0], prev = ib[1];
+  const tile = (k, t, u, better) => {
+    if (!last || last.m[k] == null) return "";
+    let delta = "";
+    if (prev && prev.m[k] != null) {
+      const dv = Math.round((last.m[k] - prev.m[k]) * 10) / 10;
+      const good = dv === 0 ? null : (better === "up" ? dv > 0 : dv < 0);
+      delta = `<em style="color:${good == null ? "var(--inactive)" : good ? "var(--easy)" : "var(--hard)"}">${dv === 0 ? "без изменений" : (dv > 0 ? "+" : "") + bNum(dv) + " " + u}</em>`;
+    }
+    return `<div><small>${t}</small><b>${bNum(last.m[k])}<u>${u}</u></b>${delta}</div>`;
+  };
+  const card = last ? `<div class="cysum"><small>Последний замер · ${bDate(last.d)}</small>
+      <div class="bgrid">${tile("w","Вес","кг","")}${tile("smm","Мышцы","кг","up")}${tile("pbf","Жир","%","down")}${tile("vfl","Висцеральный жир","ур.","down")}</div>
+      ${last.s ? `<div class="bsum">${esc(last.s)}</div>` : ""}</div>` :
+    `<div class="cysum"><small>Пока пусто</small><p>Загрузи фото бланка InBody — тренер разберёт цифры и будет их учитывать.</p></div>`;
+  const rows = docs.map(d => `<button class="brow" data-id="${d.id}"><div class="t"><b>${BKIND[d.kind] || "Документ"}${d.kind === "inbody" && !d.ok ? '<span class="btag">ПРОВЕРЬ ЦИФРЫ</span>' : ""}</b>
+      <span>${bDate(d.d)}${d.m && d.m.w != null ? " · вес " + bNum(d.m.w) + " кг" : ""}${d.m && d.m.pbf != null ? " · жир " + bNum(d.m.pbf) + "%" : ""}</span></div>
+      <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>`).join("");
+  $("sh-body").innerHTML = card + `<button class="cta" id="b-add" style="margin-top:16px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Добавить документ</button>
+    ${rows ? `<div class="cymh"><b>Документы</b></div>${rows}` : ""}
+    <button class="cyoff" id="b-revoke">Отозвать согласие и удалить всё</button>`;
+  $("b-add").onclick = bodyAddMenu;
+  $("sh-body").querySelectorAll(".brow").forEach(b => b.onclick = () => { const d = docs.find(x => x.id === +b.dataset.id); d.kind === "inbody" && !d.ok ? bodyConfirm(d) : bodyDoc(d); });
+  $("b-revoke").onclick = () => {
+    $("sh-body").innerHTML = `<p style="font-size:15px;line-height:1.5">Удалим все документы, фото и цифры, а тренер забудет состав тела. Это нельзя отменить.</p>
+      <button class="cta" id="b-rv-yes" style="background:#E5484D;color:#fff">Удалить всё</button><button class="addex" id="b-rv-no">Отмена</button>`;
+    $("b-rv-no").onclick = renderBody;
+    $("b-rv-yes").onclick = async () => { try { await api("body", { act: "revoke" }); closeSheet(); toast("Удалено"); HN("success"); } catch (e) { toast("Не получилось — проверь интернет"); } };
+  };
+}
+function bodyAddMenu() {
+  H();
+  const opt = (k, ic, t, sub) => `<button class="opt" data-k="${k}"><div class="ic">${ic}</div><div><b>${t}</b><span>${sub}</span></div></button>`;
+  $("sh-body").innerHTML = opt("inbody", ico("body"), "InBody или анализ тела", "фото бланка — тренер прочитает цифры") +
+    opt("med", ico("doc"), "Справка или анализы", "скоро") + opt("note", ico("doc"), "Рукописная запись", "скоро") + opt("other", ico("clip"), "Другое", "скоро") +
+    `<button class="addex" id="b-back" style="margin-top:12px">Назад</button>`;
+  $("b-back").onclick = renderBody;
+  $("sh-body").querySelectorAll(".opt").forEach(b => b.onclick = () => {
+    if (b.dataset.k !== "inbody") { toast("Появится в следующем обновлении"); return; }
+    $("body-file").click();
+  });
+}
+$("body-file").onchange = async () => {
+  const f = $("body-file").files[0]; $("body-file").value = ""; if (!f) return;
+  $("sh-body").innerHTML = THINK("Читаю бланк… до минуты");
+  try {
+    const fd = new FormData(), a = AUTH();
+    fd.append("init", a.init); fd.append("id", a.id || ""); fd.append("k", a.k || ""); fd.append("kind", "inbody");
+    fd.append("img", await shrink(f, 2400), "body.jpg");
+    const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 190000);
+    const r = await fetch(API + "/api/body/add", { method: "POST", body: fd, signal: ctl.signal });
+    clearTimeout(tm);
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error);
+    BODY = { consent: d.consent, docs: d.docs };
+    bodyConfirm({ id: d.id, kind: "inbody", d: d.d, m: d.m || {}, ok: 0 }, d.err);
+  } catch (e) { $("sh-body").innerHTML = `<p style="color:var(--inactive)">Не получилось загрузить — проверь интернет и попробуй ещё раз.</p><button class="addex" id="b-back">Назад</button>`; $("b-back").onclick = renderBody; }
+};
+function bodyConfirm(doc, err) {
+  const has = Object.keys(doc.m || {}).length;
+  $("sh-body").innerHTML = `<p style="color:var(--text2);font-size:14.5px;line-height:1.5;margin:0 0 6px">${err ? esc(err) + " " : ""}${has ? "Проверь цифры — тренер мог ошибиться. Поправь, если нужно, и сохрани." : "Введи главные цифры с бланка — хотя бы вес и процент жира."}</p>
+    <div class="bform"><label><span>Дата замера</span><input type="date" id="b-d" value="${doc.d || iso(today)}" style="width:150px"></label>
+    ${IBK.map(([k, t, u]) => `<label><span>${t}</span><input type="number" inputmode="decimal" step="any" data-k="${k}" value="${doc.m[k] ?? ""}" placeholder="—"><small>${u}</small></label>`).join("")}</div>
+    <button class="cta" id="b-save" style="margin-top:16px">Сохранить</button>
+    <button class="addex" id="b-photo">Показать фото</button><button class="addex" id="b-del">Удалить</button>`;
+  $("b-save").onclick = async () => {
+    const m = {}; $("sh-body").querySelectorAll("[data-k]").forEach(i => { if (i.value !== "") m[i.dataset.k] = Number(i.value.replace(",", ".")); });
+    if (!Object.keys(m).length) { toast("Заполни хотя бы одну цифру"); HN("error"); return; }
+    const day = $("b-d").value;
+    $("sh-body").innerHTML = THINK("Тренер разбирает результаты…");
+    try { BODY = await api("body", { act: "save", id: doc.id, m, d: day }, 60000); }
+    catch (e) { toast("Не сохранилось — проверь интернет"); renderBody(); return; }
+    HN("success"); const saved = (BODY.docs || []).find(x => x.id === doc.id); saved ? bodyDoc(saved) : renderBody();
+  };
+  $("b-photo").onclick = () => bodyPhoto(doc);
+  $("b-del").onclick = () => bodyDel(doc);
+}
+function bodyDoc(d) {
+  $("sh-body").innerHTML = `<div class="cysum"><small>${BKIND[d.kind] || "Документ"} · ${bDate(d.d)}</small>
+    <div class="bform" style="margin-top:6px">${IBK.filter(([k]) => d.m[k] != null).map(([k, t, u]) => `<label><span>${t}</span><b>${bNum(d.m[k])} ${u}</b></label>`).join("")}</div>
+    ${d.s ? `<div class="bsum">${esc(d.s)}</div>` : ""}</div>
+    <button class="addex" id="b-edit">Исправить цифры</button><button class="addex" id="b-photo">Показать фото</button><button class="addex" id="b-del">Удалить</button><button class="addex" id="b-back">Назад</button>`;
+  $("b-edit").onclick = () => bodyConfirm(d);
+  $("b-photo").onclick = () => bodyPhoto(d);
+  $("b-del").onclick = () => bodyDel(d);
+  $("b-back").onclick = renderBody;
+}
+async function bodyPhoto(d) {
+  try { const r = await api("body", { act: "img", id: d.id }, 30000); openSheet(`<h2 style="margin:6px 0 4px">${BKIND[d.kind] || "Документ"}</h2>`, `<img src="${r.img}" style="width:100%;border-radius:14px"><button class="addex" id="b-back" style="margin-top:12px">Назад</button>`, true); $("b-back").onclick = openBody; }
+  catch (e) { toast("Фото не загрузилось"); }
+}
+async function bodyDel(d) {
+  try { BODY = await api("body", { act: "del", id: d.id }); toast("Удалено"); renderBody(); } catch (e) { toast("Не получилось — проверь интернет"); }
+}
+
 /* ---------- профиль ---------- */
 const GOAL_T = { lose: "Похудеть", mass: "Набрать мышцы", strength: "Стать сильнее", fit: "Держать форму", health: "Здоровье и самочувствие" };
 const IC2 = {
@@ -2361,6 +2537,7 @@ const IC2 = {
   gift: '<rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8v13M3 12h18M12 8c-2-4-6-4-6-1s6 1 6 1zM12 8c2-4 6-4 6-1s-6 1-6 1z"/>',
   gear: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+  body: '<circle cx="12" cy="4.5" r="2"/><path d="M5 8.5l7 1.5 7-1.5M12 10v5l-3 6.5M12 15l3 6.5"/>',
   doc: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
   trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/>',
 };
@@ -2388,6 +2565,7 @@ function renderProfile() {
       ${row("goal", "goal", "Моя цель", goalSub || "не указана")}
       ${row("ex", "dumb", "Мои упражнения и веса", nEx ? nEx + " " + plural(nEx, "упражнение", "упражнения", "упражнений") : "пока пусто")}
       ${PROFILE.s === "f" && hasAPI() ? row("cyc", "moon", "Мой цикл", cySub()) : ""}
+      ${hasAPI() ? row("body", "body", "Сведения о теле", "InBody и другие документы") : ""}
       ${hasAPI() ? row("imp", "clip", "Перенести тренировки", "со скриншотов другого приложения") : ""}
     </div>
     <div class="plist2">
@@ -2410,6 +2588,7 @@ const PGO = {
   wipe: openWipe,
   help: startTour,
   cyc: () => openCycle(),
+  body: () => openBody(),
 };
 function openMyEx() {
   const W0 = S.w || {};
@@ -2547,8 +2726,8 @@ async function renderDayCards(d) {
     if (request !== dayRequest) return;
     const sessions = res.sessions || [];
     const label = d === iso(today) ? "Сегодня" : new Date(d + "T12:00").toLocaleDateString("ru-RU", {day:"numeric", month:"long"});
-    const OK = `<div class="okmark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>`;
-    container.innerHTML = sessions.length ? sessions.map((x, i) => `<button class="donecard daycard" data-session="${i}"><div class="t"><small>${esc(label)}${sessions.length > 1 ? " · " + (i + 1) : ""}</small><b>Тренировка</b><span class="grp">${esc(grpOf(x.i.map(([id]) => id)) || x.t || "")}</span></div>${OK}</button>`).join("") : "";
+    const OK = `<div class="okmark"><svg viewBox="0 0 24 24" fill="none" style="stroke:var(--easy)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>`;
+    container.innerHTML = sessions.length ? sessions.map((x, i) => `<button class="donecard daycard" data-session="${i}"><div class="t"><b>Тренировка${sessions.length > 1 ? " " + (i + 1) : ""}</b><span class="grp">${esc(grpOf(x.i.map(([id]) => id)) || x.t || "")}</span></div>${OK}</button>`).join("") : "";
     container.querySelectorAll("[data-session]").forEach(b => b.onclick = () => {
       if ((selDay || iso(today)) !== d || stack[stack.length - 1] !== "home") return;
       const x = sessions[+b.dataset.session];
