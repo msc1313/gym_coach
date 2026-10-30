@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ru">
 <head>
+<meta name="referrer" content="no-referrer">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Тренер</title>
@@ -909,16 +910,25 @@ function readState() {
     if (!d) return empty;
     let b = d.replace(/-/g, "+").replace(/_/g, "/");
     while (b.length % 4) b += "=";
-    return Object.assign(empty, JSON.parse(atob(b)));
+    const decoded = JSON.parse(atob(b));
+    // Old links may contain another account's profile: never import personal data from a URL.
+    const url = new URL(decoded.x || "https://89-124-99-128.sslip.io");
+    if (url.origin === "https://89-124-99-128.sslip.io") empty.x = url.origin;
+    return empty;
   } catch (e) { return empty; }
 }
 const S = readState();
+const accountId = tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id;
+const storagePrefix = "user_" + (accountId || "guest") + "_";
+const userKey = k => storagePrefix + k;
+// Legacy unscoped data cannot safely be assigned to the current account.
+// Keep it untouched for recovery, but never display or upload it automatically.
 Object.assign(CAT, S.cx || {});
 const FAV = new Set((store0("fav") || S.f || []).filter(id => CAT[id]));
-function store0(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+function store0(k) { try { return JSON.parse(localStorage.getItem(userKey(k))); } catch (e) { return null; } }
 function toggleFav(id) {
   if (FAV.has(id)) FAV.delete(id); else FAV.add(id);
-  try { localStorage.setItem("fav", JSON.stringify([...FAV])); } catch (e) {}
+  try { localStorage.setItem(userKey("fav"), JSON.stringify([...FAV])); } catch (e) {}
   H("medium"); toast(FAV.has(id) ? "Добавлено в любимые ♥" : "Убрано из любимых");
 }
 const HEART = (on) => `<svg viewBox="0 0 24 24" style="fill:${on ? "var(--lime)" : "none"};stroke:${on ? "var(--lime)" : "currentColor"}" stroke-width="2.2" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5C19 15.6 12 20 12 20z"/></svg>`;
@@ -938,15 +948,19 @@ buildHist();
 
 /* ---------- сервер: данные и сохранение прямо из приложения ---------- */
 const API = S.x || "";
-const AUTH = () => ({ init: (tg && tg.initData) || "", id: S.id || "", k: S.k || "" });
-const hasAPI = () => !!(API && ((tg && tg.initData) || (S.id && S.k)));
+const AUTH = () => ({ init: (tg && tg.initData) || "" });
+const hasAPI = () => !!(API && tg && tg.initData);
 async function api(path, body, ms) {
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms || 30000);
   try {
     const r = await fetch(API + "/api/" + path, { method: "POST", headers: { "Content-Type": "text/plain" },
       body: JSON.stringify(Object.assign(AUTH(), body || {})), signal: ctl.signal });
     const d = await r.json();
-    if (!r.ok) throw new Error(d.error || r.status);
+    if (!r.ok) {
+      if (r.status === 403) toast("Открой приложение заново через Telegram");
+      if (r.status === 429) toast("Слишком много запросов. Подожди минуту");
+      throw new Error(d.error || r.status);
+    }
     return d;
   } finally { clearTimeout(t); }
 }
@@ -956,7 +970,7 @@ function applyState(st) {
   if (st.cx) { S.cx = st.cx; Object.assign(CAT, st.cx); }
   S.a = st.a || null; S.nt = st.nt || []; S.pu = st.pu || null; if (st.rl) S.rl = st.rl;
   if (!st.lk) S.cy = st.cy || null;   // в ссылке данных цикла нет — их даёт только сервер
-  if (st.id) { S.id = st.id; S.k = st.k; }
+  if (st.id) S.id = st.id;
   buildHist();
   if (!store0("fav")) { FAV.clear(); (S.f || []).filter(id => CAT[id]).forEach(id => FAV.add(id)); }
   if (st.p) Object.assign(PROFILE, st.p, store0("profile") || {});
@@ -969,9 +983,9 @@ function applyState(st) {
 }
 
 const store = {
-  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
-  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
-  del(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  get(k) { try { return JSON.parse(localStorage.getItem(userKey(k))); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(userKey(k), JSON.stringify(v)); return true; } catch (e) { toast("Не удалось сохранить данные на устройстве. Не закрывай приложение"); return false; } },
+  del(k) { try { localStorage.removeItem(userKey(k)); } catch (e) {} }
 };
 const fmt = (x) => x == null || x === "" ? "" : String(Math.round(Number(x) * 100) / 100);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -1156,6 +1170,7 @@ function go(v, replace) {
   stack.push(v); syncChrome();
 }
 function back(discard = false) {
+  if (finishing && W && !W.sid) { toast("Дождись сохранения тренировки"); return; }
   if ($("sheet").classList.contains("show")) { closeSheet(); return; }
   if ($("c-drawer").classList.contains("show")) { closeDrawer(); return; }
   if (stack.length < 2) return;
@@ -1206,7 +1221,7 @@ function openOnb(edit, from, to) {
   renderOnb();
 }
 function closeOnb() {
-  try { localStorage.setItem("profile", JSON.stringify(PROFILE)); } catch (e) {}
+  try { localStorage.setItem(userKey("profile"), JSON.stringify(PROFILE)); } catch (e) {}
   applyTheme(); renderWeek();
   $("v-onb").classList.add("hidden"); $("nav").classList.remove("hide");
   current = onb.edit && onb.ret ? onb.ret : "home"; $("v-" + current).classList.remove("hidden");
@@ -1907,7 +1922,7 @@ function buildCustom(groups) {
 
 /* ---------- тренировка: состояние ---------- */
 let W = null;
-const dkey = (day) => "w2_" + day + "_" + S.c;
+const dkey = (day) => "draft_" + day;
 function freshItem(id, slot, sets) {
   const e = CAT[id], st = (S.w || {})[id];
   const w = st && st[0] != null ? st[0] : (e.step || e.kind === "k" ? "" : 0);
@@ -1920,14 +1935,15 @@ function newPlanWorkout(day) {
 }
 function startWorkout(w, replace) {
   H("medium");
-  W = w; if (!W.start) W.start = Date.now();
+  W = w; if (!W.sid && !W.requestId) W.requestId = crypto.randomUUID();
+  if (!W.start) W.start = Date.now();
   if (!W.sid) save();
   renderWorkout();
   closeSheet();
   go("work", replace);
   if (W.sid) { clearInterval(clockId); $("w-clock").textContent = "Сделана"; } else startClock();
 }
-function save() { if (!W) return; if (W.sid) W.dirty = true; else store.set(dkey(W.day), W); }
+function save() { if (!W) return; if (W.sid) W.dirty = true; else return store.set(dkey(W.day), W); }
 
 let clockId = null;
 function startClock() {
@@ -1957,6 +1973,10 @@ function renderWorkout() {
   $("w-chips").innerHTML = muscleChips(p, new Set());
   $("w-list").innerHTML = W.items.map((it, i) => exCard(it, i)).join("");
   bindCards();
+  if (W.pendingFinish) {
+    $("w-list").querySelectorAll("input,button").forEach(el => el.disabled = true);
+  }
+  ["w-add", "w-order", "w-delete"].forEach(id => $(id).disabled = !!W.pendingFinish);
   updateProgress();
 }
 function exCard(it, i) {
@@ -2094,10 +2114,13 @@ async function finishServer(w) {
   try { tg && tg.MainButton && tg.MainButton.showProgress && tg.MainButton.showProgress(); } catch (e) {}
   openSheet(`<h2 style="margin:6px 0 4px">Сохраняю тренировку</h2>`, THINK("Тренер разбирает результаты…"));
   try {
-    const d = await api("finish", { w, p: PROFILE }, 90000);
+    if (!W.pendingFinish) { W.pendingFinish = w; }
+    if (save() === false) throw new Error("local_storage");
+    const d = await api("finish", { w: W.pendingFinish, request_id: W.requestId, p: PROFILE }, 90000);
     if (W) store.del(dkey(W.day));
     if (W && W.ai) store.set(aiKey(), 1);
     closeSheet();
+    finishing = false;
     while (stack.length > 1) back();
     weekOff = 0; selDay = null;
     applyState(d.state);
@@ -2105,7 +2128,7 @@ async function finishServer(w) {
     openSheet(`<h2 style="margin:6px 0 4px">Тренировка сохранена 🔥</h2>`, `<div class="fbtext">${esc(d.text || "")}</div><button class="cta" id="fb-ok">Отлично</button>`);
     $("fb-ok").onclick = closeSheet;
   } catch (e) {
-    closeSheet(); toast("Не сохранилось — проверь интернет и нажми ещё раз"); HN("error");
+    closeSheet(); renderWorkout(); toast("Не удалось подтвердить сохранение. Повторное нажатие безопасно"); HN("error");
   } finally {
     finishing = false;
     try { tg && tg.MainButton && tg.MainButton.hideProgress && tg.MainButton.hideProgress(); } catch (e) {}
@@ -2377,7 +2400,7 @@ function openWipe() {
     try {
       const d = await api("wipe", {});
       ["ai_done_", "draft"].forEach(() => {});
-      try { Object.keys(localStorage).filter(k => k.startsWith("w_") || k.startsWith("ai_done_") || k === "fav").forEach(k => localStorage.removeItem(k)); } catch (e) {}
+      try { Object.keys(localStorage).filter(k => k.startsWith(storagePrefix) && !k.endsWith("_profile")).forEach(k => localStorage.removeItem(k)); } catch (e) {}
       FAV.clear(); closeSheet(); applyState(d.state); TH = null; chatLoaded = false; THREADS = []; $("c-msgs").innerHTML = ""; HN("success"); toast("Данные удалены");
     } catch (e) { b.disabled = false; b.textContent = "Не получилось — ещё раз"; HN("error"); }
   };
@@ -2523,10 +2546,13 @@ async function noteOp(body) {
 
 /* ---------- старт ---------- */
 renderWeek(); renderHome(); updateMain();
-if (!hasProfile()) openOnb(false);
-else if (!PROFILE.g) openOnb(false, "g");
-else maybeTour();
-if (hasAPI()) api("state", {}, 15000).then(applyState).catch(() => {});
+
+if (hasAPI()) api("state", {}, 15000).then(st => {
+  applyState(st);
+  if (!hasProfile()) openOnb(false);
+  else if (!PROFILE.g) openOnb(false, "g");
+  else maybeTour();
+}).catch(() => toast("Не удалось загрузить профиль. Переоткрой приложение через Telegram"));
 </script>
 </body>
 </html>
