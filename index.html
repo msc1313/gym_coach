@@ -508,6 +508,8 @@ html.light .askbar{background:rgba(255,255,255,.6)}
 .chrow b em{font-style:normal;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);margin-left:6px}
 .chrow span{display:block;color:var(--inactive);font-size:12.5px;line-height:1.35;margin-top:2px}
 .bub.choose .cta{margin-top:10px;height:46px;font-size:15px}
+.chn{display:block;font-size:12px;font-weight:700;color:var(--lime);margin-top:2px}
+.chnew{display:block;width:100%;margin-top:10px;padding:11px;border-radius:14px;border:1.5px dashed var(--outline);color:var(--text2);font-weight:600;font-size:14px}
 .bgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .bgrid div{background:var(--card2);border-radius:16px;padding:12px 14px}
 .bgrid small{display:block;font-size:12px;color:var(--inactive);font-weight:600}
@@ -523,6 +525,9 @@ html.light .askbar{background:rgba(255,255,255,.6)}
 .bform input{width:110px;background:var(--card2);border:1.5px solid transparent;border-radius:12px;padding:10px 12px;color:var(--text);font:inherit;font-size:16px;text-align:right;outline:none}
 .bform input:focus{border-color:var(--lime)}
 .bform small{width:34px;color:var(--inactive);font-size:12.5px}
+.exnote{display:flex;gap:8px;align-items:flex-start;width:100%;text-align:left;margin-top:8px;padding:7px 10px;border-radius:12px;border:1.5px dashed var(--dark);color:var(--inactive);font-size:13.5px;font-weight:600;line-height:1.4}
+.exnote.has{border-style:solid;border-color:transparent;background:rgba(var(--acc-rgb),.10);color:var(--text2);font-weight:500}
+.exnote b{flex:none}
 .copysec{font-size:12px;font-weight:700;color:var(--inactive);letter-spacing:.06em;text-transform:uppercase;margin:18px 2px 8px}
 .illus{display:flex;justify-content:center;margin:18px 0 6px}
 .illus svg{width:230px;height:auto}
@@ -625,17 +630,16 @@ html.light .askbar{background:rgba(255,255,255,.6)}
 .x{color:var(--mid);font-weight:600}
 .del{margin-left:auto;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:var(--mid)}
 .del svg{width:16px;height:16px}
-.rates{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}
-.rates button{height:36px;border-radius:99px;border:1.5px solid var(--outline);color:var(--inactive);font-size:12px;font-weight:700;letter-spacing:.04em;
+.rates{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:10px}
+.rates button{height:42px;border-radius:10px;border:1.5px solid var(--outline);color:var(--inactive);font-size:19px;font-weight:800;
   transition:transform .15s,background .2s,color .2s,border-color .2s}
 .rates button:active{transform:scale(.94)}
-.rates [data-r=w].on{background:var(--warm);border-color:var(--warm);color:var(--on)}
-.rates [data-r=e]{border-color:rgba(127,183,126,.55)}
-.rates [data-r=n]{border-color:rgba(226,176,74,.55)}
-.rates [data-r=h]{border-color:rgba(229,83,75,.55)}
-.rates [data-r=e].on{background:var(--easy);border-color:var(--easy);color:var(--on)}
-.rates [data-r=n].on{background:var(--norm);border-color:var(--norm);color:var(--on)}
-.rates [data-r=h].on{background:var(--hard);border-color:var(--hard);color:var(--on)}
+/* 1–2 легко (зелёный) → 3 норм (жёлтый) → 4 тяжело (оранжевый) → 5 на пределе (красный) */
+.rates [data-r="1"]{--rc:#5FC28A}.rates [data-r="2"]{--rc:#9BCB5E}
+.rates [data-r="3"]{--rc:#E8C04A}.rates [data-r="4"]{--rc:#EE8A3C}.rates [data-r="5"]{--rc:#E5484D}
+.rates button{border-color:color-mix(in srgb,var(--rc) 55%,transparent);color:var(--rc)}
+.rates button.on{background:var(--rc);border-color:var(--rc);color:#fff}
+
 .addset{margin-top:12px;width:100%;height:42px;border-radius:14px;border:1.5px dashed var(--dark);color:var(--inactive);font-weight:600;font-size:14px}
 .addset:active{border-color:var(--lime);color:var(--lime)}
 .addex{margin-top:14px;width:100%;height:54px;border-radius:20px;border:1.5px dashed var(--outline);color:var(--text);font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -910,7 +914,12 @@ function restFor(id) {
   else if (g === "health" || g === "fit") t = Math.max(60, Math.round(t * 0.85 / 15) * 15);
   return t;
 }
-const RATES = [["w","РАЗМ"],["e","ЛЕГК"],["n","НОРМ"],["h","СЛОЖ"]];
+// оценка подхода 1–5: 1 очень легко … 5 на пределе. Разминку отмечать не нужно: подходы с весом
+// меньше 85% рабочего сервер сам не учитывает в прогрессии.
+const RATES = [["1","Очень легко"],["2","Легко"],["3","Нормально"],["4","Тяжело"],["5","На пределе"]];
+const RT_OLD = { w: "1", "0": "1", e: "2", n: "3", h: "4" };   // старые оценки из истории → новая шкала
+const rtNew = (rt) => RT_OLD[rt] || (rt == null ? null : String(rt));
+const isWarm = (rt) => rt === "0" || rt === "w";
 
 /* ---------- Telegram ---------- */
 const tg = window.Telegram && window.Telegram.WebApp;
@@ -1012,7 +1021,8 @@ function applyState(st) {
   ["n", "c", "w", "s", "h", "f", "u"].forEach(k => { if (k in st) S[k] = st[k]; });
   if (st.cx) { S.cx = st.cx; Object.assign(CAT, st.cx); }
   S.a = st.a || null; S.nt = st.nt || []; S.pu = st.pu || null; if (st.rl) S.rl = st.rl;
-  if (!st.lk) S.cy = st.cy || null;   // в ссылке данных цикла нет — их даёт только сервер
+  if (!st.lk) S.cy = st.cy || null;
+  S.en = st.en || {}; S.rm = st.rm;   // в ссылке данных цикла нет — их даёт только сервер
   if (st.id) S.id = st.id;
   buildHist();
   if (!store0("fav")) { FAV.clear(); (S.f || []).filter(id => CAT[id]).forEach(id => FAV.add(id)); }
@@ -1617,18 +1627,22 @@ function planBubble(pl) {
   return el;
 }
 // выбор прошлой тренировки, которую продолжаем (тренер нашёл несколько дат)
-function chooseBubble(text, opts) {
+function chooseBubble(text, opts, what) {
   opts = (opts || []).filter(o => o.i && o.i.some(([id]) => CAT[id]));
   const el = document.createElement("div"); el.className = "bub ai choose";
   const ck = `<svg viewBox="0 0 12 12" fill="none" style="stroke:var(--on)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.3l2.3 2.2 4.7-5"/></svg>`;
   const fd = (d) => new Date(d + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" });
   el.innerHTML = `<p>${esc(text || "Выбери тренировку")}</p>` + opts.map((o, k) =>
-    `<button class="chrow ${k ? "" : "on"}" data-k="${k}"><i>${ck}</i><div><b>${fd(o.d)}<em>${esc(o.g || "")}</em></b><span>${o.i.filter(([id]) => CAT[id]).map(([id]) => esc(CAT[id].name)).join(" · ")}</span></div></button>`).join("") +
-    (opts.length ? `<button class="cta">Продолжить<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>` : "");
-  let sel = 0;
-  el.querySelectorAll(".chrow").forEach(b => b.onclick = () => { H(); sel = +b.dataset.k; el.querySelectorAll(".chrow").forEach(x => x.classList.toggle("on", x === b)); });
+    `<button class="chrow" data-k="${k}"><i>${ck}</i><div><b>${fd(o.d)}<em>${esc(o.g || "")}</em></b>${o.n > 1 ? `<small class="chn">${fem() ? "делала" : "делал"} ${o.n} ${plural(o.n, "раз", "раза", "раз")}</small>` : ""}<span>${o.i.filter(([id]) => CAT[id]).map(([id]) => esc(CAT[id].name)).join(" · ")}</span></div></button>`).join("") +
+    `<button class="cta" style="display:none">Начать тренировку<svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="stroke:var(--on)" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button><button class="chnew">✨ Собрать новую тренировку${what ? " на " + esc(what) : ""}</button>`;
+  let sel = -1;
   const go = el.querySelector(".cta");
-  if (go) go.onclick = () => { const w = copyWorkout(opts[sel], null); if (stack[stack.length - 1] === "chat") back(); startWorkout(w); };
+  el.querySelectorAll(".chrow").forEach(b => b.onclick = () => {
+    H(); sel = +b.dataset.k; el.querySelectorAll(".chrow").forEach(x => x.classList.toggle("on", x === b));
+    if (go.style.display === "none") { go.style.display = ""; go.classList.add("pop"); }
+  });
+  go.onclick = () => { if (sel < 0) return; const w = copyWorkout(opts[sel], null); if (stack[stack.length - 1] === "chat") back(); startWorkout(w); };
+  el.querySelector(".chnew").onclick = () => sendChat(what ? "Собери новую тренировку на " + what : "Собери новую тренировку", { new: 1 });
   return el;
 }
 function addBubble(role, text, extra) {
@@ -1651,7 +1665,7 @@ async function loadChat(force) {
     TH = d.th || 0; setChatTitle(d.tt);
     const ms = d.msgs || [];
     if (!ms.length) { helloChat(); return; }
-    ms.forEach(m => m.r === "plan" ? $("c-msgs").appendChild(planBubble(m.plan)) : m.r === "choose" ? $("c-msgs").appendChild(chooseBubble(m.t, m.opts)) : addBubble(m.r, m.t));
+    ms.forEach(m => m.r === "plan" ? $("c-msgs").appendChild(planBubble(m.plan)) : m.r === "choose" ? $("c-msgs").appendChild(chooseBubble(m.t, m.opts, m.w)) : addBubble(m.r, m.t));
     chatScroll();
   } catch (e) { t.remove(); helloChat(); }
 }
@@ -1728,13 +1742,13 @@ function cGrow() { const t = $("c-q"); t.style.height = "auto"; t.style.height =
 $("c-q").oninput = cGrow;
 $("c-send").onclick = () => { const q = $("c-q").value.trim(); if (q.length < 2) return; $("c-q").value = ""; cGrow(); sendChat(q); };
 $("c-clip").onclick = () => { H(); $("ask-file").click(); };
-async function sendChat(q) {
+async function sendChat(q, extra) {
   if (asking) return;
   const hello = $("c-msgs").querySelector(".chello"); if (hello) { hello.remove(); const ch = $("c-msgs").querySelector(".cchips"); if (ch) ch.remove(); }
   asking = true; $("c-send").disabled = true; HN("success");
   addBubble("user", q); const t = thinkingBubble();
   try {
-    const d = await api("ask", { q, p: PROFILE, th: TH || 0 }, 90000);
+    const d = await api("ask", Object.assign({ q, p: PROFILE, th: TH || 0 }, extra || {}), 90000);
     t.remove();
     if (d.th) { TH = d.th; setChatTitle(d.tt); }
     if (d.nt) S.nt = d.nt;
@@ -1742,7 +1756,7 @@ async function sendChat(q) {
       S.a = d.plan; store.del(aiKey()); renderAI(findDraft());
       $("c-msgs").appendChild(planBubble(d.plan)); chatScroll();
     } else if (d.type === "choose" && d.opts) {
-      $("c-msgs").appendChild(chooseBubble(d.text, d.opts)); chatScroll();
+      $("c-msgs").appendChild(chooseBubble(d.text, d.opts, d.w)); chatScroll();
     } else addBubble("assistant", d.text || "", d.note ? `<span class="note">📌 Запомнил: ${esc(d.note)}</span>` : "");
     HN("success");
   } catch (e) { t.remove(); addBubble("assistant", "Не получилось связаться 😕 Проверь интернет и попробуй ещё раз."); HN("error"); }
@@ -1948,7 +1962,7 @@ async function loadPastForCopy() {
 }
 function copyWorkout(x, date = pastSel()) {
   const items = x.i.filter(([id]) => CAT[id]).map(([id, sets]) => {
-    const work = (sets || []).filter(s => s[2] !== "w");
+    const work = (sets || []).filter(s => !isWarm(s[2]));
     const it = freshItem(id, id, Math.max(1, Math.min(6, work.length || (sets || []).length || 3)));
     const st = (S.w || {})[id];
     if (!st || st[0] == null) {   // прогрессии ещё нет — берём последний рабочий подход из той тренировки
@@ -2126,13 +2140,13 @@ function exCard(it, i) {
       <div class="exnum">${i + 1}</div>
       <div class="exname"><b>${esc(e.name)}</b><span>${e.m.map(m => MUSCLES[m]).join(" · ")}${swapped ? " · замена" : ""}</span></div>
       <div class="exbtns">
-        <button data-act="fav" aria-label="Любимое">${HEART(FAV.has(it.id))}</button>
         ${e.tip ? `<button data-act="tip" aria-label="Техника">${IC.info}</button>` : ""}
         <button data-act="swap" aria-label="Заменить">${IC.swap}</button>
         ${W.sid || !it.slot || !PLAN[W.day] ? `<button data-act="remove" aria-label="Убрать">${IC.trash}</button>` : ""}
       </div>
     </div>
     <div class="target"><span>${e.kind === "k" ? "Запиши время и калории" : `Цель: ${e.kind === "c" || !it.sets.length ? "" : it.sets.length + " × "}${e.reps[0]}–${e.reps[1]} ${e.kind === "w" ? "" : unitOf(e)}`}</span><span>${tgt}</span></div>
+    <button class="exnote ${(S.en || {})[it.id] ? "has" : ""}" data-act="note">${(S.en || {})[it.id] ? `<b>📝</b><span>${esc(S.en[it.id])}</span>` : "+ Добавить заметку"}</button>
     <div class="tip ${it.tip ? "open" : ""}">${esc(e.tip || "")}</div>
     ${it.sets.map((x, k) => setRow(e, x, k)).join("")}
     <button class="addset" data-act="addset">+ Подход</button>
@@ -2147,7 +2161,7 @@ function setRow(e, x, k) {
       <label class="val reps"><input type="number" inputmode="numeric" data-f="r" value="${x.r ?? ""}" placeholder="—"><small>${e.kind === "t" ? "сек" : e.kind === "c" ? "мин" : e.kind === "k" ? "ккал" : "повт"}</small></label>
       <button class="del" data-act="delset" aria-label="Удалить подход">${IC.del}</button>
     </div>
-    <div class="rates">${RATES.map(([r, t]) => `<button data-r="${r}" class="${x.rt === r ? "on" : ""}">${t}</button>`).join("")}</div>
+    <div class="rates">${RATES.map(([r, t]) => `<button data-r="${r}" title="${t}" aria-label="${t}" class="${rtNew(x.rt) === r ? "on" : ""}">${r}</button>`).join("")}</div>
   </div>`;
 }
 function bindCards() {
@@ -2156,6 +2170,7 @@ function bindCards() {
     card.querySelectorAll("[data-act]").forEach(b => b.onclick = () => {
       const a = b.dataset.act;
       if (a === "fav") { toggleFav(it.id); b.innerHTML = HEART(FAV.has(it.id)); return; }
+      if (a === "note") { openExNote(it.id); return; }
       if (a === "tip") { it.tip = !it.tip; card.querySelector(".tip").classList.toggle("open", it.tip); H(); save(); }
       if (a === "swap") openPicker("swap", i);
       if (a === "remove") { if (W.items.length <= 1) { toast("В тренировке должно остаться упражнение"); return; } H("medium"); W.items.splice(i, 1); save(); renderWorkout(); updateMain(); }
@@ -2183,14 +2198,14 @@ function bindCards() {
         const e = CAT[it.id];
         if (e.step && !(Number(x.w) > 0)) { toast("Сначала укажи вес"); HN("error"); row.querySelector("[data-f=w]").focus(); return; }
         if (!(Number(x.r) > 0)) { toast(e.kind === "t" ? "Укажи секунды" : e.kind === "c" ? "Укажи минуты" : e.kind === "k" ? "Укажи калории" : "Укажи повторы"); HN("error"); row.querySelector("[data-f=r]").focus(); return; }
-        const was = x.rt;
+        const was = rtNew(x.rt);
         x.rt = was === b.dataset.r ? null : b.dataset.r;
         row.querySelectorAll(".rates button").forEach(bb => bb.classList.toggle("on", bb.dataset.r === x.rt));
         row.classList.toggle("rated", !!x.rt);
         card.classList.toggle("done", it.sets.some(s => s.rt));
         if (x.rt) { b.classList.add("pop"); setTimeout(() => b.classList.remove("pop"), 300); H("medium"); }
         if (x.rt && !was && !W.sid) {
-          startTimer(x.rt === "w" ? REST_WARM : restFor(it.id));
+          startTimer(restFor(it.id));
         }
         save(); updateProgress(); updateMain();
       });
@@ -2427,6 +2442,26 @@ function choose(id) {
   if (pick.mode === "add") setTimeout(() => $("v-work").scrollTo({ top: $("v-work").scrollHeight, behavior: "smooth" }), 80);
 }
 
+/* ---------- заметка к упражнению («на одну руку») ---------- */
+function openExNote(id) {
+  H();
+  const cur = (S.en || {})[id] || "";
+  openSheet(`<h2 style="margin:6px 0 4px">Заметка</h2><div style="color:var(--inactive);font-size:14px">${esc(CAT[id].name)}</div>`,
+    `<textarea class="cx-in" id="en-t" maxlength="200" rows="3" placeholder="Например: вес на одну руку · сиденье на 4 · узкий хват">${esc(cur)}</textarea>
+     <p class="cynote">Заметка будет видна каждый раз в этом упражнении, и тренер её учтёт.</p>
+     <button class="cta" id="en-save" style="margin-top:14px">Сохранить</button>${cur ? `<button class="addex" id="en-del">Удалить заметку</button>` : ""}`);
+  setTimeout(() => { const t = $("en-t"); if (t) { t.focus(); t.setSelectionRange(t.value.length, t.value.length); } }, 250);
+  const put = async (t) => {
+    S.en = Object.assign({}, S.en || {}); if (t) S.en[id] = t; else delete S.en[id];
+    closeSheet(); if (W) renderWorkout();
+    if (!hasAPI()) return;
+    try { const d = await api("exnote", { ex: id, t }); S.en = d.en || {}; }
+    catch (e) { toast("Заметка сохранится, когда появится интернет"); }
+  };
+  $("en-save").onclick = () => { HN("success"); put($("en-t").value.trim()); };
+  if ($("en-del")) $("en-del").onclick = () => { H(); put(""); };
+}
+
 /* ---------- сведения о теле: InBody и документы ---------- */
 const IBK = [["w","Вес","кг"],["smm","Мышечная масса","кг"],["fat","Масса жира","кг"],["pbf","Процент жира","%"],["vfl","Висцеральный жир","ур."],
   ["bmi","ИМТ",""],["bmr","Базовый обмен","ккал"],["tbw","Общая вода","л"],["score","Баллы InBody",""]];
@@ -2646,12 +2681,19 @@ function openGift() {
     catch (e) { toast("Не получилось — проверь интернет"); } finally { const b = $("promo-ok"); if (b) b.disabled = false; }
   };
 }
+const REMIND_DAYS_TXT = "4 дня";
 function openSettings() {
   const seg = (name, val, opts) => `<div class="seg" data-set="${name}">${opts.map(([v, t]) => `<button data-v="${v}" class="${val === v ? "on" : ""}">${t}</button>`).join("")}</div>`;
   openSheet(`<h2 style="margin:6px 0 4px">Настройки приложения</h2>`,
     `<div class="sec">Тема</div>${seg("theme", SET.theme || "auto", [["auto", "Авто"], ["dark", "Тёмная"], ["light", "Светлая"], ["neon", "Неон ✨"], ...(PROFILE.s === "f" ? [["dawn", "Рассвет 🌸"], ["dusk", "Сумерки 🌙"]] : []), ["system", "Как в Telegram"]])}
      <div class="sec">Единицы веса</div>${seg("unit", SET.unit || "kg", [["kg", "Килограммы"], ["lb", "Фунты"]])}
+     ${hasAPI() ? `<div class="sec">Уведомления</div><button class="toggle ${S.rm !== 0 ? "on" : ""}" id="set-rm"><div><span>Напоминания в Telegram</span><small>Если ${REMIND_DAYS_TXT} нет тренировок — бот напомнит</small></div><div class="sw"></div></button>` : ""}
      <p style="color:var(--mid);font-size:12.5px;margin-top:14px;line-height:1.45">«Авто» — светлая тема для женского профиля, тёмная для мужского. Отдых между подходами приложение подбирает само: по упражнению и твоей цели.</p>`);
+  if ($("set-rm")) $("set-rm").onclick = async () => {
+    const b = $("set-rm"), on = !b.classList.contains("on"); H(); b.classList.toggle("on", on);
+    try { const d = await api("remind", { on: on ? 1 : 0 }); S.rm = d.rm; toast(d.rm ? "Напоминания включены" : "Напоминания выключены"); }
+    catch (e) { b.classList.toggle("on", !on); toast("Не получилось — проверь интернет"); }
+  };
   document.querySelectorAll("#sh-body .seg button").forEach(b => b.onclick = () => {
     H(); const k = b.closest(".seg").dataset.set; SET[k] = b.dataset.v; saveSet();
     b.parentNode.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
@@ -2761,7 +2803,7 @@ async function renderDayCards(d) {
       if ((selDay || iso(today)) !== d || stack[stack.length - 1] !== "home") return;
       const x = sessions[+b.dataset.session];
       if (x.i.some(([id]) => !CAT[id])) { toast("Обнови приложение: часть упражнений не загружена"); return; }
-      startWorkout({day: "X", sid: x.sid, date: d, title: x.t, items: x.i.map(([id, sets]) => ({id, slot: null, perm: false, sets: sets.map(([w,r,rt]) => ({w,r,rt: ["w","e","n","h"].includes(rt) ? rt : "n"}))}))});
+      startWorkout({day: "X", sid: x.sid, date: d, title: x.t, items: x.i.map(([id, sets]) => ({id, slot: null, perm: false, sets: sets.map(([w,r,rt]) => ({w,r,rt: rtNew(rt) && "12345".includes(rtNew(rt)) ? rtNew(rt) : "3"}))}))});
     });
   } catch (e) {
     if (request !== dayRequest) return;
@@ -2771,7 +2813,7 @@ async function renderDayCards(d) {
 }
 async function saveHistoryWorkout() {
   if (finishing || !W || !W.sid) return;
-  const items = W.items.map(it => ({id: it.id, sets: it.sets.map(s => [Number(s.w) || 0, Number(s.r), s.rt || "n"])}));
+  const items = W.items.map(it => ({id: it.id, sets: it.sets.map(s => [Number(s.w) || 0, Number(s.r), rtNew(s.rt) || "3"])}));
   if (!items.length || items.some(it => !it.sets.length || it.sets.some(([w,r]) => !Number.isFinite(w) || w < 0 || !Number.isFinite(r) || r <= 0))) {
     toast("Заполни подходы: вес не меньше нуля, повторы больше нуля"); return;
   }
