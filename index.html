@@ -768,6 +768,14 @@ html.light .askbar{background:rgba(255,255,255,.6)}
 .sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--inactive);transition:all .2s var(--ease)}
 .toggle.on .sw{background:var(--lime)}
 .toggle.on .sw::after{left:21px;background:var(--on)}
+.prow2 .sw{margin-left:auto}.prow2.on .sw{background:var(--lime)}.prow2.on .sw::after{left:21px;background:var(--on)}
+/* режим тренера: своя тема (синяя), поверх любой выбранной */
+html.coach,html.coach.fem,html.coach.light,html.coach.fem.light,html.coach.neon,html.coach.dawn,html.coach.dusk{
+  --lime:#4F8EF7; --green:#8DB6FF; --olive:#2F6BD8; --on:#FFFFFF; --acc-rgb:79,142,247}
+.coachbar{display:flex;align-items:center;gap:12px;background:rgba(var(--acc-rgb),.1);border:1.5px solid rgba(var(--acc-rgb),.4);border-radius:18px;padding:12px 14px;margin:0 0 12px}
+.coachbar .t{flex:1;min-width:0}.coachbar b{display:block;font-size:15px}.coachbar span{font-size:12.5px;color:var(--inactive)}
+.coachbar button{background:var(--lime);color:var(--on);font-weight:700;font-size:13.5px;border-radius:12px;padding:9px 12px;white-space:nowrap}
+.coachbar button.ghost{background:transparent;color:var(--lime);border:1.5px solid rgba(var(--acc-rgb),.5)}
 
 /* ---------- прогресс ---------- */
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -1328,7 +1336,7 @@ const ONB = [
   { key: "fr", title: "Сколько раз в неделю", sub: "Сколько реально готов ходить", opts: [["2", "2 раза"], ["3", "3 раза"], ["4", "4 раза"], ["5", "5 и больше"]] },
   { key: "du", title: "Время на тренировку", sub: "Тренер уложит тренировку в это время", opts: [["30", "30 минут"], ["45", "45 минут"], ["60", "Час"], ["90", "Полтора часа"]] },
   { key: "pl", title: "Где тренируешься", sub: "Чтобы предлагать то, что тебе доступно", opts: [["gym", "В зале"], ["home", "Дома"], ["both", "И там, и там"]] },
-  { key: "role", title: "Как будешь пользоваться", sub: "Тренер тоже может тренироваться сам", opts: [["athlete", "Тренируюсь сам", "дневник, ИИ-тренер и прогресс"], ["coach", "Я тренер", "веду учеников, назначаю им тренировки"]] },
+  { key: "role", title: "Как будешь пользоваться", sub: "Режим тренера можно включить или выключить потом в профиле", opts: [["athlete", "Тренируюсь сам", "дневник, ИИ-тренер и прогресс"], ["coach", "Я тренер", "веду учеников, назначаю им тренировки"]] },
 ];
 const ONB_IDX = (k) => ONB.findIndex(x => x.key === k);
 function age(b) {
@@ -1430,6 +1438,7 @@ function themeIsLight() {
   if (t === "system") return !!(tg && tg.colorScheme === "light");
   return PROFILE.s === "f";   // по умолчанию: девушкам светлая, парням тёмная
 }
+function isCoach() { return !!(S && S.me && S.me.role === "coach"); }
 function applyTheme() {
   const f = PROFILE.s === "f";
   document.documentElement.classList.toggle("fem", f);
@@ -1439,6 +1448,7 @@ function applyTheme() {
   document.documentElement.classList.toggle("dusk", gt === "dusk");
   document.documentElement.classList.toggle("grad", !!gt);
   document.documentElement.classList.toggle("light", themeIsLight());
+  document.documentElement.classList.toggle("coach", isCoach());
   DAYS = f && D.days_w ? D.days_w : D.days;
   if (!DAYS.includes(S.n)) S.n = DAYS[0];
   const bg = cssVar("--bg");
@@ -2964,12 +2974,15 @@ function renderSocialHome(selectedDate) {
   const isToday = selectedDate === iso(today);
   const inv = (S.co || []).filter(c => c.st === "pending");
   const plans = (S.cp || []).filter(p => p.st === "new" ? (isToday ? p.d <= selectedDate : p.d === selectedDate) : p.d === selectedDate && false);
-  box.innerHTML = inv.map(c => `<div class="cpcard inv"><div class="frow">${avatarSVG(c.av, 44, c.c)}<div class="t"><b>Тренер ${esc(c.n)}</b><span>хочет вести твои тренировки</span></div></div><button class="cta" data-inv="1">Посмотреть</button></div>`).join("") +
+  const cbar = isCoach() && isToday ? `<div class="coachbar"><div class="t"><b>Режим тренера</b><span>назначай тренировки ученикам</span></div><button id="cb-cl">Ученики</button><button class="ghost" id="cb-inv">Пригласить</button></div>` : "";
+  box.innerHTML = cbar + inv.map(c => `<div class="cpcard inv"><div class="frow">${avatarSVG(c.av, 44, c.c)}<div class="t"><b>Тренер ${esc(c.n)}</b><span>хочет вести твои тренировки</span></div></div><button class="cta" data-inv="1">Посмотреть</button></div>`).join("") +
     plans.map(p => `<div class="cpcard" data-p="${p.id}"><div class="cph"><small>📋 От тренера · ${esc(p.cn)}${p.d < selectedDate ? " · с " + fdate(p.d) : ""}</small><b>${esc(p.t)}</b></div>
       ${p.n ? `<p class="cpn">«${esc(p.n)}»</p>` : ""}
       <div class="cpi">${p.i.filter(([id]) => CAT[id]).map(([id, sets]) => `<span>${esc(CAT[id].name)} <em>${sets.length}×${sets[0] ? sets[0][1] : ""}${sets[0] && sets[0][0] ? " · " + fmt(wShow(sets[0][0])) + " " + UW() : ""}</em></span>`).join("")}</div>
       <button class="cta" data-go="${p.id}">Начать тренировку</button></div>`).join("");
   box.querySelectorAll("[data-inv]").forEach(b => b.onclick = openMyCoach);
+  if ($("cb-cl")) $("cb-cl").onclick = () => { H(); openCoach(); };
+  if ($("cb-inv")) $("cb-inv").onclick = () => { H(); if (S.cl) shareLink(S.cl, "Буду вести твои тренировки в FormFit — открой ссылку и подключись 💪"); else openCoach(); };
   box.querySelectorAll("[data-go]").forEach(b => b.onclick = () => {
     const p = (S.cp || []).find(x => x.id === +b.dataset.go); if (!p) return;
     const items = p.i.filter(([id]) => CAT[id]).map(([id, sets]) => ({ id, slot: id, perm: false, tip: false, sets: (sets.length ? sets : [[0, 10]]).map(([w, r]) => ({ w, r, rt: null })) }));
@@ -3028,9 +3041,11 @@ function renderProfile() {
     ${hasAPI() ? `<div class="plist2">
       ${row("avatar", "star", "Мой персонаж и имя", (S.me && S.me.nick) || "настрой, как тебя видят друзья")}
       ${row("fr", "trophy", "Друзья и доска почёта", "кто больше тренируется · месяц Premium за друга")}
-      ${S.me && S.me.role === "coach" ? row("coach", "users", "Ученики", "назначай тренировки и следи за прогрессом") : ""}
-      ${row("mycoach", "whistle", "Мой тренер", (S.co || []).some(c => c.st === "active") ? (S.co.find(c => c.st === "active").n) : (S.co || []).some(c => c.st === "pending") ? "есть приглашение" : "подключить по коду")}
-      ${S.me && S.me.role !== "coach" ? row("becoach", "users", "Я тренер", "веду учеников — включить кабинет тренера") : ""}
+      ${(S.co || []).length ? row("mycoach", "whistle", "Мой тренер", (S.co.find(c => c.st === "active") || {}).n || "есть приглашение") : ""}
+    </div>
+    <div class="plist2">
+      <button class="prow2 ${isCoach() ? "on" : ""}" data-go="coachmode"><div class="pi">${ico("whistle")}</div><div class="pt"><b>Режим тренера</b><span>${isCoach() ? "включён · ученики на главной" : "для тех, кто ведёт учеников"}</span></div><div class="sw"></div></button>
+      ${isCoach() ? row("coach", "users", "Ученики", "назначай тренировки и следи за прогрессом") : ""}
     </div>` : ""}
     <div class="plist2">
       ${hasAPI() ? row("gift", "gift", "Premium и подарки", prem ? "до " + new Date(S.pu + "T12:00").toLocaleDateString("ru-RU", { day: "numeric", month: "long" }) : "промокод, пригласить друга") : ""}
@@ -3048,12 +3063,21 @@ const PGO = {
   imp: () => { $("ask-file").click(); showTab("home"); },
   gift: openGift,
   set: openSettings,
-  docs: () => openSheet(`<h2 style="margin:6px 0 4px">Документы</h2>`, `<p style="color:var(--inactive);font-size:15px;line-height:1.5">Публичная оферта и политика конфиденциальности появятся здесь перед запуском платной версии.</p>`),
+  docs: () => {
+    const L = [["tarify.html", "Тарифы и реквизиты"], ["oferta.html", "Публичная оферта"], ["privacy.html", "Политика конфиденциальности"], ["soglasie.html", "Согласия на обработку данных"]];
+    openSheet(`<h2 style="margin:6px 0 4px">Документы</h2>`, `<div class="plist2">${L.map(([f, t]) => `<button class="prow2" data-doc="${f}"><div class="pt"><b>${t}</b></div></button>`).join("")}</div>`);
+    document.querySelectorAll("#sh-body [data-doc]").forEach(a => a.onclick = () => { const u = new URL(a.dataset.doc, location.href).href; try { tg.openLink(u); } catch (e) { location.href = u; } });
+  },
   wipe: openWipe,
   help: startTour,
   cyc: () => openCycle(),
   avatar: openMe, fr: openFriends, coach: openCoach, mycoach: openMyCoach,
-  becoach: async () => { try { await social("role", { role: "coach" }); PROFILE.role = "coach"; HN("success"); renderProfile(); openCoach(); } catch (e) { socErr(e); } },
+  coachmode: async () => {
+    const on = !isCoach();
+    try { await social("role", { role: on ? "coach" : "athlete" }); PROFILE.role = on ? "coach" : "athlete"; S.me = Object.assign(S.me || {}, { role: PROFILE.role });
+      HN("success"); applyTheme(); renderProfile(); renderHome(); toast(on ? "Режим тренера включён — ученики теперь на главной" : "Режим тренера выключен"); }
+    catch (e) { socErr(e); }
+  },
   body: () => openBody(),
 };
 function openMyEx() {
@@ -3073,7 +3097,7 @@ function openGift() {
        <div class="tf"><b>Бесплатно</b><span>журнал, прогрессия, история, домашние тренировки, друзья · ИИ: 3 тренировки в неделю, 30 сообщений и 3 фото в месяц</span></div>
        <div class="tf on"><b>Premium · 299 ₽/мес</b><span>ИИ без лимитов: тренировки, чат, фото и тренажёры, InBody, цикл</span></div>
        <div class="tf on"><b>Premium на год · 1 990 ₽</b><span>то же самое — 166 ₽ в месяц, выгода 45%</span></div>
-       <div class="tf"><b>Тренер Pro · 590 ₽/мес</b><span>до 30 учеников; до 3 учеников — бесплатно</span></div>
+       ${isCoach() ? `<div class="tf"><b>Тренер Pro · 590 ₽/мес</b><span>до 30 учеников; до 3 учеников — бесплатно</span></div>` : ""}
      </div>
      <p class="tf-note">Новым — 7 дней Premium бесплатно. Оплата картой скоро появится прямо здесь.</p>
      <div class="sec">Промокод</div>
